@@ -1,0 +1,39 @@
+!!!
+-/ hi there all!
+%html
+	%head
+		%title mustaml (mustache+HAML)
+		%script(src=jqurey,type="text/javascript")
+		%script(src="script/main.js")
+		-style
+			%stlye(=atttibutes_array)
+		/[if IE]
+			%stlye(src="style/ie.css")
+	%body
+		#container
+			.intro
+				=intro
+			/ created by main template
+			%h1(lang=en)=headline
+			.blog
+			-article.blogentry#=id
+				%h2=title
+				%p=intro
+				-body
+					.blogtext.html=!html
+				-socnetsworksbox
+				-comments
+				-^comments
+					%p.small Comments are disabled here.
+			#footer
+				&copy; 2011 by Bernhard Häussner
+				\- feel free to share
+				br/
+				%a(href="http://gist.guthub.com/bxt") my Gists
+-/
+	Still missing:
+	* joining array with " " or "_" in attributes, or creating data-{{.}}
+	* conveting true/false to selected, checked etc.
+	* multiline html comments?
+	* auto self-close
+	* ! unescape not ignore, / ignore, & nothing not unescape

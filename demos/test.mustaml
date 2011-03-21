@@ -1,0 +1,22 @@
+!!!
+%html#pageid.full.nojs content
+	#someid
+		.full.nojs content
+	%p(a=b)
+		hi there
+		\ 100
+		\% true 
+		-/ comment!
+		=myval
+		-bol %span.good bol was there!
+		-^bol %span.error bol was absent
+	/
+		#hidden.by.comment but still in markup!
+			/
+				yey!
+	#arr -arr
+		%p =.
+	#maps
+		-maps
+			%span.val =k
+		-^maps no maps for you boy!
