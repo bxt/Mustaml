@@ -2,7 +2,7 @@
 namespace Mustaml;
 
 class HtmlCompiler {
-	final public function render($ast,$data=array()) {
+	public function render($ast,$data=array()) {
 		$renderMethod='render_'.$ast->type;
 		return $this->$renderMethod($ast,$data);
 	}

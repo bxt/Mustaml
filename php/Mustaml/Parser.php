@@ -2,7 +2,7 @@
 namespace Mustaml;
 
 class Parser {
-	final public function parseString($templateString) {
+	public function parseString($templateString) {
 		$rootnode=new Node();
 		$rootnode->type='root';
 		$lines=explode("\n",$templateString);
