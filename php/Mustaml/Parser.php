@@ -35,27 +35,21 @@ class Parser {
 		return $rootnode;
 	}
 	private function parse_node($nodecode) {
-		$tokenMap=array(// $eventRegexpsWithHandlers
-			'/^!!!/',    'doctype',     //  !!!
-			'/^-\\//',   'comment',     //  -\
-			'/^[%\\.#]/','htag',        //  %, . and #
-			'/^-\\^/',   'notval',      //  -^
-			'/^-/',      'val',         //  -
-			'/^=/',      'hecho',       //  =
-			'/^\\//',    'hcomment',    //  /
-			'/^\\\\/',   'excapedText', //  \
-		); 
-		for($i=0,$len=count($tokenMap)-1;$i<$len;$i+=2) {
-			if(preg_match($tokenMap[$i],$nodecode)===1) {
-				$method='parse_'.$tokenMap[$i+1];
-				$node=$this->$method($nodecode);
-				$node->type=($tokenMap[$i+1]=='excapedText'?'text':$tokenMap[$i+1]);
-				return $node;
+		switch(true) {
+			case ($nodecode[0]=='-'): switch(true) {
+				case ($nodecode[1]=='\\'): $node=$this->parse_comment($nodecode); $node->type='comment';return $node;
+				case ($nodecode[1]=='^'): $node=$this->parse_notval($nodecode); $node->type='notval';return $node;
+				default: $node=$this->parse_val($nodecode); $node->type='val';return $node;
 			}
+			case ($nodecode[0]=='='): $node=$this->parse_hecho($nodecode); $node->type='hecho';return $node;
+			case ($nodecode[0]=='/'): $node=$this->parse_hcomment($nodecode); $node->type='hcomment';return $node;
+			case ($nodecode[0]=='\\'): $node=$this->parse_excapedText($nodecode); $node->type='text';return $node;
+			case ($nodecode[0]=='%'):
+			case ($nodecode[0]=='.'):
+			case ($nodecode[0]=='#'): $node=$this->parse_htag($nodecode); $node->type='htag';return $node;
+			case ($nodecode[0]=='!'&&$nodecode[1]=='!'&&$nodecode[2]=='!'): $node=$this->parse_doctype($nodecode); $node->type='doctype';return $node;
+			default:$node=$this->parse_text($nodecode);$node->type='text';return $node;
 		}
-		$node=$this->parse_text($nodecode);
-		$node->type='text';
-		return $node;;
 	}
 	private function parse_text($contents) {
 		$node=new Node();
