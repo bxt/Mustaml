@@ -8,13 +8,13 @@ class Cli {
 			$data=json_decode(file_get_contents($argv[0]),true);
 			$templateString=file_get_contents($argv[1]);
 			$pr=new \Profile('bench.csv');
-			for($i=0;$i<1000;$i++) {
+			for($i=0;$i<10000;$i++) {
 				$p=new Parser();
 				$ast=$p->parseString($templateString);
 			}
 			$pr->end("parse4htmlclass x $i");
 			$pr=new \Profile('bench.csv');
-			for($i=0;$i<1000;$i++) {
+			for($i=0;$i<10000;$i++) {
 				$c=new HtmlCompiler();
 				$c->render($ast,$data);
 			}
