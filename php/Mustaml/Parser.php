@@ -3,7 +3,7 @@ namespace Mustaml;
 
 class Parser {
 	final public function parseString($templateString) {
-		$rootnode=new Node();
+		$rootnode=new RootNode();
 		$lines=explode("\n",$templateString);
 		$indentLevels=array();
 		$parentBlocks=array();
@@ -144,7 +144,7 @@ class Node {
 	}
 }
 
-class RootNode {
+class RootNode extends Node {
 	public function html($data=array()) {
 		return parent::html($data);
 	}
