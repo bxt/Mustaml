@@ -7,11 +7,20 @@ class Cli {
 		if(isset($argv[0])&&isset($argv[1])) {
 			$data=json_decode(file_get_contents($argv[0]),true);
 			$templateString=file_get_contents($argv[1]);
-			$p=new Parser();
-			$ast=$p->parseString($templateString);
-			$c=new HtmlCompiler();
+			$pr=new \Profile('bench.csv');
+			for($i=0;$i<1000;$i++) {
+				$p=new Parser();
+				$ast=$p->parseString($templateString);
+			}
+			$pr->end("parse4htmlclass x $i");
+			$pr=new \Profile('bench.csv');
+			for($i=0;$i<1000;$i++) {
+				$c=new HtmlCompiler();
+				$c->render($ast,$data);
+			}
+			$pr->end("htmlclass x $i");
+			//echo md5($c->render($ast,$data))."\n";
 			//var_dump($c->render($ast,$data));
-			echo md5(*/$c->render($ast,$data))."\n";
 		}
 	}
 }
