@@ -11,8 +11,7 @@ class Cli {
 			$ast=$p->parseString($templateString);
 			$c=new HtmlCompiler();
 			//var_dump($c->render($ast,$data));
-			echo md5($c->render($ast,$data))."\n";
-			echo md5($ast->html($data))."\n";
+			echo md5(*/$c->render($ast,$data))."\n";
 		}
 	}
 }

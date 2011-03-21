@@ -3,7 +3,8 @@ namespace Mustaml;
 
 class Parser {
 	final public function parseString($templateString) {
-		$rootnode=new RootNode();
+		$rootnode=new Node();
+		$rootnode->type='root';
 		$lines=explode("\n",$templateString);
 		$indentLevels=array();
 		$parentBlocks=array();
@@ -47,13 +48,17 @@ class Parser {
 		for($i=0,$len=count($tokenMap)-1;$i<$len;$i+=2) {
 			if(preg_match($tokenMap[$i],$nodecode)===1) {
 				$method='parse_'.$tokenMap[$i+1];
-				return $this->$method($nodecode);
+				$node=$this->$method($nodecode);
+				$node->type=($tokenMap[$i+1]=='excapedText'?'text':$tokenMap[$i+1]);
+				return $node;
 			}
 		}
-		return $this->parse_text($nodecode);
+		$node=$this->parse_text($nodecode);
+		$node->type='text';
+		return $node;;
 	}
 	private function parse_text($contents) {
-		$node=new TextNode();
+		$node=new Node();
 		$node->contents=$contents;
 		return $node;
 	}
@@ -61,18 +66,18 @@ class Parser {
 		return $this->parse_text(substr($nodecode,1));
 	}
 	private function parse_hcomment($contents) {
-		$node=new HcommentNode();
+		$node=new Node();
 		$node->children[]=$this->parse_node(substr($contents,1));
 		return $node;
 	}
 	private function parse_hecho($nodecode) {
-		$node=new HechoNode();
+		$node=new Node();
 		$node->varname=substr($nodecode,1);
 		return $node;
 	}
 	private function parse_notval($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,2),$m);
-		$node=new NotvalNode();
+		$node=new Node();
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$node->children[]=$this->parse_node($m[3]);
@@ -81,7 +86,7 @@ class Parser {
 	}
 	private function parse_val($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,1),$m);
-		$node=new ValNode();
+		$node=new Node();
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$node->children[]=$this->parse_node($m[3]);
@@ -89,15 +94,15 @@ class Parser {
 		return $node;
 	}
 	private function parse_doctype($nodecode) {
-		$node=new DoctypeNode();
+		$node=new Node();
 		return $node;
 	}
 	private function parse_comment($nodecode) {
-		$node=new CommentNode();
+		$node=new Node();
 		return $node;
 	}
 	private function parse_htag($nodecode) {
-		$node=new HtagNode;
+		$node=new Node();
 		preg_match("/^  (%(.+?))?  (\#(.+?))?  ((\..+?)*)  (\((.*?)\))?  (\ (.*))?  $/x",$nodecode,$m);
 		//var_dump($m);
 		if(isset($m[2])&&$m[2]!='') {
@@ -124,131 +129,3 @@ class Parser {
 		return $node;
 	}
 }
-
-class Node {
-	public $children=array();
-	public function html($data) {
-		$html='';
-		$html.=$this->html_before($data);
-		foreach($this->children as $c) {
-			$html.=$c->html($data);
-		}
-		$html.=$this->html_after($data);
-		return $html;
-	}
-	protected function html_before($data) {
-		return '';
-	}
-	protected function html_after($data) {
-		return '';
-	}
-}
-
-class RootNode extends Node {
-	public function html($data=array()) {
-		return parent::html($data);
-	}
-}
-
-abstract class DataNode extends Node {
-
-}
-
-class HechoNode extends DataNode {
-	public $varname='';
-	public function html($data) {
-		if(isset($data[$this->varname])) {
-			return htmlspecialchars($data[$this->varname]);
-		}
-	}
-}
-
-class NotvalNode extends DataNode {
-	public $varname='';
-	public function html($data) {
-		if(!isset($data[$this->varname]) || $data[$this->varname]===false) {
-			return parent::html($data);
-		}
-	}
-}
-
-class ValNode extends DataNode {
-	public $varname='';
-	public function html($data) {
-		$html='';
-		if(isset($data[$this->varname])) {
-			$v=$data[$this->varname];
-			if(is_array($v)) {
-				foreach($v as $key=>$val) {
-					if(is_array($val)) {
-						$html.=parent::html(array_merge($data,$val));
-					} else {
-						$data['.']=$val;
-						$html.=parent::html($data);
-					}
-				}
-			} elseif ($v===true) {
-				$html.=parent::html($data);
-			} elseif ($v===false) {
-			} else {
-				$html.=$v;
-				$html.=parent::html($data);
-			}
-		}
-		return $html;
-	}
-}
-
-class TextNode extends Node {
-	public $contents='';
-	protected function html_before($data) {
-		return $this->contents;
-	}
-}
-class HcommentNode extends Node {
-	public function html($data) {
-		$html='<!-- ';
-		foreach($this->children as $c) {
-			$html.=str_replace(array('--','>'),array('&#x2d;&#x2d;','&gt;'),$c->html($data));
-		}
-		$html.=' -->';
-		return $html;
-	}
-}
-class DoctypeNode extends Node {
-	protected function html_before($data) {
-		return '<!DOCTYPE html>';
-	}
-}
-
-class CommentNode extends Node {
-	public function html($data) {
-		return ''; // don't touch children
-	}
-}
-
-class HtagNode extends Node {
-	public $attributes=array();
-	public $name='div';
-	protected function html_before($data) {
-		return '<'.htmlspecialchars($this->name).''.$this->html_attr($data).'>';
-	}
-	protected function html_after($data) {
-		return '</'.htmlspecialchars($this->name).'>';
-	}
-	private function html_attr($data) {
-		$attr='';
-		foreach($this->attributes as $key=>$val) {
-			$attr.=' '.htmlspecialchars($key).'="';
-			if(is_array($val)) {
-				$attr.=htmlspecialchars(implode(' ',$val));
-			} else {
-				$attr.=htmlspecialchars($val);
-			}
-			$attr.='"';
-		}
-		return $attr;
-	}
-}
-
-

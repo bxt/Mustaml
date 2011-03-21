@@ -3,7 +3,7 @@ namespace Mustaml;
 
 class HtmlCompiler {
 	final public function render($ast,$data=array()) {
-		$renderMethod='render_'.lcfirst(preg_replace('/Node$|^Mustaml\\\\/','',get_class($ast)));
+		$renderMethod='render_'.$ast->type;
 		return $this->$renderMethod($ast,$data);
 	}
 	private function render_root($ast,$data) {
