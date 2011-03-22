@@ -1,1 +1,1 @@
-{"style":[{"atttibutes_array":{"src":"main.css","type","text/css"},{"atttibutes_array":{"src":"mobile.css","media":"handheld"}]}
+{"style":[{"src":"main.css","type":"text/css"},{"src":"mobile.css","media":"handheld"}]}

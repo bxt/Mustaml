@@ -27,12 +27,11 @@ class HtmlCompiler {
 			$v=$data[$ast->varname];
 			if(is_array($v)) {
 				foreach($v as $key=>$val) {
+					$data['.']=$val;
 					if(is_array($val)) {
-						$html.=$this->render_children($ast,array_merge($data,$val));
-					} else {
-						$data['.']=$val;
-						$html.=$this->render_children($ast,$data);
+						$data=array_merge($data,$val);
 					}
+					$html.=$this->render_children($ast,$data);
 				}
 			} elseif ($v===true) {
 				$html.=$this->render_children($ast,$data);
@@ -75,10 +74,29 @@ class HtmlCompiler {
 	}
 	private function html_attr($ast,$data) {
 		$attr='';
-		foreach($ast->attributes as $key=>$val) {
+		$attr_array=array();
+		if(isset($ast->attributes['other'])) {
+			$attr_array=$ast->attributes['other'];
+		}
+		if(isset($ast->attributes['val'])&&isset($data[$ast->attributes['val']])) {
+			if(is_array($data[$ast->attributes['val']])) {
+				$attr_array=array_merge($attr_array,$data[$ast->attributes['val']]);
+			} else {
+				$attr.=(string)$data[$ast->attributes['val']];
+			}
+		}
+		/// @TODO: Don't override all classes
+		if(isset($ast->attributes['classes'])) {
+			$attr_array['class']=$ast->attributes['classes'];
+		}
+		foreach($attr_array as $key=>$val) {
 			$attr.=' '.htmlspecialchars($key).'="';
 			if(is_array($val)) {
 				$attr.=htmlspecialchars(implode(' ',$val));
+			} elseif($val===true) {
+				$attr.=htmlspecialchars($key);
+			} elseif($val===false) {
+				$attr.='';
 			} else {
 				$attr.=htmlspecialchars($val);
 			}

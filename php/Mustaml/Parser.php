@@ -37,7 +37,7 @@ class Parser {
 	private function parse_node($nodecode) {
 		switch(true) {
 			case ($nodecode[0]=='-'): switch(true) {
-				case ($nodecode[1]=='\\'): $node=$this->parse_comment($nodecode); $node->type='comment';return $node;
+				case ($nodecode[1]=='/'): $node=$this->parse_comment($nodecode); $node->type='comment';return $node;
 				case ($nodecode[1]=='^'): $node=$this->parse_notval($nodecode); $node->type='notval';return $node;
 				default: $node=$this->parse_val($nodecode); $node->type='val';return $node;
 			}
@@ -105,17 +105,30 @@ class Parser {
 			$node->name="div";
 		}
 		if(isset($m[4])&&$m[4]!='') {
-			$node->attributes["id"]=$m[4];
+			$node->attributes['other']['id']=$m[4];
 		}
 		if(isset($m[5])&&$m[5]!='') {
 			$classes=explode('.',$m[5]);
 			array_shift($classes);
 			foreach($classes as $class) {
-				$node->attributes["class"][]=$class;
+				$node->attributes['classes'][]=$class;
 			}
 		}
 		if(isset($m[8])&&$m[8]!='') {
-			//attrs
+			$input=$m[8];
+			if($input[0]=='=') {
+				$node->attributes['val']=substr($input,1);
+			} else {
+				$domdoc=\DOMDocument::loadHTML('<html '.$input.'></html>');
+				//var_dump($domdoc->saveXML($domdoc->documentElement));
+				foreach($domdoc->documentElement->attributes as $attr) {
+					if($attr->name=='class') {
+						$node->attributes['classes'][]=$attr->value;
+					} else {
+						$node->attributes['other'][$attr->name]=$attr->value;
+					}
+				}
+			}
 		}
 		if(isset($m[10])&&$m[10]!='') {
 			$node->children[]=$this->parse_node($m[10]);

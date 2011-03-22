@@ -3,10 +3,10 @@
 %html
 	%head
 		%title mustaml (mustache+HAML)
-		%script(src=jqurey,type="text/javascript")
+		%script(src=jqurey type="text/javascript")
 		%script(src="script/main.js")
 		-style
-			%stlye(=atttibutes_array)
+			%stlye(=.)
 		/[if IE]
 			%stlye(src="style/ie.css")
 	%body
@@ -14,7 +14,7 @@
 			.intro
 				=intro
 			/ created by main template
-			%h1(lang=en)=headline
+			%h1(lang=en) =headline
 			.blog
 			-article.blogentry#=id
 				%h2=title
@@ -28,7 +28,7 @@
 			#footer
 				&copy; 2011 by Bernhard Häussner
 				\- feel free to share
-				br/
+				%br
 				%a(href="http://gist.guthub.com/bxt") my Gists
 -/
 	Still missing:
