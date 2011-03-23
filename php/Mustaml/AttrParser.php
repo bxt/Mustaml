@@ -23,11 +23,7 @@ class AttrParser {
 				$s->get(self::ws);
 				if($s->getOne(self::eq)) {
 					//value
-					$val=new Node();
-					$val->type="text";
-					$key->children[]=$val;
-					
-					$s->getOne(self::gt);// accept ruby-like hash
+					$s->getOne(self::gt);// accept ruby-like hash (k=>v)
 					$s->get(self::ws);
 					
 					if($s->getOne(self::q)) {
@@ -37,26 +33,18 @@ class AttrParser {
 						if($s->is()&&!$s->is(self::sep)) {
 							throw new SyntaxErrorException("Text after quote");
 						}
-						$valinner=new Node();
-						$valinner->type="text";
-						$valinner->contents=$c;
-						$val->children[]=$valinner;
+						$key->children[]=self::construct_textnode($c);
 					} else {
-						// unquotet value list
+						// unquoted value list
 						while($s->is()&&!$s->is(self::sep)) {
 							$dynval=self::parse_dynval($s);
 							if($dynval) {
 								// var "val" value
-								$val->children[]=$dynval;
+								$key->children[]=$dynval;
 							} else {
 								// unquoted text value
-								
 								$c=$s->getUnless(self::sep,self::dyneq);
-								$valinner=new Node();
-								$valinner->type="text";
-								$valinner->contents=$c;
-								$val->children[]=$valinner;
-								
+								$key->children[]=self::construct_textnode($c);
 							}
 						}
 					}
@@ -69,7 +57,13 @@ class AttrParser {
 		}
 		return $attrs;
 	}
-	function parse_dynval($s) {
+	private function construct_textnode($contents) {
+		$t=new Node();
+		$t->type="text";
+		$t->contents=$contents;
+		return $t;
+	}
+	private function parse_dynval($s) {
 		if($s->getOne(self::dyneq)) {
 			if($s->is(self::sep)) throw new SyntaxErrorException("No varname");
 			$varname=$s->getUnless(self::sep);
