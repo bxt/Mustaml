@@ -14,8 +14,8 @@
 		%br.clearfix
 		-unittests
 			%a.toplink(href=#top) top
-			%h3 =title
 			%a(name==testname)
+			%h3 =title
 			%p =desc
 			%p %b Mustaml:
 			%pre.mustaml =mustaml

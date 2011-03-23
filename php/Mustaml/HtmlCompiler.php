@@ -83,7 +83,8 @@ class HtmlCompiler {
 					}
 				}
 			} elseif ($attrNode->type=='attr') {
-				$attr_array[$attrNode->name]=array(); // make sure it's set for booleans
+				if(!isset($attr_array[$attrNode->name]))
+					$attr_array[$attrNode->name]=array(); // make sure it's set for booleans
 				$val='';
 				$hasVal=false;
 				foreach($attrNode->children as $attValPart) {
@@ -108,7 +109,7 @@ class HtmlCompiler {
 				case 1: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[0]).'"'; break;
 				default:
 					if($key=='class') { /// TODO: Array of multi-value attrs
-						$attr.= ''.htmlspecialchars($key).'="'.htmlspecialchars(implode(' ',$val)).'"';
+						$attr.= ' '.htmlspecialchars($key).'="'.htmlspecialchars(implode(' ',$val)).'"';
 					} else {
 						$attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[count($val)-1]).'"';
 					}
