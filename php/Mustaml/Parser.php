@@ -36,6 +36,7 @@ class Parser {
 	}
 	private function parse_node($nodecode) {
 		switch(true) {
+			case (!isset($nodecode[1])): $node=$this->parse_text($nodecode);$node->type='text';return $node; // at least 2 chars
 			case ($nodecode[0]=='-'): switch(true) {
 				case ($nodecode[1]=='/'): $node=$this->parse_comment($nodecode); $node->type='comment';return $node;
 				case ($nodecode[1]=='^'): $node=$this->parse_notval($nodecode); $node->type='notval';return $node;
@@ -47,7 +48,7 @@ class Parser {
 			case ($nodecode[0]=='%'):
 			case ($nodecode[0]=='.'):
 			case ($nodecode[0]=='#'): $node=$this->parse_htag($nodecode); $node->type='htag';return $node;
-			case ($nodecode[0]=='!'&&$nodecode[1]=='!'&&$nodecode[2]=='!'): $node=$this->parse_doctype($nodecode); $node->type='doctype';return $node;
+			case ($nodecode[0]=='!'&&$nodecode[1]=='!'&&isset($nodecode[2])&&$nodecode[2]=='!'): $node=$this->parse_doctype($nodecode); $node->type='doctype';return $node;
 			default:$node=$this->parse_text($nodecode);$node->type='text';return $node;
 		}
 	}
