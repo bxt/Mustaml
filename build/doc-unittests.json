@@ -30,8 +30,8 @@
 "desc":"One of the Key features is quickly adding the common class and id attributes, with a syntax well known from CSS. ",
 "testname":"BasicClassAndId",
 "data":{},
-"mustaml":"%p#first.nice Text\n%p.nice.middle Text too\n%p\n  %span.inner\n    Wehah",
-"html":"<p id=\"first\" class=\"nice\">Text</p><p class=\"nice middle\">Text too</p><p><span class=\"inner\">Wehah</span></p>"
+"mustaml":"%p#first.nice Text\n%p.nice.middle Text too\n%p\n  %span.inner\n    Weeehah",
+"html":"<p id=\"first\" class=\"nice\">Text</p><p class=\"nice middle\">Text too</p><p><span class=\"inner\">Weeehah</span></p>"
 },
 {
 "title":"Implicit Divs",
@@ -43,7 +43,7 @@
 },
 {
 "title":"HTML-Attributes",
-"desc":"Atrtributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of @, => and so on. ",
+"desc":"Attributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of @, => and so on. ",
 "testname":"HAttrs",
 "data":{},
 "mustaml":"%p(lang=\"en\") Yo!\n%input(type=\"text\" value=\"tryna edit me\" disabled)",
@@ -54,8 +54,8 @@
 "desc":"You can insert html-comments too. ",
 "testname":"HComments",
 "data":{},
-"mustaml":"%html\n  / created by mustaml!",
-"html":"<html><!--  created by mustaml! --></html>"
+"mustaml":"%html\n  / created by Mustaml!",
+"html":"<html><!--  created by Mustaml! --></html>"
 },
 {
 "title":"HTML-Comment-blocks",
@@ -70,7 +70,7 @@
 
 {
 "title":"Inserting Data",
-"desc":"Of course a template engine does output strings. They are excaped for html-output by default. ",
+"desc":"Of course a template engine does output strings. They are escaped for HTML-output by default. ",
 "testname":"BasicData",
 "data":{"varname":"Hello World!"},
 "mustaml":"%p =varname",
@@ -89,7 +89,7 @@
 
 {
 "title":"Looping",
-"desc":"You can loop over arrays. The current value is availible as \".\". ",
+"desc":"You can loop over arrays. The current value is available as \".\". ",
 "testname":"BasicLoop",
 "data":{"planets":["World","Venus","Pluto"]},
 "mustaml":"%ul\n  -planets\n    %li \n     Hello \n     =.\n     !",
@@ -147,8 +147,8 @@
 "desc":"Another use of ^ is checking for empty arrays, strings and 0 numbers. ",
 "testname":"EmptryArray",
 "data":{"planets":[]},
-"mustaml":"%ul\n  -planets\n    %li =. , G'day!\n  -^planets\n    %li.grey No planats to visit today!",
-"html":"<ul><li class=\"grey\">No planats to visit today!</li></ul>"
+"mustaml":"%ul\n  -planets\n    %li =. , G'day!\n  -^planets\n    %li.grey No planets to visit today!",
+"html":"<ul><li class=\"grey\">No planets to visit today!</li></ul>"
 },
 
 
@@ -163,7 +163,7 @@
 
 {
 "title":"Attributes with data",
-"desc":"You can provide a map for hightly dynamic attributes. ",
+"desc":"You can provide a map for highly dynamic attributes. ",
 "testname":"AttrData",
 "data":{"linktag":{"rel":"stylesheet","src":"style/main.css"}},
 "mustaml":"%link(=linktag)",

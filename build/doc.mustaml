@@ -19,10 +19,11 @@
 			%p =desc
 			%p %b Mustaml:
 			%pre.mustaml =mustaml
-			%p %b Html:
+			%p %b Html output:
 			%pre.html =html
 			-^html
 				%i (Empty output)
 		%p.footer %small
 			&copy; 2011 by 
-			%a(href="http://bernhardhaussner.de/") Bernhard Häussner
+			%a(href="http://bernhardhaussner.de/") Bernhard Häussner 
+			\- generated from build/doc-unittests.json
