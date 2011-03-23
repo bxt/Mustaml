@@ -30,9 +30,6 @@ class AttrParser {
 						// quoted sting
 						$c=$s->getUnless(self::q);
 						$s->getOne(self::q);
-						if($s->is()&&!$s->is(self::sep)) {
-							throw new SyntaxErrorException("Text after quote");
-						}
 						$key->children[]=self::construct_textnode($c);
 					} else {
 						// unquoted value list

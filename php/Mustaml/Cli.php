@@ -10,6 +10,7 @@ class Cli {
 			
 			$p=new Parser();
 			$ast=$p->parseString($templateString);
+			//var_dump($ast);
 			$c=new HtmlCompiler();
 			$html=$c->render($ast,$data)."\n";
 			

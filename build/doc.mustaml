@@ -10,12 +10,12 @@
 		%h3 Contents
 		%ul
 		-unittests
-			%li %a(href="#=testname") =title
+			%li %a(href=#=testname) =title
 		%br.clearfix
 		-unittests
 			%a.toplink(href=#top) top
 			%h3 =title
-			%a(name="=testname")
+			%a(name==testname)
 			%p =desc
 			%p %b Mustaml:
 			%pre.mustaml =mustaml

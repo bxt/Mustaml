@@ -61,7 +61,7 @@ class HtmlCompiler {
 	}
 	private function render_htag($ast,$data) {
 		$html='';
-		$html.='<'.htmlspecialchars($ast->name).''.$this->html_attr($ast,$data).'>';
+		$html.='<'.htmlspecialchars($ast->name).$this->html_attr($ast,$data).'>';
 		$html.=$this->render_children($ast,$data);
 		$html.='</'.htmlspecialchars($ast->name).'>';
 		return $html;
@@ -74,34 +74,45 @@ class HtmlCompiler {
 		return $html;
 	}
 	private function html_attr($ast,$data) {
-		$attr='';
 		$attr_array=array();
-		if(isset($ast->attributes['other'])) {
-			$attr_array=$ast->attributes['other'];
-		}
-		if(isset($ast->attributes['val'])&&isset($data[$ast->attributes['val']])) {
-			if(is_array($data[$ast->attributes['val']])) {
-				$attr_array=array_merge($attr_array,$data[$ast->attributes['val']]);
-			} else {
-				$attr.=(string)$data[$ast->attributes['val']];
+		foreach($ast->attributes as $attrNode) {
+			if($attrNode->type=='val') {
+				if(isset($data[$attrNode->varname])&&is_array($data[$attrNode->varname])) {
+					foreach($data[$attrNode->varname] as $key=>$val) {
+						$attr_array[$key][]=$val;
+					}
+				}
+			} elseif ($attrNode->type=='attr') {
+				$attr_array[$attrNode->name]=array(); // make sure it's set for booleans
+				$val='';
+				$hasVal=false;
+				foreach($attrNode->children as $attValPart) {
+					if($attValPart->type=='val'&&isset($data[$attValPart->varname])) {
+						$hasVal=true;
+						$val.=$data[$attValPart->varname];
+					} elseif ($attValPart->type=='text') {
+						$hasVal=true;
+						$val.=$attValPart->contents;
+					}
+				}
+				if($hasVal) {
+					$attr_array[$attrNode->name][]=$val;
+				}
 			}
 		}
-		/// @TODO: Don't override all classes
-		if(isset($ast->attributes['classes'])) {
-			$attr_array['class']=$ast->attributes['classes'];
-		}
+		
+		$attr='';
 		foreach($attr_array as $key=>$val) {
-			$attr.=' '.htmlspecialchars($key).'="';
-			if(is_array($val)) {
-				$attr.=htmlspecialchars(implode(' ',$val));
-			} elseif($val===true) {
-				$attr.=htmlspecialchars($key);
-			} elseif($val===false) {
-				$attr.='';
-			} else {
-				$attr.=htmlspecialchars($val);
+			switch(count($val)) {
+				case 0: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($key).'"'; break;
+				case 1: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[0]).'"'; break;
+				default:
+					if($key=='class') { /// TODO: Array of multi-value attrs
+						$attr.= ''.htmlspecialchars($key).'="'.htmlspecialchars(implode(' ',$val)).'"';
+					} else {
+						$attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[count($val)-1]).'"';
+					}
 			}
-			$attr.='"';
 		}
 		return $attr;
 	}

@@ -106,34 +106,35 @@ class Parser {
 			$node->name="div";
 		}
 		if(isset($m[4])&&$m[4]!='') {
-			$node->attributes['other']['id']=$m[4];
+			$node->attributes[]=$this->get_attr_node('id',$m[4]);
 		}
 		if(isset($m[5])&&$m[5]!='') {
 			$classes=explode('.',$m[5]);
 			array_shift($classes);
 			foreach($classes as $class) {
-				$node->attributes['classes'][]=$class;
+				$node->attributes[]=$this->get_attr_node('class',$class);
 			}
 		}
 		if(isset($m[8])&&$m[8]!='') {
 			$input=$m[8];
-			if($input[0]=='=') {
-				$node->attributes['val']=substr($input,1);
-			} else {
-				$domdoc=\DOMDocument::loadHTML('<html '.$input.'></html>');
-				//var_dump($domdoc->saveXML($domdoc->documentElement));
-				foreach($domdoc->documentElement->attributes as $attr) {
-					if($attr->name=='class') {
-						$node->attributes['classes'][]=$attr->value;
-					} else {
-						$node->attributes['other'][$attr->name]=$attr->value;
-					}
-				}
-			}
+			$s=new Scanner($input);
+			$p=new AttrParser();
+			$attr=$p->parse_attr($s);
+			$node->attributes=array_merge($node->attributes,$attr);
 		}
 		if(isset($m[10])&&$m[10]!='') {
 			$node->children[]=$this->parse_node($m[10]);
 		}
 		return $node;
+	}
+	private function get_attr_node($key,$val) {
+		$attr=new Node();
+		$attr->type="attr";
+		$attr->name=$key;
+		$t=new Node();
+		$t->type="text";
+		$t->contents=$val;
+		$attr->children[]=$t;
+		return $attr;
 	}
 }
