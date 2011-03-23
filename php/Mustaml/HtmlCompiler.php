@@ -16,7 +16,7 @@ class HtmlCompiler {
 		return '';
 	}
 	private function render_notval($ast,$data) {
-		if(!isset($data[$ast->varname]) || $data[$ast->varname]===false) {
+		if( !isset($data[$ast->varname]) || empty($data[$ast->varname]) ) {
 			return $this->render_children($ast,$data);
 		}
 		return '';
@@ -25,13 +25,14 @@ class HtmlCompiler {
 		$html='';
 		if(isset($data[$ast->varname])) {
 			$v=$data[$ast->varname];
-			if(is_array($v)) {
+			if(is_array($v)) {			
 				foreach($v as $key=>$val) {
-					$data['.']=$val;
+					$newdata=$data;
+					$newdata['.']=$val;
 					if(is_array($val)) {
-						$data=array_merge($data,$val);
+						$newdata=array_merge($newdata,$val);
 					}
-					$html.=$this->render_children($ast,$data);
+					$html.=$this->render_children($ast,$newdata);
 				}
 			} elseif ($v===true) {
 				$html.=$this->render_children($ast,$data);
