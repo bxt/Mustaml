@@ -1,0 +1,28 @@
+%html
+	%head
+		%meta(charset=UTF-8)
+		%title Mustaml Reference
+		%link(rel=stylesheet href=doc.css)
+	%body #container
+		%a(name=top)
+		%h1 Mustaml Reference
+		%p =desc
+		%h3 Contents
+		%ul
+		-unittests
+			%li %a(href="#=testname") =title
+		%br.clearfix
+		-unittests
+			%a.toplink(href=#top) top
+			%h3 =title
+			%a(name="=testname")
+			%p =desc
+			%p %b Mustaml:
+			%pre.mustaml =mustaml
+			%p %b Html:
+			%pre.html =html
+			-^html
+				%i (Empty output)
+		%p.footer %small
+			&copy; 2011 by 
+			%a(href="http://bernhardhaussner.de/") Bernhard Häussner

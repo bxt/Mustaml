@@ -14,7 +14,7 @@ clean:
 	rm -Rvf target
 	rm -vf ${BUILD_NAME}.phar
 	@echo "----------------------------------------"
-	mkdir -vp target/{dist,docs/{phpuml,phpdoc}}
+	mkdir -vp target/{dist,docs/{phpuml,phpdoc,reference}}
 
 phar: clean
 	@echo "----------------------------------------"
@@ -74,3 +74,15 @@ demos: phar cleandemos
 	@echo
 	@echo "----------------------------------------"
 	
+
+gen:
+	@echo "----------------------------------------"
+	@echo
+	@echo "Building various..."
+	@echo
+	@echo "----------------------------------------"
+	php build/gen-unittests.php build/doc-unittests.json > test-php/GeneratedTest.php
+	sass build/doc.sass:target/docs/reference/doc.css
+	php mustaml.php build/doc-unittests.json build/doc.mustaml > target/docs/reference/index.html
+
+
