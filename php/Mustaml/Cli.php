@@ -13,7 +13,7 @@ class Cli {
 			$c=new HtmlCompiler();
 			$html=$c->render($ast,$data)."\n";
 			
-			var_dump($html);
+			echo $html;
 		}
 	}
 }
