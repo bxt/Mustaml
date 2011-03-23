@@ -20,7 +20,7 @@ class Parser {
 			}
 			if($indent<$preIndent) {
 				for($isum=0,$change=$preIndent-$indent;$isum<$change;$isum+=array_pop($indentLevels));
-				if($isum>$change) throw new \Exception("Indent-error");
+				if($isum>$change) throw new SyntaxErrorException("Indent-error");
 			}
 			$level=count($indentLevels);
 			//echo $level.'---'.$nodecode."\n";
