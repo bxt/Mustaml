@@ -2,6 +2,10 @@
 namespace Mustaml;
 
 class HtmlCompiler {
+	private $config;
+	public function __construct($config=null) {
+		$this->config=$config?:new HtmlCompilerConfig;
+	}
 	public function render($ast,$data=array()) {
 		$renderMethod='render_'.$ast->type;
 		return $this->$renderMethod($ast,$data);
@@ -71,9 +75,16 @@ class HtmlCompiler {
 	}
 	private function render_htag($ast,$data) {
 		$html='';
-		$html.='<'.htmlspecialchars($ast->name).$this->html_attr($ast,$data).'>';
-		$html.=$this->render_children($ast,$data);
-		$html.='</'.htmlspecialchars($ast->name).'>';
+		$html.='<'.htmlspecialchars($ast->name).$this->html_attr($ast,$data);
+		$innerHtml=$this->render_children($ast,$data);
+		if($innerHtml==''&&$this->config->isHtmlSelfclosingTag($ast->name)) {
+			//self closing tag
+			$html.=' />';
+		} else {
+			$html.='>';
+			$html.=$innerHtml;
+			$html.='</'.htmlspecialchars($ast->name).'>';
+		}
 		return $html;
 	}
 	private function render_children($ast,$data) {
@@ -118,7 +129,7 @@ class HtmlCompiler {
 				case 0: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($key).'"'; break;
 				case 1: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[0]).'"'; break;
 				default:
-					if($key=='class') { /// TODO: Array of multi-value attrs
+					if($this->config->isHtmlArrayAttr($key)) {
 						$attr.= ' '.htmlspecialchars($key).'="'.htmlspecialchars(implode(' ',$val)).'"';
 					} else {
 						$attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[count($val)-1]).'"';

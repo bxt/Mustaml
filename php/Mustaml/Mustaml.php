@@ -2,9 +2,11 @@
 namespace Mustaml;
 
 class Mustaml {
+	private $config;
 	private $data=array();
 	private $template='';
-	public function __construct($template,$data=array()) {
+	public function __construct($template,$data=array(),$config=null) {
+		$this->config=$config?:new HtmlCompilerConfig;
 		$this->data=$data;
 		$this->template=$template;
 	}
@@ -16,11 +18,13 @@ class Mustaml {
 				$ast=$p->parseString($this->template);
 			}
 			
-			$c=new HtmlCompiler();
+			$c=new HtmlCompiler($this->config);
+			$newData=$this->data;
 			if($yieldAst) {
-				$this->data['-']=new Mustaml($yieldAst,$yieldData+$this->data);
+				$newData['-']=new Mustaml($yieldAst,$yieldData+$this->data,$this->config);
 			}
-			$html=$c->render($ast,$this->data+$yieldData);
+			$newData=$newData+$yieldData;
+			$html=$c->render($ast,$newData);
 			return $html;
 	}
 }

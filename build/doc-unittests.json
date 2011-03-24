@@ -50,12 +50,20 @@
 "html":"<!DOCTYPE html><html></html>"
 },
 {
+"title":"Self-Closing tags",
+"desc":"You can configure a list of tags that should be self-closed when empty. Here are the defaults: ",
+"testname":"SelfClosingTags",
+"data":{},
+"mustaml":"%br\n%img\n%input\n%meta\n%link\n%hr\n%frame\n%param",
+"html":"<br /><img /><input /><meta /><link /><hr /><frame /><param />"
+},
+{
 "title":"HTML-Attributes",
 "desc":"Attributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of @, => and so on. ",
 "testname":"HAttrs",
 "data":{},
 "mustaml":"%p(lang=\"en\") Yo!\n%input(type=text value=\"tryna edit me\" disabled)",
-"html":"<p lang=\"en\">Yo!</p><input type=\"text\" value=\"tryna edit me\" disabled=\"disabled\"></input>"
+"html":"<p lang=\"en\">Yo!</p><input type=\"text\" value=\"tryna edit me\" disabled=\"disabled\" />"
 },
 {
 "title":"Old-School HTML-Attributes",
@@ -63,7 +71,7 @@
 "testname":"HAttrsAlternates",
 "data":{},
 "mustaml":"%p(lang=>\"en\") Yo!\n%input(type=>\"text\",value => \"tryna edit me\", disabled)",
-"html":"<p lang=\"en\">Yo!</p><input type=\"text\" value=\"tryna edit me\" disabled=\"disabled\"></input>"
+"html":"<p lang=\"en\">Yo!</p><input type=\"text\" value=\"tryna edit me\" disabled=\"disabled\" />"
 },
 {
 "title":"Overriding HTML-Attributes",
@@ -72,6 +80,14 @@
 "data":{},
 "mustaml":"#old(id=new id=newer)",
 "html":"<div id=\"newer\"></div>"
+},
+{
+"title":"HTML-Array-Attributes",
+"desc":"Some attributes can have a space-separated list of values. Currently these 3 are supported. ",
+"testname":"HArrayAttrs",
+"data":{},
+"mustaml":"%link.foo(class=bar,rev=prev,rev=index,rel=shortlink,rel=\"home up\")",
+"html":"<link class=\"foo bar\" rev=\"prev index\" rel=\"shortlink home up\" />"
 },
 {
 "title":"HTML-Comments",
@@ -227,7 +243,7 @@
 "testname":"AttrData",
 "data":{"linktag":{"rel":"stylesheet","href":"style/main.css"}},
 "mustaml":"%link(=linktag  type=\"text\/css\")",
-"html":"<link rel=\"stylesheet\" href=\"style/main.css\" type=\"text\/css\"></link>"
+"html":"<link rel=\"stylesheet\" href=\"style/main.css\" type=\"text\/css\" />"
 },
 
 {
@@ -236,7 +252,7 @@
 "testname":"AttrDataValues",
 "data":{"style":"style/main.css"},
 "mustaml":"%link(rel=>stylesheet, href=>=style)",
-"html":"<link rel=\"stylesheet\" href=\"style/main.css\"></link>"
+"html":"<link rel=\"stylesheet\" href=\"style/main.css\" />"
 },
 
 {

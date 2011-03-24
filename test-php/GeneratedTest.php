@@ -122,6 +122,28 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
+   * Self-Closing tags
+   *
+   * You can configure a list of tags that should be self-closed when
+   * empty. Here are the defaults: 
+   */
+  public function testSelfClosingTags() {
+    $expectedHtml='<br /><img /><input /><meta /><link /><hr /><frame /><param />';
+    $template='%br
+%img
+%input
+%meta
+%link
+%hr
+%frame
+%param';
+    $data=json_decode('[]',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
    * HTML-Attributes
    *
    * Attributes are defined as usual but are appended in brackets. Yes,
@@ -129,7 +151,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * => and so on. 
    */
   public function testHAttrs() {
-    $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled"></input>';
+    $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />';
     $template='%p(lang="en") Yo!
 %input(type=text value="tryna edit me" disabled)';
     $data=json_decode('[]',true);
@@ -144,7 +166,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * You can use some alternate syntax and even whitepace if you like: 
    */
   public function testHAttrsAlternates() {
-    $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled"></input>';
+    $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />';
     $template='%p(lang=>"en") Yo!
 %input(type=>"text",value => "tryna edit me", disabled)';
     $data=json_decode('[]',true);
@@ -162,6 +184,21 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testHAttrsOverride() {
     $expectedHtml='<div id="newer"></div>';
     $template='#old(id=new id=newer)';
+    $data=json_decode('[]',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * HTML-Array-Attributes
+   *
+   * Some attributes can have a space-separated list of values. Currently
+   * these 3 are supported. 
+   */
+  public function testHArrayAttrs() {
+    $expectedHtml='<link class="foo bar" rev="prev index" rel="shortlink home up" />';
+    $template='%link.foo(class=bar,rev=prev,rev=index,rel=shortlink,rel="home up")';
     $data=json_decode('[]',true);
     $m=new Mustaml($template,$data);
     $html=$m();
@@ -440,7 +477,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * space to exit the varname. 
    */
   public function testAttrData() {
-    $expectedHtml='<link rel="stylesheet" href="style/main.css" type="text/css"></link>';
+    $expectedHtml='<link rel="stylesheet" href="style/main.css" type="text/css" />';
     $template='%link(=linktag  type="text/css")';
     $data=json_decode('{"linktag":{"rel":"stylesheet","href":"style\\/main.css"}}',true);
     $m=new Mustaml($template,$data);
@@ -455,7 +492,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * and mix this with other attributes and old syntax. 
    */
   public function testAttrDataValues() {
-    $expectedHtml='<link rel="stylesheet" href="style/main.css"></link>';
+    $expectedHtml='<link rel="stylesheet" href="style/main.css" />';
     $template='%link(rel=>stylesheet, href=>=style)';
     $data=json_decode('{"style":"style\\/main.css"}',true);
     $m=new Mustaml($template,$data);
