@@ -106,6 +106,22 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
+   * Generating a Doctype
+   *
+   * Mustaml provides the short triple-bang for inserting your doctype
+   * declaration. It currently supports only the HTML5 one. 
+   */
+  public function testBasicDoctype() {
+    $expectedHtml='<!DOCTYPE html><html></html>';
+    $template='!!!
+%html';
+    $data=json_decode('[]',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
    * HTML-Attributes
    *
    * Attributes are defined as usual but are appended in brackets. Yes,
@@ -125,12 +141,27 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Old-School HTML-Attributes
    *
-   * You can use some alternate syntax if you like: 
+   * You can use some alternate syntax and even whitepace if you like: 
    */
   public function testHAttrsAlternates() {
     $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled"></input>';
     $template='%p(lang=>"en") Yo!
-%input(type=>"text",value=>"tryna edit me", disabled)';
+%input(type=>"text",value => "tryna edit me", disabled)';
+    $data=json_decode('[]',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Overriding HTML-Attributes
+   *
+   * When you specify id attributes in your attribute hash, it is
+   * overridden by the latter. 
+   */
+  public function testHAttrsOverride() {
+    $expectedHtml='<div id="newer"></div>';
+    $template='#old(id=new id=newer)';
     $data=json_decode('[]',true);
     $m=new Mustaml($template,$data);
     $html=$m();
@@ -180,6 +211,20 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $expectedHtml='<p>Hello World!</p>';
     $template='%p =varname';
     $data=json_decode('{"varname":"Hello World!"}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Undefined Data
+   *
+   * If you do not provide a piece of data, it will be silently ignored. 
+   */
+  public function testBasicDataUndefined() {
+    $expectedHtml='<p></p>';
+    $template='%p =unexisting';
+    $data=json_decode('[]',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -310,7 +355,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $expectedHtml='<ul><li class="grey">No planets to visit today!</li></ul>';
     $template='%ul
   -planets
-    %li =. , G\'day!
+    %li =.
   -^planets
     %li.grey No planets to visit today!';
     $data=json_decode('{"planets":[]}',true);
@@ -327,12 +372,31 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    */
   public function testEmptryArrayNot() {
     $expectedHtml='<p class="grey">No planets to visit today!</p>';
-    $template='-^^ planets %ul
+    $template='-^^planets %ul
   -planets
-    %li =. , G\'day!
+    %li =.
 -^planets
     %p.grey No planets to visit today!';
     $data=json_decode('{"planets":[]}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Nonempty Loops that are not empty
+   *
+   * I you use the  notayim operator on an defined value it will just
+   * render its subblocks as nothing had happended. 
+   */
+  public function testEmptryArrayNotWithValue() {
+    $expectedHtml='<ul><li>World</li></ul>';
+    $template='-^^planets %ul
+  -planets
+    %li =.
+-^planets
+    %p.grey No planets to visit today!';
+    $data=json_decode('{"planets":["World"]}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -344,10 +408,25 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * If you want to start a text line with a meta-character otherwise
    * interpreted as some kind of node, you can escape it with a backslash. 
    */
-  public function testBscaping() {
+  public function testEscaping() {
     $expectedHtml='%p';
     $template='\\%p';
     $data=json_decode('[]',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Printing verbatim HTML
+   *
+   * Say you've preprocessed some Markdown and want to display it on a
+   * page, just use the string value with minus. '
+   */
+  public function testVerbatimHtml() {
+    $expectedHtml='<b>I\'m bold!</b>';
+    $template='-html';
+    $data=json_decode('{"html":"<b>I\'m bold!<\\/b>"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);

@@ -42,6 +42,14 @@
 "html":"<div id=\"page\" class=\"container\"><div id=\"header\"></div><div id=\"content\"><div id=\"sidebar\"></div></div><div id=\"footer\"></div></div>"
 },
 {
+"title":"Generating a Doctype",
+"desc":"Mustaml provides the short triple-bang for inserting your doctype declaration. It currently supports only the HTML5 one. ",
+"testname":"BasicDoctype",
+"data":{},
+"mustaml":"!!!\n%html",
+"html":"<!DOCTYPE html><html></html>"
+},
+{
 "title":"HTML-Attributes",
 "desc":"Attributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of @, => and so on. ",
 "testname":"HAttrs",
@@ -51,11 +59,19 @@
 },
 {
 "title":"Old-School HTML-Attributes",
-"desc":"You can use some alternate syntax if you like: ",
+"desc":"You can use some alternate syntax and even whitepace if you like: ",
 "testname":"HAttrsAlternates",
 "data":{},
-"mustaml":"%p(lang=>\"en\") Yo!\n%input(type=>\"text\",value=>\"tryna edit me\", disabled)",
+"mustaml":"%p(lang=>\"en\") Yo!\n%input(type=>\"text\",value => \"tryna edit me\", disabled)",
 "html":"<p lang=\"en\">Yo!</p><input type=\"text\" value=\"tryna edit me\" disabled=\"disabled\"></input>"
+},
+{
+"title":"Overriding HTML-Attributes",
+"desc":"When you specify id attributes in your attribute hash, it is overridden by the latter. ",
+"testname":"HAttrsOverride",
+"data":{},
+"mustaml":"#old(id=new id=newer)",
+"html":"<div id=\"newer\"></div>"
 },
 {
 "title":"HTML-Comments",
@@ -83,6 +99,15 @@
 "data":{"varname":"Hello World!"},
 "mustaml":"%p =varname",
 "html":"<p>Hello World!</p>"
+},
+
+{
+"title":"Undefined Data",
+"desc":"If you do not provide a piece of data, it will be silently ignored. ",
+"testname":"BasicDataUndefined",
+"data":{},
+"mustaml":"%p =unexisting",
+"html":"<p></p>"
 },
 
 {
@@ -155,7 +180,7 @@
 "desc":"Another use of ^ is checking for empty arrays, strings and 0 numbers. ",
 "testname":"EmptryArray",
 "data":{"planets":[]},
-"mustaml":"%ul\n  -planets\n    %li =. , G'day!\n  -^planets\n    %li.grey No planets to visit today!",
+"mustaml":"%ul\n  -planets\n    %li =.\n  -^planets\n    %li.grey No planets to visit today!",
 "html":"<ul><li class=\"grey\">No planets to visit today!</li></ul>"
 },
 
@@ -164,18 +189,36 @@
 "desc":"The notayim operator (^^) will inverse the not-operator. You can check if a loop would render at least one item. ",
 "testname":"EmptryArrayNot",
 "data":{"planets":[]},
-"mustaml":"-^^ planets %ul\n  -planets\n    %li =. , G'day!\n-^planets\n    %p.grey No planets to visit today!",
+"mustaml":"-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!",
 "html":"<p class=\"grey\">No planets to visit today!</p>"
+},
+
+{
+"title":"Nonempty Loops that are not empty",
+"desc":"I you use the  notayim operator on an defined value it will just render its subblocks as nothing had happended. ",
+"testname":"EmptryArrayNotWithValue",
+"data":{"planets":["World"]},
+"mustaml":"-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!",
+"html":"<ul><li>World</li></ul>"
 },
 
 
 {
 "title":"Escaping",
 "desc":"If you want to start a text line with a meta-character otherwise interpreted as some kind of node, you can escape it with a backslash. ",
-"testname":"Bscaping",
+"testname":"Escaping",
 "data":{},
 "mustaml":"\\%p",
 "html":"%p"
+},
+
+{
+"title":"Printing verbatim HTML",
+"desc":"Say you've preprocessed some Markdown and want to display it on a page, just use the string value with minus. '",
+"testname":"VerbatimHtml",
+"data":{"html":"<b>I'm bold!</b>"},
+"mustaml":"-html",
+"html":"<b>I'm bold!</b>"
 },
 
 {
