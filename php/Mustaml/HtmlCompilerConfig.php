@@ -4,9 +4,9 @@ namespace Mustaml;
 class HtmlCompilerConfig {
 	private $htmlArrayAttrs;
 	private $htmlSelfclosingTags;
-	private $valueAutoloader;
+	private $valueAutoloaders;
 	private $autoloadedValues=array();
-	public function __construct($valueAutoloader=null,$htmlSelfclosingTags=null,$htmlArrayAttrs=null) {
+	public function __construct($valueAutoloaders=array(),$htmlSelfclosingTags=null,$htmlArrayAttrs=null) {
 		$at=$htmlArrayAttrs?:array('class','rel','rev');
 		$this->htmlArrayAttrs=array_fill_keys($at,true); // ~= convert list to set
 		
@@ -23,8 +23,7 @@ class HtmlCompilerConfig {
 		 * like <script> that go rouge when self-closed. 
 		 */
 		$this->htmlSelfclosingTags=array_fill_keys($ct,true);
-		
-		$this->valueAutoloader=$valueAutoloader;
+		$this->valueAutoloaders=$valueAutoloaders;
 	}
 	public function isHtmlArrayAttr($attr) {
 		return isset($this->htmlArrayAttrs[$attr]);
@@ -34,16 +33,17 @@ class HtmlCompilerConfig {
 	}
 	public function isAutoloadable($key) {
 		if(isset($this->autoloadedValues[$key])) return true;
-		if(!$this->valueAutoloader) return false;
-		$loaded=call_user_func_array($this->$valueAutoloader,array($key));
-		if($loaded!==null) {
-			$this->autoloadedValues[$key]=$loaded;
-			return true;
+		for($i=count($this->valueAutoloaders)-1;$i>=0;$i--) {
+			$loaded=call_user_func_array($this->valueAutoloaders[$i],array($key));
+			if($loaded!==null) {
+				$this->autoloadedValues[$key]=$loaded;
+				return true;
+			}
 		}
 		return false;
 	}
 	public function getAutoloadable($key) {
-		if(!isAutoloadable($key)) throw new \OutOfRangeException("Tried to autoload an not-autoloadable key. ");
+		if(!$this->isAutoloadable($key)) throw new \OutOfRangeException("Tried to autoload an not-autoloadable key. ");
 		return $this->autoloadedValues[$key];
 	}
 }

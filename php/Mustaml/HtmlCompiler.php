@@ -14,27 +14,27 @@ class HtmlCompiler {
 		return $this->render_children($ast,$data);
 	}
 	private function render_hecho($ast,$data) {
-		if(isset($data[$ast->varname])) {
-			return htmlspecialchars($data[$ast->varname]);
+		if($this->issetData($data,$ast->varname)) {
+			return htmlspecialchars($this->getData($data,$ast->varname));
 		}
 		return '';
 	}
 	private function render_notval($ast,$data) {
-		if( !isset($data[$ast->varname]) || empty($data[$ast->varname]) ) {
+		if( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) {
 			return $this->render_children($ast,$data);
 		}
 		return '';
 	}
 	private function render_notnotval($ast,$data) {
-		if( isset($data[$ast->varname]) && !empty($data[$ast->varname]) ) {
+		if( $this->issetData($data,$ast->varname) && $this->getData($data,$ast->varname) ) {
 			return $this->render_children($ast,$data);
 		}
 		return '';
 	}
 	private function render_val($ast,$data) {
 		$html='';
-		if(isset($data[$ast->varname])) {
-			$v=$data[$ast->varname];
+		if($this->issetData($data,$ast->varname)) {
+			$v=$this->getData($data,$ast->varname);
 			if(is_callable($v)) {
 				$r=new Ast\Node('root');
 				$r->children=$ast->children;
@@ -98,8 +98,8 @@ class HtmlCompiler {
 		$attr_array=array();
 		foreach($ast->attributes as $attrNode) {
 			if($attrNode->type=='val') {
-				if(isset($data[$attrNode->varname])&&is_array($data[$attrNode->varname])) {
-					foreach($data[$attrNode->varname] as $key=>$val) {
+				if($this->issetData($data,$attrNode->varname)&&is_array($this->getData($data,$attrNode->varname))) {
+					foreach($this->getData($data,$attrNode->varname) as $key=>$val) {
 						$attr_array[$key][]=$val;
 					}
 				}
@@ -109,9 +109,9 @@ class HtmlCompiler {
 				$val='';
 				$hasVal=false;
 				foreach($attrNode->children as $attValPart) {
-					if($attValPart->type=='val'&&isset($data[$attValPart->varname])) {
+					if($attValPart->type=='val'&&$this->issetData($data,$attValPart->varname)) {
 						$hasVal=true;
-						$val.=$data[$attValPart->varname];
+						$val.=$this->getData($data,$attValPart->varname);
 					} elseif ($attValPart->type=='text') {
 						$hasVal=true;
 						$val.=$attValPart->contents;
@@ -137,5 +137,13 @@ class HtmlCompiler {
 			}
 		}
 		return $attr;
+	}
+	private function issetData($data,$key) {
+		if(isset($data[$key])) return true;
+		return $this->config->isAutoloadable($key);
+	}
+	private function getData($data,$key) {
+		if(isset($data[$key])) return $data[$key];
+		return $this->config->getAutoloadable($key);
 	}
 }
