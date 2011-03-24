@@ -8,11 +8,19 @@ class Mustaml {
 		$this->data=$data;
 		$this->template=$template;
 	}
-	public function __invoke() {
-			$p=new Parser();
-			$ast=$p->parseString($this->template);
+	public function __invoke($yieldAst=false,$yieldData=array()) {
+			if($this->template instanceof Node) {
+				$ast=$this->template;
+			} else {
+				$p=new Parser();
+				$ast=$p->parseString($this->template);
+			}
+			
 			$c=new HtmlCompiler();
-			$html=$c->render($ast,$this->data);
+			if($yieldAst) {
+				$this->data['-']=new Mustaml($yieldAst,$yieldData+$this->data);
+			}
+			$html=$c->render($ast,$this->data+$yieldData);
 			return $html;
 	}
 }

@@ -31,7 +31,12 @@ class HtmlCompiler {
 		$html='';
 		if(isset($data[$ast->varname])) {
 			$v=$data[$ast->varname];
-			if(is_array($v)) {			
+			if(is_callable($v)) {
+				$r=new Node();
+				$r->type='root';
+				$r->children=$ast->children;
+				return $v($r,$data);
+			} elseif(is_array($v)) {			
 				foreach($v as $key=>$val) {
 					$newdata=$data;
 					$newdata['.']=$val;
