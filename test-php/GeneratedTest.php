@@ -365,7 +365,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Nonempty Loops etc.
+   * Checking for empty Loops or Strings
    *
    * The notayim operator (^^) will inverse the not-operator. You can check
    * if a loop would render at least one item. 
@@ -384,7 +384,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Nonempty Loops that are not empty
+   * Checking for empty Loops nevertheless
    *
    * I you use the  notayim operator on an defined value it will just
    * render its subblocks as nothing had happended. 

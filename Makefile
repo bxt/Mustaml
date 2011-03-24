@@ -28,7 +28,7 @@ phar: clean
 	find php -type f -iname "*.php" | xargs ${PHP_PATH}/php -d phar.readonly=0 ${PHP_PATH}/phar pack -f "${BUILD_NAME}.phar" -s "${BUILD_NAME}.php" 
 	chmod a+x "${BUILD_NAME}.phar"
 
-test: clean
+test: clean test-php/GeneratedTest.php
 	@echo "----------------------------------------"
 	@echo
 	@echo "Running tests..."
@@ -75,14 +75,22 @@ demos: phar cleandemos
 	@echo "----------------------------------------"
 	
 
-gen:
+gen: test-php/GeneratedTest.php target/docs/reference/index.html
 	@echo "----------------------------------------"
 	@echo
 	@echo "Building various..."
 	@echo
 	@echo "----------------------------------------"
+
+
+
+test-php/GeneratedTest.php: build/gen-unittests.php build/doc-unittests.json
 	php build/gen-unittests.php build/doc-unittests.json > test-php/GeneratedTest.php
+
+target/docs/reference/doc.css: build/doc.sass
 	sass build/doc.sass:target/docs/reference/doc.css
+
+target/docs/reference/index.html: target/docs/reference/doc.css build/doc-unittests.json build/doc.mustaml
 	php mustaml.php build/doc-unittests.json build/doc.mustaml > target/docs/reference/index.html
 
 

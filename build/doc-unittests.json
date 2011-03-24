@@ -185,7 +185,7 @@
 },
 
 {
-"title":"Nonempty Loops etc.",
+"title":"Checking for empty Loops or Strings",
 "desc":"The notayim operator (^^) will inverse the not-operator. You can check if a loop would render at least one item. ",
 "testname":"EmptryArrayNot",
 "data":{"planets":[]},
@@ -194,7 +194,7 @@
 },
 
 {
-"title":"Nonempty Loops that are not empty",
+"title":"Checking for empty Loops nevertheless",
 "desc":"I you use the  notayim operator on an defined value it will just render its subblocks as nothing had happended. ",
 "testname":"EmptryArrayNotWithValue",
 "data":{"planets":["World"]},
