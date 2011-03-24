@@ -21,10 +21,20 @@ class Mustaml {
 			$c=new HtmlCompiler($this->config);
 			$newData=$this->data;
 			if($yieldAst) {
-				$newData['-']=new Mustaml($yieldAst,$yieldData+$this->data,$this->config);
+				$newData['-']=$this->getWithTemplate($yieldAst,$yieldData);
 			}
 			$newData=$newData+$yieldData;
 			$html=$c->render($ast,$newData);
 			return $html;
+	}
+	/**
+	 * Return a "clone" of this Mustaml instance
+	 * 
+	 * This is not a clone as the result is wrapping
+	 * an other template and optionally has some
+	 * override data
+	 */
+	public function getWithTemplate($template,$data=array()) {
+		return new static($template,$data+$this->data,$this->config);
 	}
 }
