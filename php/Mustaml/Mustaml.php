@@ -9,7 +9,7 @@ class Mustaml {
 		$this->template=$template;
 	}
 	public function __invoke($yieldAst=false,$yieldData=array()) {
-			if($this->template instanceof Node) {
+			if($this->template instanceof Ast\Node) {
 				$ast=$this->template;
 			} else {
 				$p=new Parser();

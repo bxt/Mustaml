@@ -32,8 +32,7 @@ class HtmlCompiler {
 		if(isset($data[$ast->varname])) {
 			$v=$data[$ast->varname];
 			if(is_callable($v)) {
-				$r=new Node();
-				$r->type='root';
+				$r=new Ast\Node('root');
 				$r->children=$ast->children;
 				return $v($r,$data);
 			} elseif(is_array($v)) {			

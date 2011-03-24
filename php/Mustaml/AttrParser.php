@@ -17,8 +17,7 @@ class AttrParser {
 			$s->get(self::ws);
 			if($s->is(self::a)) {
 				//identifier
-				$key=new Node();
-				$key->type="attr";
+				$key=new Ast\TagNode('attr');
 				$key->name=$s->get(self::anum);
 				$s->get(self::ws);
 				if($s->getOne(self::eq)) {
@@ -55,8 +54,7 @@ class AttrParser {
 		return $attrs;
 	}
 	private function construct_textnode($contents) {
-		$t=new Node();
-		$t->type="text";
+		$t=new Ast\TextNode();
 		$t->contents=$contents;
 		return $t;
 	}
@@ -66,8 +64,7 @@ class AttrParser {
 			$varname=$s->getUnless(self::sep);
 			$s->getOne(self::sep);
 			
-			$node=new Node();
-			$node->type="val";
+			$node=new Ast\DataNode();
 			$node->varname=$varname;
 			return $node;
 		}

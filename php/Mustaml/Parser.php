@@ -3,8 +3,7 @@ namespace Mustaml;
 
 class Parser {
 	public function parseString($templateString) {
-		$rootnode=new Node();
-		$rootnode->type='root';
+		$rootnode=new Ast\Node('root');
 		$lines=explode("\n",$templateString);
 		$indentLevels=array();
 		$parentBlocks=array();
@@ -36,26 +35,26 @@ class Parser {
 	}
 	private function parse_node($nodecode) {
 		switch(true) {
-			case (!isset($nodecode[1])): $node=$this->parse_text($nodecode);$node->type='text';return $node; // at least 2 chars
+			case (!isset($nodecode[1])): $node=$this->parse_text($nodecode);return $node; // at least 2 chars
 			case ($nodecode[0]=='-'): switch(true) {
-				case ($nodecode[1]=='/'): $node=$this->parse_comment($nodecode); $node->type='comment';return $node;
+				case ($nodecode[1]=='/'): $node=$this->parse_comment($nodecode); return $node;
 				case ($nodecode[1]=='^'): if(isset($nodecode[2])&&$nodecode[2]=='^') {
-						$node=$this->parse_notnotval($nodecode); $node->type='notnotval';return $node;
-					} else { $node=$this->parse_notval($nodecode); $node->type='notval';return $node; }
-				default: $node=$this->parse_val($nodecode); $node->type='val';return $node;
+						$node=$this->parse_notnotval($nodecode); return $node;
+					} else { $node=$this->parse_notval($nodecode); return $node; }
+				default: $node=$this->parse_val($nodecode);return $node;
 			}
-			case ($nodecode[0]=='='): $node=$this->parse_hecho($nodecode); $node->type='hecho';return $node;
-			case ($nodecode[0]=='/'): $node=$this->parse_hcomment($nodecode); $node->type='hcomment';return $node;
-			case ($nodecode[0]=='\\'): $node=$this->parse_excapedText($nodecode); $node->type='text';return $node;
+			case ($nodecode[0]=='='): $node=$this->parse_hecho($nodecode); return $node;
+			case ($nodecode[0]=='/'): $node=$this->parse_hcomment($nodecode) ;return $node;
+			case ($nodecode[0]=='\\'): $node=$this->parse_excapedText($nodecode); return $node;
 			case ($nodecode[0]=='%'):
 			case ($nodecode[0]=='.'):
-			case ($nodecode[0]=='#'): $node=$this->parse_htag($nodecode); $node->type='htag';return $node;
-			case ($nodecode[0]=='!'&&$nodecode[1]=='!'&&isset($nodecode[2])&&$nodecode[2]=='!'): $node=$this->parse_doctype($nodecode); $node->type='doctype';return $node;
-			default:$node=$this->parse_text($nodecode);$node->type='text';return $node;
+			case ($nodecode[0]=='#'): $node=$this->parse_htag($nodecode); return $node;
+			case ($nodecode[0]=='!'&&$nodecode[1]=='!'&&isset($nodecode[2])&&$nodecode[2]=='!'): $node=$this->parse_doctype($nodecode); return $node;
+			default:$node=$this->parse_text($nodecode); return $node;
 		}
 	}
 	private function parse_text($contents) {
-		$node=new Node();
+		$node=new Ast\TextNode();
 		$node->contents=$contents;
 		return $node;
 	}
@@ -63,18 +62,18 @@ class Parser {
 		return $this->parse_text(substr($nodecode,1));
 	}
 	private function parse_hcomment($contents) {
-		$node=new Node();
+		$node=new Ast\Node('hcomment');
 		$node->children[]=$this->parse_node(substr($contents,1));
 		return $node;
 	}
 	private function parse_hecho($nodecode) {
-		$node=new Node();
+		$node=new Ast\DataNode('hecho');
 		$node->varname=substr($nodecode,1);
 		return $node;
 	}
 	private function parse_notval($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,2),$m);
-		$node=new Node();
+		$node=new Ast\DataNode('notval');
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$node->children[]=$this->parse_node($m[3]);
@@ -83,7 +82,7 @@ class Parser {
 	}
 	private function parse_notnotval($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,3),$m);
-		$node=new Node();
+		$node=new Ast\DataNode('notnotval');
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$node->children[]=$this->parse_node($m[3]);
@@ -92,7 +91,7 @@ class Parser {
 	}
 	private function parse_val($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,1),$m);
-		$node=new Node();
+		$node=new Ast\DataNode();
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$node->children[]=$this->parse_node($m[3]);
@@ -100,15 +99,15 @@ class Parser {
 		return $node;
 	}
 	private function parse_doctype($nodecode) {
-		$node=new Node();
+		$node=new Ast\Node('doctype');
 		return $node;
 	}
 	private function parse_comment($nodecode) {
-		$node=new Node();
+		$node=new Ast\Node('comment');
 		return $node;
 	}
 	private function parse_htag($nodecode) {
-		$node=new Node();
+		$node=new Ast\TagNode();
 		preg_match("/^  (%(.+?))?  (\#(.+?))?  ((\..+?)*)  (\((.*?)\))?  (\ (.*))?  $/x",$nodecode,$m);
 		//var_dump($m);
 		if(isset($m[2])&&$m[2]!='') {
@@ -139,11 +138,9 @@ class Parser {
 		return $node;
 	}
 	private function get_attr_node($key,$val) {
-		$attr=new Node();
-		$attr->type="attr";
+		$attr=new Ast\TagNode('attr');
 		$attr->name=$key;
-		$t=new Node();
-		$t->type="text";
+		$t=new Ast\TextNode();
 		$t->contents=$val;
 		$attr->children[]=$t;
 		return $attr;
