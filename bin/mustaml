@@ -1,0 +1,32 @@
+#!/bin/sh
+
+PHP=php
+#PHP="/usr/bin/php5"
+
+# Copied from Maven 2 startup script
+# http://stackoverflow.com/questions/7665/how-to-resolve-symbolic-links-in-a-shell-script
+if [ -z "$MUSTAML_HOME" ] ; then
+  ## resolve links - $0 may be a link to maven's home
+  PRG="$0"
+
+  # need this for relative symlinks
+  while [ -h "$PRG" ] ; do
+    ls=`ls -ld "$PRG"`
+    link=`expr "$ls" : '.*-> \(.*\)$'`
+    if expr "$link" : '/.*' > /dev/null; then
+      PRG="$link"
+    else
+      PRG="`dirname "$PRG"`/$link"
+    fi
+  done
+
+  saveddir=`pwd`
+
+  MUSTAML_HOME=`dirname "$PRG"`/..
+
+  # make it fully qualified
+  MUSTAML_HOME=`cd "$MUSTAML_HOME" && pwd`
+fi
+
+# Copied from PEAR startup script
+exec $PHP -d output_buffering=1 -d variables_order=EGPCS -d open_basedir="" -d safe_mode=0 -d register_argc_argv="On" -d auto_prepend_file="" -d auto_append_file="" $MUSTAML_HOME/mustaml.php "$@"

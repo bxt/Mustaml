@@ -93,4 +93,5 @@ target/docs/reference/doc.css: build/doc.sass
 target/docs/reference/index.html: target/docs/reference/doc.css build/doc-unittests.json build/doc.mustaml
 	php mustaml.php build/doc-unittests.json build/doc.mustaml > target/docs/reference/index.html
 
-
+install: 
+	ln -s $(PWD)/bin/mustaml ~/bin/mustaml
