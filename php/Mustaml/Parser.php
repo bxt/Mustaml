@@ -39,7 +39,9 @@ class Parser {
 			case (!isset($nodecode[1])): $node=$this->parse_text($nodecode);$node->type='text';return $node; // at least 2 chars
 			case ($nodecode[0]=='-'): switch(true) {
 				case ($nodecode[1]=='/'): $node=$this->parse_comment($nodecode); $node->type='comment';return $node;
-				case ($nodecode[1]=='^'): $node=$this->parse_notval($nodecode); $node->type='notval';return $node;
+				case ($nodecode[1]=='^'): if(isset($nodecode[2])&&$nodecode[2]=='^') {
+						$node=$this->parse_notnotval($nodecode); $node->type='notnotval';return $node;
+					} else { $node=$this->parse_notval($nodecode); $node->type='notval';return $node; }
 				default: $node=$this->parse_val($nodecode); $node->type='val';return $node;
 			}
 			case ($nodecode[0]=='='): $node=$this->parse_hecho($nodecode); $node->type='hecho';return $node;
@@ -72,6 +74,15 @@ class Parser {
 	}
 	private function parse_notval($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,2),$m);
+		$node=new Node();
+		$node->varname=$m[1];
+		if(isset($m[3])) {
+			$node->children[]=$this->parse_node($m[3]);
+		}
+		return $node;
+	}
+	private function parse_notnotval($nodecode) {
+		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,3),$m);
 		$node=new Node();
 		$node->varname=$m[1];
 		if(isset($m[3])) {

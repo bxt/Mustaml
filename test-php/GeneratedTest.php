@@ -320,6 +320,25 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
+   * Nonempty Loops etc.
+   *
+   * The notayim operator (^^) will inverse the not-operator. You can check
+   * if a loop would render at least one item. 
+   */
+  public function testEmptryArrayNot() {
+    $expectedHtml='<p class="grey">No planets to visit today!</p>';
+    $template='-^^ planets %ul
+  -planets
+    %li =. , G\'day!
+-^planets
+    %p.grey No planets to visit today!';
+    $data=json_decode('{"planets":[]}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
    * Escaping
    *
    * If you want to start a text line with a meta-character otherwise

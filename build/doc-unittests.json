@@ -159,6 +159,15 @@
 "html":"<ul><li class=\"grey\">No planets to visit today!</li></ul>"
 },
 
+{
+"title":"Nonempty Loops etc.",
+"desc":"The notayim operator (^^) will inverse the not-operator. You can check if a loop would render at least one item. ",
+"testname":"EmptryArrayNot",
+"data":{"planets":[]},
+"mustaml":"-^^ planets %ul\n  -planets\n    %li =. , G'day!\n-^planets\n    %p.grey No planets to visit today!",
+"html":"<p class=\"grey\">No planets to visit today!</p>"
+},
+
 
 {
 "title":"Escaping",

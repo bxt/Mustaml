@@ -21,6 +21,12 @@ class HtmlCompiler {
 		}
 		return '';
 	}
+	private function render_notnotval($ast,$data) {
+		if( isset($data[$ast->varname]) && !empty($data[$ast->varname]) ) {
+			return $this->render_children($ast,$data);
+		}
+		return '';
+	}
 	private function render_val($ast,$data) {
 		$html='';
 		if(isset($data[$ast->varname])) {
