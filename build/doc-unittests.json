@@ -240,7 +240,7 @@
 
 {
 "title":"Using anything (e.g. Strings) with blocks",
-"desc":"Don't get the aboce confused with calling blocks with Strings. You can pretty much call everything with a block, and it will be availible as . inside the block, if it evaluates to true. ''",
+"desc":"Don't get the aboce confused with calling blocks with Strings. You can pretty much call everything with a block, and it will be availible as \".\" inside the block. However, other than the notayim-operator it will render its block for empty strings too. ",
 "testname":"BlockToStrong",
 "data":"{\"string\":\"Big Mike\"}",
 "mustaml":"-string\n  %b =.",

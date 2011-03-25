@@ -479,7 +479,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    *
    * Don't get the aboce confused with calling blocks with Strings. You can
    * pretty much call everything with a block, and it will be availible as
-   * . inside the block, if it evaluates to true. ''
+   * "." inside the block. However, other than the notayim-operator it will
+   * render its block for empty strings too. 
    */
   public function testBlockToStrong() {
     $expectedHtml='<b>Big Mike</b>';
