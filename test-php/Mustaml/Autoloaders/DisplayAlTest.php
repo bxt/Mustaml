@@ -2,10 +2,10 @@
 namespace Mustaml\Autoloaders;
 require_once 'mustaml.php';
 
-class DisplayAutoloaderTest extends \PHPUnit_Framework_TestCase {
+class DisplayAlTest extends \PHPUnit_Framework_TestCase {
 	public function testDisplayingValues() {
 		
-		$al=new DisplayAutoloader();
+		$al=new DisplayAl();
 		$config=new \Mustaml\HtmlCompilerConfig(array(array($al,'autoload')));
 		$main=new \Mustaml\Mustaml("%p =foo\n%p =bar",array("bar"=>"set"),$config);
 		
@@ -13,7 +13,7 @@ class DisplayAutoloaderTest extends \PHPUnit_Framework_TestCase {
 	}
 	public function testCustomDelims() {
 		
-		$al=new DisplayAutoloader('-=|','|=-');
+		$al=new DisplayAl('-=|','|=-');
 		$config=new \Mustaml\HtmlCompilerConfig(array(array($al,'autoload')));
 		$main=new \Mustaml\Mustaml("%p =foo",array(),$config);
 		
@@ -21,7 +21,7 @@ class DisplayAutoloaderTest extends \PHPUnit_Framework_TestCase {
 	}
 	public function testDisplayingBlockcode() {
 		
-		$al=new DisplayAutoloader();
+		$al=new DisplayAl();
 		$config=new \Mustaml\HtmlCompilerConfig(array(array($al,'autoload')));
 		$main=new \Mustaml\Mustaml("%p -foo\n  %p -bar",array("bar"=>"set"),$config);
 		

@@ -17,7 +17,7 @@ class Cli {
 			$data=array();
 		}
 		
-		$al=new Autoloaders\TemplateDirAutoloader('.'); //pwd
+		$al=new Autoloaders\TemplateDirAl('.'); //pwd
 		$config=new HtmlCompilerConfig(array(array($al,'autoload')));
 		$al_bp=new Mustaml('',array(),$config);
 		$al->setMustamlBoilerplate($al_bp);

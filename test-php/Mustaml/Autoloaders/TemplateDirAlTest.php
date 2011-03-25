@@ -2,11 +2,11 @@
 namespace Mustaml\Autoloaders;
 require_once 'mustaml.php';
 
-class TemplateDirAutoloaderTest extends \PHPUnit_Framework_TestCase {
+class TemplateDirAlTest extends \PHPUnit_Framework_TestCase {
 	public function testLoadingTwoNestedTemplate() {
 		
 		$data=array("love"=>"with love");
-		$al=new TemplateDirAutoloader('test-php/data');
+		$al=new TemplateDirAl('test-php/data');
 		$config=new \Mustaml\HtmlCompilerConfig(array(array($al,'autoload')));
 		$main=new \Mustaml\Mustaml("-hornshee.mustaml",$data,$config);
 		$al->setMustamlBoilerplate($main);
@@ -16,7 +16,7 @@ class TemplateDirAutoloaderTest extends \PHPUnit_Framework_TestCase {
 	public function testLoadingTwoNestedTemplateUsingInterfaceCallback() {
 		
 		$data=array("love"=>"with love");
-		$al=new TemplateDirAutoloader('test-php/data');
+		$al=new TemplateDirAl('test-php/data');
 		$config=new \Mustaml\HtmlCompilerConfig(array($al));
 		$main=new \Mustaml\Mustaml("-hornshee.mustaml",$data,$config);
 		$al->setMustamlBoilerplate($main);

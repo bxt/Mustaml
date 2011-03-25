@@ -1,7 +1,7 @@
 <?php
 namespace Mustaml\Autoloaders;
 
-class DisplayAutoloader implements AutoloaderI {
+class DisplayAl implements AutoloaderI {
 	private $openingDelim;
 	private $closingDelim;
 	public function __construct($openingDelim=null,$closingDelim=null) {
