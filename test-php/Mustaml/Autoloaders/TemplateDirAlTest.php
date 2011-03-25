@@ -7,7 +7,7 @@ class TemplateDirAlTest extends \PHPUnit_Framework_TestCase {
 		
 		$data=array("love"=>"with love");
 		$al=new TemplateDirAl('test-php/data');
-		$config=new \Mustaml\HtmlCompilerConfig(array(array($al,'autoload')));
+		$config=new \Mustaml\Html\CompilerConfig(array(array($al,'autoload')));
 		$main=new \Mustaml\Mustaml("-hornshee.mustaml",$data,$config);
 		$al->setMustamlBoilerplate($main);
 		
@@ -17,7 +17,7 @@ class TemplateDirAlTest extends \PHPUnit_Framework_TestCase {
 		
 		$data=array("love"=>"with love");
 		$al=new TemplateDirAl('test-php/data');
-		$config=new \Mustaml\HtmlCompilerConfig(array($al));
+		$config=new \Mustaml\Html\CompilerConfig(array($al));
 		$main=new \Mustaml\Mustaml("-hornshee.mustaml",$data,$config);
 		$al->setMustamlBoilerplate($main);
 		

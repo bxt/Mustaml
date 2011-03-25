@@ -6,7 +6,7 @@ class Mustaml {
 	private $data=array();
 	private $template='';
 	public function __construct($template,$data=array(),$config=null) {
-		$this->config=$config?:new HtmlCompilerConfig;
+		$this->config=$config?:new Html\CompilerConfig;
 		$this->data=$data;
 		$this->template=$template;
 	}
@@ -18,7 +18,7 @@ class Mustaml {
 				$ast=$p->parseString($this->template);
 			}
 			
-			$c=new HtmlCompiler($this->config);
+			$c=new Html\Compiler($this->config);
 			$newData=$this->data;
 			if($yieldAst) {
 				$newData['-']=$this->getWithTemplate($yieldAst,$yieldData);

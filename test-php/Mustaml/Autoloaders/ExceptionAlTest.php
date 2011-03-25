@@ -8,14 +8,14 @@ class ExceptionAlTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testThrowingException() {
 		$al=new ExceptionAl();
-		$config=new \Mustaml\HtmlCompilerConfig(array(array($al,'autoload')));
+		$config=new \Mustaml\Html\CompilerConfig(array(array($al,'autoload')));
 		$main=new \Mustaml\Mustaml("%p =foo\n%p =bar",array("bar"=>"set"),$config);
 		$main();
 	}
 	public function testNotThrowingException() {
 		
 		$al=new ExceptionAl();
-		$config=new \Mustaml\HtmlCompilerConfig(array(array($al,'autoload')));
+		$config=new \Mustaml\Html\CompilerConfig(array(array($al,'autoload')));
 		$main=new \Mustaml\Mustaml("%p =foo",array("foo"=>"set"),$config);
 		
 		$this->assertEquals('<p>set</p>',$main());

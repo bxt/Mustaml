@@ -18,14 +18,14 @@ class Cli {
 		}
 		
 		$al=new Autoloaders\TemplateDirAl('.'); //pwd
-		$config=new HtmlCompilerConfig(array(array($al,'autoload')));
+		$config=new Html\CompilerConfig(array(array($al,'autoload')));
 		$al_bp=new Mustaml('',array(),$config);
 		$al->setMustamlBoilerplate($al_bp);
 		
 		$p=new Parser();
 		$ast=$p->parseString($templateString);
 		//var_dump($ast);
-		$c=new HtmlCompiler($config);
+		$c=new Html\Compiler($config);
 		$html=$c->render($ast,$data)."\n";
 		
 		echo $html;

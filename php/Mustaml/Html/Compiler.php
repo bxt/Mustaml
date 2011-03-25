@@ -1,10 +1,10 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Html;
 
-class HtmlCompiler {
+class Compiler {
 	private $config;
 	public function __construct($config=null) {
-		$this->config=$config?:new HtmlCompilerConfig;
+		$this->config=$config?:new CompilerConfig;
 	}
 	public function render($ast,$data=array()) {
 		$renderMethod='render_'.$ast->type;
@@ -36,7 +36,7 @@ class HtmlCompiler {
 		if($this->issetData($data,$ast->varname)) {
 			$v=$this->getData($data,$ast->varname);
 			if(is_callable($v)) {
-				$r=new Ast\Node('root');
+				$r=new \Mustaml\Ast\Node('root');
 				$r->children=$ast->children;
 				return $v($r,$data);
 			} elseif(is_array($v)) {			

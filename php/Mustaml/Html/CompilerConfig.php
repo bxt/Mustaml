@@ -1,7 +1,7 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Html;
 
-class HtmlCompilerConfig {
+class CompilerConfig {
 	private $htmlArrayAttrs;
 	private $htmlSelfclosingTags;
 	private $valueAutoloaders;
@@ -36,7 +36,7 @@ class HtmlCompilerConfig {
 		for($i=count($this->valueAutoloaders)-1;$i>=0;$i--) {
 			$al=$this->valueAutoloaders[$i];
 			$loaded=null;
-			if(interface_exists('Mustaml\\Autoloaders\\AutoloaderI',false) && ($al instanceof Autoloaders\AutoloaderI) ) {
+			if(interface_exists('Mustaml\\Autoloaders\\AutoloaderI',false) && ($al instanceof \Mustaml\Autoloaders\AutoloaderI) ) {
 				$loaded=call_user_func_array(array($al,'autoload'),array($key));
 			} elseif(is_callable($al)) {
 				$loaded=call_user_func_array($al,array($key));
