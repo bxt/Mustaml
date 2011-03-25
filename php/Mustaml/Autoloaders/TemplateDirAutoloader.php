@@ -11,7 +11,7 @@ class TemplateDirAutoloader implements AutoloaderI {
 	public function autoload($key) {
 		if(preg_match('/\.mustaml$/i',$key)) {
 			// only for vars like *.mustaml to avoid loading random stuff
-			$possibleTemplateString=file_get_contents($this->templateDir.'/'.$key);
+			$possibleTemplateString=@file_get_contents($this->templateDir.'/'.$key);
 			if(!$possibleTemplateString) {
 				return null;
 			} else {
