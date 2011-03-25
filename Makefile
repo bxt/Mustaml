@@ -75,7 +75,7 @@ demos: phar cleandemos
 	@echo "----------------------------------------"
 	
 
-gen: test-php/GeneratedTest.php target/docs/reference/index.html
+gen: test-php/GeneratedTest.php target/docs/reference/ref.html target/docs/reference/index.html
 	@echo "----------------------------------------"
 	@echo
 	@echo "Building various..."
@@ -84,14 +84,17 @@ gen: test-php/GeneratedTest.php target/docs/reference/index.html
 
 
 
-test-php/GeneratedTest.php: build/gen-unittests.php build/doc-unittests.json
-	php build/gen-unittests.php build/doc-unittests.json > test-php/GeneratedTest.php
+test-php/GeneratedTest.php: build/gen-unittests.php build/ref-unittests.json
+	php build/gen-unittests.php build/ref-unittests.json > test-php/GeneratedTest.php
 
 target/docs/reference/doc.css: build/doc.sass
 	sass build/doc.sass:target/docs/reference/doc.css
 
-target/docs/reference/index.html: target/docs/reference/doc.css build/doc-unittests.json build/doc.mustaml
-	php mustaml.php build/doc-unittests.json build/doc.mustaml > target/docs/reference/index.html
+target/docs/reference/ref.html: target/docs/reference/doc.css build/ref-unittests.json build/ref.mustaml build/htmlintro.mustaml
+	php mustaml.php build/ref-unittests.json build/ref.mustaml > target/docs/reference/ref.html
+
+target/docs/reference/index.html: target/docs/reference/doc.css build/index.json build/index.mustaml build/index.json build/htmlintro.mustaml
+	php mustaml.php build/index.json build/index.mustaml > target/docs/reference/index.html
 
 install: 
 	ln -s $(PWD)/bin/mustaml ~/bin/mustaml

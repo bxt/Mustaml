@@ -1,0 +1,10 @@
+-htmlintro.mustaml
+	%h1 =pagetitle
+	=intro
+	%h3 Key features
+	%ul -key-features
+		%li =.
+	%br.clearfix
+	-desc
+		%p =.
+	%p %a(href=ref.html) Language Reference
