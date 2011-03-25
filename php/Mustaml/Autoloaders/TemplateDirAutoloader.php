@@ -1,7 +1,7 @@
 <?php
 namespace Mustaml\Autoloaders;
 
-class TemplateDirAutoloader {
+class TemplateDirAutoloader implements AutoloaderI {
 	private $templateDir;
 	private $mustamlBoilerplate;
 	public function __construct($dir,$mustamlBoilerplate=null) {

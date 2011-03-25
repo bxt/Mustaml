@@ -34,7 +34,13 @@ class HtmlCompilerConfig {
 	public function isAutoloadable($key) {
 		if(isset($this->autoloadedValues[$key])) return true;
 		for($i=count($this->valueAutoloaders)-1;$i>=0;$i--) {
-			$loaded=call_user_func_array($this->valueAutoloaders[$i],array($key));
+			$al=$this->valueAutoloaders[$i];
+			$loaded=null;
+			if(interface_exists('Mustaml\\Autoloaders\\AutoloaderI',false) && ($al instanceof Autoloaders\AutoloaderI) ) {
+				$loaded=call_user_func_array(array($al,'autoload'),array($key));
+			} elseif(is_callable($al)) {
+				$loaded=call_user_func_array($al,array($key));
+			}
 			if($loaded!==null) {
 				$this->autoloadedValues[$key]=$loaded;
 				return true;
