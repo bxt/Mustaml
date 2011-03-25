@@ -9,18 +9,28 @@ class Cli {
 			return 0;
 		}
 		if(isset($argv[0])&&isset($argv[1])) {
-			$templateString=file_get_contents($argv[1]);
+			$filename=$argv[1];
 			$data=json_decode(file_get_contents($argv[0]),true);
 			if($data===null) throw new \Exception("Invalid JSON!");
 		} else {
-			$templateString=file_get_contents($argv[0]);
+			$filename=$argv[0];
 			$data=array();
 		}
+		$templateString=file_get_contents($filename);
 		
-		$al=new Autoloaders\TemplateDirAl('.'); //pwd
-		$config=new Html\CompilerConfig(array(array($al,'autoload')));
+		$alList=array();
+		$pwd_al=new Autoloaders\TemplateDirAl('.');
+		array_push($alList,$pwd_al);
+		if(dirname($filename)!='.') {
+			$filedir_al=new Autoloaders\TemplateDirAl(dirname($filename));
+			array_push($alList,$filedir_al);
+		}
+		$config=new Html\CompilerConfig($alList);
 		$al_bp=new Mustaml('',array(),$config);
-		$al->setMustamlBoilerplate($al_bp);
+		$pwd_al->setMustamlBoilerplate($al_bp);
+		if(isset($filedir_al)) {
+			$filedir_al->setMustamlBoilerplate($al_bp);
+		}
 		
 		$p=new Parser();
 		$ast=$p->parseString($templateString);
