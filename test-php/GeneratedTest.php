@@ -147,8 +147,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * HTML-Attributes
    *
    * Attributes are defined as usual but are appended in brackets. Yes,
-   * this is HTML-syntax and not some language-specific map with lots of @,
-   * => and so on. 
+   * this is HTML-syntax and not some language-specific map with lots of :,
+   * @, => and so on. 
    */
   public function testHAttrs() {
     $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />';
@@ -163,7 +163,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Old-School HTML-Attributes
    *
-   * You can use some alternate syntax and even whitepace if you like: 
+   * You can use some alternate syntax and whitepace as you like: 
    */
   public function testHAttrsAlternates() {
     $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />';
@@ -260,7 +260,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    */
   public function testBasicDataUndefined() {
     $expectedHtml='<p></p>';
-    $template='%p =unexisting';
+    $template='%p =nonexisting';
     $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
@@ -270,15 +270,16 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Inserting More Data
    *
-   * The = tag doesn't want sub-nodes, so use parallel =tags like this: 
+   * You can define text and vars as children.  (The = tag doesn't want
+   * sub-nodes. )
    */
   public function testBasicData2() {
-    $expectedHtml='<p>Hello World!, Hello Venus!</p>';
+    $expectedHtml='<p>Hello World, hello Venus!</p>';
     $template='%p
   =varname
   , 
   =varname2';
-    $data=json_decode('{"varname":"Hello World!","varname2":"Hello Venus!"}',true);
+    $data=json_decode('{"varname":"Hello World","varname2":"hello Venus!"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -287,7 +288,9 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Looping
    *
-   * You can loop over arrays. The current value is available as ".". 
+   * The minus operator (-) marks special blocks that behave depending on
+   * the var content. For arrays the block will be looped. The current
+   * value is available as ".". 
    */
   public function testBasicLoop() {
     $expectedHtml='<ul><li>Hello World!</li><li>Hello Venus!</li><li>Hello Pluto!</li></ul>';
@@ -306,8 +309,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Looping Maps
    *
-   * And you can loop over maps. Inside the loop, you can access the map
-   * keys like normal vars. 
+   * And you can loop over arrays containing maps. Inside the loop, you can
+   * access the map keys like normal vars. 
    */
   public function testBasicAssocLoop() {
     $expectedHtml='<ul><li>Hello World!</li><li>Ave Venus!</li><li>Hey tiny Pluto!</li></ul>';
@@ -334,8 +337,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    */
   public function testBasicBoolean() {
     $expectedHtml='it\'s true';
-    $template='-doIt it\'s true
--^doIt it\'s actually false';
+    $template='-doIt it\'s true';
     $data=json_decode('{"doIt":true}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
@@ -407,12 +409,13 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Checking for empty Loops or Strings
+   * Checking for empty Loops
    *
    * The notayim operator (^^) will inverse the not-operator. You can check
-   * if a loop would render at least one item. 
+   * if a loop would render at least one item. In this example the <ul> tag
+   * is only rendered if there are any "planets". 
    */
-  public function testEmptryArrayNot() {
+  public function testEmptyArrayNot() {
     $expectedHtml='<p class="grey">No planets to visit today!</p>';
     $template='-^^planets %ul
   -planets
@@ -426,7 +429,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Checking for empty Loops nevertheless
+   * Empty-loop-check does nothing when loop has items
    *
    * I you use the  notayim operator on an defined value it will just
    * render its subblocks as nothing had happended. 
@@ -439,6 +442,39 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
 -^planets
     %p.grey No planets to visit today!';
     $data=json_decode('{"planets":["World"]}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Checking for empty Strings
+   *
+   * The notayim operator (^^) can be used to check if a String is ""
+   * (empty). In this example no paragraph is created if the string is
+   * empty. 
+   */
+  public function testEmptyStringNot() {
+    $expectedHtml='';
+    $template='-^^stingray %p =stingray
+';
+    $data=json_decode('{"stingray":""}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Empty-string-check does nothing when string has chars
+   *
+   * If the string is not empty the subblock remains unaffected and is
+   * rendered as usual. 
+   */
+  public function testEmptyStringNotWithValue() {
+    $expectedHtml='<p>Corvette C2</p>';
+    $template='-^^stingray %p =stingray
+';
+    $data=json_decode('{"stingray":"Corvette C2"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -462,8 +498,9 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Printing verbatim HTML
    *
-   * Say you've preprocessed some Markdown and want to display it on a
-   * page, just use the string value with minus. '
+   * The minus operator applied on string values prints them verbatim. Say
+   * you've preprocessed some Markdown and want to display it on a page,
+   * just insert the string value's varname after the minus. 
    */
   public function testVerbatimHtml() {
     $expectedHtml='<b>I\'m bold!</b>';
@@ -477,10 +514,9 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Using anything (e.g. Strings) with blocks
    *
-   * Don't get the aboce confused with calling blocks with Strings. You can
-   * pretty much call everything with a block, and it will be availible as
-   * "." inside the block. However, other than the notayim-operator it will
-   * render its block for empty strings too. 
+   * Don't get the above confused with calling blocks with Strings. You can
+   * use every type of value to initialize blocks, it won't be rendered but
+   * it will be availible as "." inside the block. 
    */
   public function testBlockToStrong() {
     $expectedHtml='<b>Big Mike</b>';
@@ -493,11 +529,26 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
+   * Using srtings with with blocks vs notayim
+   *
+   * However, other than the notayim-operator, using only minus it will
+   * render its block for empty strings too. 
+   */
+  public function testBlockToStrongEmpty() {
+    $expectedHtml='<b></b>';
+    $template='-string
+  %b =.';
+    $data=json_decode('{"string":""}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
    * Attributes with data
    *
    * You can provide a map for highly dynamic attributes, while still
-   * providing others directly. Last specified overrides. Note the double
-   * space to exit the varname. 
+   * defining others in your template. Last specified overrides. 
    */
   public function testAttrData() {
     $expectedHtml='<link rel="stylesheet" href="style/main.css" type="text/css" />';
@@ -512,12 +563,45 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * Attributes with data-values
    *
    * You can even fill only the attribute's values with dynamic strings,
-   * and mix this with other attributes and old syntax. 
+   * and mix this with other attributes and old syntax. Note that you have
+   * to use separators (space or comma) to end the varname string and the
+   * attribute value string. 
    */
   public function testAttrDataValues() {
     $expectedHtml='<link rel="stylesheet" href="style/main.css" />';
     $template='%link(rel=>stylesheet, href=>=style)';
     $data=json_decode('{"style":"style/main.css"}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Attributes with data-values and text
+   *
+   * You can mix usal text and dynamic values in your attributes. This is
+   * why you have to use separators to end the varname string and the
+   * attribute value string. 
+   */
+  public function testAttrDataValuesWithText() {
+    $expectedHtml='<a href="#12-headline">go</a>';
+    $template='%a(href=#=anchorNo -=anchor) go';
+    $data=json_decode('{"anchor":"headline","anchorNo":"12"}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Attributes with equal signs in them
+   *
+   * To avoid parsing the equal sings as vars just quote the attribute
+   * value. 
+   */
+  public function testAttrDataValuesWithTextQuoted() {
+    $expectedHtml='<a href="#=anchorNo -=anchor">go</a>';
+    $template='%a(href="#=anchorNo -=anchor") go';
+    $data=json_decode('{"anchor":"headline","anchorNo":"12"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);

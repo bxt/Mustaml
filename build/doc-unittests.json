@@ -60,7 +60,7 @@
 },
 {
 "title":"HTML-Attributes",
-"desc":"Attributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of @, => and so on. ",
+"desc":"Attributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of :, @, => and so on. ",
 "testname":"HAttrs",
 "data":false,
 "mustaml":"%p(lang=\"en\") Yo!\n%input(type=text value=\"tryna edit me\" disabled)",
@@ -68,7 +68,7 @@
 },
 {
 "title":"Old-School HTML-Attributes",
-"desc":"You can use some alternate syntax and even whitepace if you like: ",
+"desc":"You can use some alternate syntax and whitepace as you like: ",
 "testname":"HAttrsAlternates",
 "data":false,
 "mustaml":"%p(lang=>\"en\") Yo!\n%input(type=>\"text\",value => \"tryna edit me\", disabled)",
@@ -123,23 +123,23 @@
 "desc":"If you do not provide a piece of data, it will be silently ignored. ",
 "testname":"BasicDataUndefined",
 "data":false,
-"mustaml":"%p =unexisting",
+"mustaml":"%p =nonexisting",
 "html":"<p></p>"
 },
 
 {
 "title":"Inserting More Data",
-"desc":"The = tag doesn't want sub-nodes, so use parallel =tags like this: ",
+"desc":"You can define text and vars as children.  (The = tag doesn't want sub-nodes. )",
 "testname":"BasicData2",
-"data":"{\"varname\":\"Hello World!\",\"varname2\":\"Hello Venus!\"}",
+"data":"{\"varname\":\"Hello World\",\"varname2\":\"hello Venus!\"}",
 "mustaml":"%p\n  =varname\n  , \n  =varname2",
-"html":"<p>Hello World!, Hello Venus!</p>"
+"html":"<p>Hello World, hello Venus!</p>"
 },
 
 
 {
 "title":"Looping",
-"desc":"You can loop over arrays. The current value is available as \".\". ",
+"desc":"The minus operator (-) marks special blocks that behave depending on the var content. For arrays the block will be looped. The current value is available as \".\". ",
 "testname":"BasicLoop",
 "data":"{\"planets\":[\"World\",\"Venus\",\"Pluto\"]}",
 "mustaml":"%ul\n  -planets\n    %li \n     Hello \n     =.\n     !",
@@ -148,7 +148,7 @@
 
 {
 "title":"Looping Maps",
-"desc":"And you can loop over maps. Inside the loop, you can access the map keys like normal vars. ",
+"desc":"And you can loop over arrays containing maps. Inside the loop, you can access the map keys like normal vars. ",
 "testname":"BasicAssocLoop",
 "data":"{\"planets\":[\n  {\"name\":\"World\",\"greeting\":\"Hello \"},\n  {\"name\":\"Venus\",\"greeting\":\"Ave \"},\n  {\"name\":\"Pluto\",\"greeting\":\"Hey tiny \"}\n]}",
 "mustaml":"%ul\n  -planets\n    %li\n      =greeting\n      =name\n      !",
@@ -160,7 +160,7 @@
 "desc":"You can check for true/false values with the very same syntax. ",
 "testname":"BasicBoolean",
 "data":"{\"doIt\":true}",
-"mustaml":"-doIt it's true\n-^doIt it's actually false",
+"mustaml":"-doIt it's true",
 "html":"it's true"
 },
 
@@ -202,21 +202,41 @@
 },
 
 {
-"title":"Checking for empty Loops or Strings",
-"desc":"The notayim operator (^^) will inverse the not-operator. You can check if a loop would render at least one item. ",
-"testname":"EmptryArrayNot",
+"title":"Checking for empty Loops",
+"desc":"The notayim operator (^^) will inverse the not-operator. You can check if a loop would render at least one item. In this example the <ul> tag is only rendered if there are any \"planets\". ",
+"testname":"EmptyArrayNot",
 "data":"{\"planets\":[]}",
 "mustaml":"-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!",
 "html":"<p class=\"grey\">No planets to visit today!</p>"
 },
 
+
 {
-"title":"Checking for empty Loops nevertheless",
+"title":"Empty-loop-check does nothing when loop has items",
 "desc":"I you use the  notayim operator on an defined value it will just render its subblocks as nothing had happended. ",
 "testname":"EmptryArrayNotWithValue",
 "data":"{\"planets\":[\"World\"]}",
 "mustaml":"-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!",
 "html":"<ul><li>World</li></ul>"
+},
+
+
+{
+"title":"Checking for empty Strings",
+"desc":"The notayim operator (^^) can be used to check if a String is \"\" (empty). In this example no paragraph is created if the string is empty. ",
+"testname":"EmptyStringNot",
+"data":"{\"stingray\":\"\"}",
+"mustaml":"-^^stingray %p =stingray\n",
+"html":""
+},
+
+{
+"title":"Empty-string-check does nothing when string has chars",
+"desc":"If the string is not empty the subblock remains unaffected and is rendered as usual. ",
+"testname":"EmptyStringNotWithValue",
+"data":"{\"stingray\":\"Corvette C2\"}",
+"mustaml":"-^^stingray %p =stingray\n",
+"html":"<p>Corvette C2</p>"
 },
 
 
@@ -231,7 +251,7 @@
 
 {
 "title":"Printing verbatim HTML",
-"desc":"Say you've preprocessed some Markdown and want to display it on a page, just use the string value with minus. '",
+"desc":"The minus operator applied on string values prints them verbatim. Say you've preprocessed some Markdown and want to display it on a page, just insert the string value's varname after the minus. ",
 "testname":"VerbatimHtml",
 "data":"{\"html\":\"<b>I'm bold!</b>\"}",
 "mustaml":"-html",
@@ -240,7 +260,7 @@
 
 {
 "title":"Using anything (e.g. Strings) with blocks",
-"desc":"Don't get the aboce confused with calling blocks with Strings. You can pretty much call everything with a block, and it will be availible as \".\" inside the block. However, other than the notayim-operator it will render its block for empty strings too. ",
+"desc":"Don't get the above confused with calling blocks with Strings. You can use every type of value to initialize blocks, it won't be rendered but it will be availible as \".\" inside the block. ",
 "testname":"BlockToStrong",
 "data":"{\"string\":\"Big Mike\"}",
 "mustaml":"-string\n  %b =.",
@@ -248,8 +268,17 @@
 },
 
 {
+"title":"Using srtings with with blocks vs notayim",
+"desc":"However, other than the notayim-operator, using only minus it will render its block for empty strings too. ",
+"testname":"BlockToStrongEmpty",
+"data":"{\"string\":\"\"}",
+"mustaml":"-string\n  %b =.",
+"html":"<b></b>"
+},
+
+{
 "title":"Attributes with data",
-"desc":"You can provide a map for highly dynamic attributes, while still providing others directly. Last specified overrides. Note the double space to exit the varname. ",
+"desc":"You can provide a map for highly dynamic attributes, while still defining others in your template. Last specified overrides. ",
 "testname":"AttrData",
 "data":"{\"linktag\":{\"rel\":\"stylesheet\",\"href\":\"style/main.css\"}}",
 "mustaml":"%link(=linktag  type=\"text\/css\")",
@@ -258,11 +287,29 @@
 
 {
 "title":"Attributes with data-values",
-"desc":"You can even fill only the attribute's values with dynamic strings, and mix this with other attributes and old syntax. ",
+"desc":"You can even fill only the attribute's values with dynamic strings, and mix this with other attributes and old syntax. Note that you have to use separators (space or comma) to end the varname string and the attribute value string. ",
 "testname":"AttrDataValues",
 "data":"{\"style\":\"style/main.css\"}",
 "mustaml":"%link(rel=>stylesheet, href=>=style)",
 "html":"<link rel=\"stylesheet\" href=\"style/main.css\" />"
+},
+
+{
+"title":"Attributes with data-values and text",
+"desc":"You can mix usal text and dynamic values in your attributes. This is why you have to use separators to end the varname string and the attribute value string. ",
+"testname":"AttrDataValuesWithText",
+"data":"{\"anchor\":\"headline\",\"anchorNo\":\"12\"}",
+"mustaml":"%a(href=#=anchorNo -=anchor) go",
+"html":"<a href=\"#12-headline\">go</a>"
+},
+
+{
+"title":"Attributes with equal signs in them",
+"desc":"To avoid parsing the equal sings as vars just quote the attribute value. ",
+"testname":"AttrDataValuesWithTextQuoted",
+"data":"{\"anchor\":\"headline\",\"anchorNo\":\"12\"}",
+"mustaml":"%a(href=\"#=anchorNo -=anchor\") go",
+"html":"<a href=\"#=anchorNo -=anchor\">go</a>"
 },
 
 {
