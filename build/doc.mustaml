@@ -13,9 +13,9 @@
 		%p =desc
 		%p %b Mustaml:
 		%pre.mustaml =mustaml
-		-^^data
+		-data
 			%b %b Data:
-			%pre.json =data
+			%pre.json =.
 		%p %b Html output:
 		-^^html
 			%pre.html =html
