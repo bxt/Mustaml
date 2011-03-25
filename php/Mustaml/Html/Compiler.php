@@ -52,8 +52,14 @@ class Compiler {
 				$html.=$this->render_children($ast,$data);
 			} elseif ($v===false) {
 			} else {
-				$html.=$v;
-				$html.=$this->render_children($ast,$data);
+				if(count($ast->children)<1) {
+					$html.=$v;
+					$html.=$this->render_children($ast,$data);
+				} else { // whatever it is, we have a block and we give it to the block:
+					$newdata=$data;
+					$newdata['.']=$v;
+					$html.=$this->render_children($ast,$newdata);
+				}
 			}
 		}
 		return $html;

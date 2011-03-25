@@ -474,6 +474,23 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
+   * Using anything (e.g. Strings) with blocks
+   *
+   * Don't get the aboce confused with calling blocks with Strings. You can
+   * pretty much call everything with a block, and it will be availible as
+   * . inside the block, if it evaluates to true. ''
+   */
+  public function testBlockToStrong() {
+    $expectedHtml='<b>Big Mike</b>';
+    $template='-string
+  %b =.';
+    $data=json_decode('{"string":"Big Mike"}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
    * Attributes with data
    *
    * You can provide a map for highly dynamic attributes, while still
