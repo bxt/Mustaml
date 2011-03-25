@@ -28,7 +28,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   %body
    %p
      Everything closing automatically. ';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -44,7 +44,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $template='%html
   %head %title Yippiyeah!
   %body %p Everything closing automatically. ';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -61,7 +61,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $template='%p %span
   %b Wow. 
   Really. ';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -80,7 +80,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
 %p
   %span.inner
     Weeehah';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -99,7 +99,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   #content
     #sidebar
   #footer';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -115,7 +115,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $expectedHtml='<!DOCTYPE html><html></html>';
     $template='!!!
 %html';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -137,7 +137,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
 %hr
 %frame
 %param';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -154,7 +154,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />';
     $template='%p(lang="en") Yo!
 %input(type=text value="tryna edit me" disabled)';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -169,7 +169,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $expectedHtml='<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />';
     $template='%p(lang=>"en") Yo!
 %input(type=>"text",value => "tryna edit me", disabled)';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -184,7 +184,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testHAttrsOverride() {
     $expectedHtml='<div id="newer"></div>';
     $template='#old(id=new id=newer)';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -199,7 +199,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testHArrayAttrs() {
     $expectedHtml='<link class="foo bar" rev="prev index" rel="shortlink home up" />';
     $template='%link.foo(class=bar,rev=prev,rev=index,rel=shortlink,rel="home up")';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -214,7 +214,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $expectedHtml='<html><!--  created by Mustaml! --></html>';
     $template='%html
   / created by Mustaml!';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -232,7 +232,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $template='%html
   / temporarily disabled:
     %body %p';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -261,7 +261,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testBasicDataUndefined() {
     $expectedHtml='<p></p>';
     $template='%p =unexisting';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -317,7 +317,11 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
       =greeting
       =name
       !';
-    $data=json_decode('{"planets":[{"name":"World","greeting":"Hello "},{"name":"Venus","greeting":"Ave "},{"name":"Pluto","greeting":"Hey tiny "}]}',true);
+    $data=json_decode('{"planets":[
+  {"name":"World","greeting":"Hello "},
+  {"name":"Venus","greeting":"Ave "},
+  {"name":"Pluto","greeting":"Hey tiny "}
+]}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -377,7 +381,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testBasicBooleanIsset() {
     $expectedHtml='Absent!';
     $template='-^undefined Absent!';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -448,7 +452,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testEscaping() {
     $expectedHtml='%p';
     $template='\\%p';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -463,7 +467,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testVerbatimHtml() {
     $expectedHtml='<b>I\'m bold!</b>';
     $template='-html';
-    $data=json_decode('{"html":"<b>I\'m bold!<\\/b>"}',true);
+    $data=json_decode('{"html":"<b>I\'m bold!</b>"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -479,7 +483,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testAttrData() {
     $expectedHtml='<link rel="stylesheet" href="style/main.css" type="text/css" />';
     $template='%link(=linktag  type="text/css")';
-    $data=json_decode('{"linktag":{"rel":"stylesheet","href":"style\\/main.css"}}',true);
+    $data=json_decode('{"linktag":{"rel":"stylesheet","href":"style/main.css"}}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -494,7 +498,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testAttrDataValues() {
     $expectedHtml='<link rel="stylesheet" href="style/main.css" />';
     $template='%link(rel=>stylesheet, href=>=style)';
-    $data=json_decode('{"style":"style\\/main.css"}',true);
+    $data=json_decode('{"style":"style/main.css"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -508,7 +512,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   public function testmustamlComments() {
     $expectedHtml='';
     $template='-/ never rendered';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
@@ -523,7 +527,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $expectedHtml='';
     $template='-/ temporarily disabled:
     %body %p';
-    $data=json_decode('[]',true);
+    $data=array();
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);

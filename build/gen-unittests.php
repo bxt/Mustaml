@@ -31,7 +31,11 @@ foreach($data["unittests"] as $test) {
  echo '  public function test'.$test["testname"].'() {'."\n";
  echo '    $expectedHtml='.escape_php_str($test["html"]).';'."\n";
  echo '    $template='.escape_php_str($test["mustaml"]).';'."\n";
- echo '    $data=json_decode('.escape_php_str(json_encode($test["data"])).',true);'."\n";
+ if($test["data"]) {
+   echo '    $data=json_decode('.escape_php_str($test["data"]).',true);'."\n";
+ } else {
+   echo '    $data=array();'."\n";
+ }
  echo '    $m=new Mustaml($template,$data);'."\n";
  echo '    $html=$m();'."\n";
  echo '    $this->assertEquals($expectedHtml,$html);'."\n";

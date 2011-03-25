@@ -1,11 +1,12 @@
 {
+"pagetitle":"Mustaml Reference",
 "desc":"Mustaml is a html template language that enforces \"logic-less\" templates as known from {{ mustache }} but using pythonish indentation like HAML to build html-tags. Here are some Examples of Mustaml usage. ",
 "unittests":[
 {
 "title":"Creating HTML-tags quickly",
 "desc":"You can create tags with the %tag styntax. Nesting is done via indentation. Tags are automatically closed. ",
 "testname":"BasicIndented",
-"data":{},
+"data":false,
 "mustaml":"%html\n  %head\n    %title Yippiyeah!\n  %body\n   %p\n     Everything closing automatically. ",
 "html":"<html><head><title>Yippiyeah!</title></head><body><p>Everything closing automatically. </p></body></html>"
 },
@@ -13,7 +14,7 @@
 "title":"Creating HTML-tags even quicker",
 "desc":"You can append child nodes directly to save lines:",
 "testname":"BasicNonIndented",
-"data":{},
+"data":false,
 "mustaml":"%html\n  %head %title Yippiyeah!\n  %body %p Everything closing automatically. ",
 "html":"<html><head><title>Yippiyeah!</title></head><body><p>Everything closing automatically. </p></body></html>"
 },
@@ -21,7 +22,7 @@
 "title":"Mixing nesting and appending",
 "desc":"For every node you append, we're nesting all child nodes that level deeper. This happens when mixing appending and nesting: ",
 "testname":"BasicIndentedAndNonIndented",
-"data":{},
+"data":false,
 "mustaml":"%p %span\n  %b Wow. \n  Really. ",
 "html":"<p><span><b>Wow. </b>Really. </span></p>"
 },
@@ -29,7 +30,7 @@
 "title":"Adding classes and ids in CSS-syntax",
 "desc":"One of the Key features is quickly adding the common class and id attributes, with a syntax well known from CSS. ",
 "testname":"BasicClassAndId",
-"data":{},
+"data":false,
 "mustaml":"%p#first.nice Text\n%p.nice.middle Text too\n%p\n  %span.inner\n    Weeehah",
 "html":"<p id=\"first\" class=\"nice\">Text</p><p class=\"nice middle\">Text too</p><p><span class=\"inner\">Weeehah</span></p>"
 },
@@ -37,7 +38,7 @@
 "title":"Implicit Divs",
 "desc":"To make things even easier, you can leave out %tag and Mustaml will guess it's a %div",
 "testname":"ImplicitDivs",
-"data":{},
+"data":false,
 "mustaml":"#page.container\n  #header\n  #content\n    #sidebar\n  #footer",
 "html":"<div id=\"page\" class=\"container\"><div id=\"header\"></div><div id=\"content\"><div id=\"sidebar\"></div></div><div id=\"footer\"></div></div>"
 },
@@ -45,7 +46,7 @@
 "title":"Generating a Doctype",
 "desc":"Mustaml provides the short triple-bang for inserting your doctype declaration. It currently supports only the HTML5 one. ",
 "testname":"BasicDoctype",
-"data":{},
+"data":false,
 "mustaml":"!!!\n%html",
 "html":"<!DOCTYPE html><html></html>"
 },
@@ -53,7 +54,7 @@
 "title":"Self-Closing tags",
 "desc":"You can configure a list of tags that should be self-closed when empty. Here are the defaults: ",
 "testname":"SelfClosingTags",
-"data":{},
+"data":false,
 "mustaml":"%br\n%img\n%input\n%meta\n%link\n%hr\n%frame\n%param",
 "html":"<br /><img /><input /><meta /><link /><hr /><frame /><param />"
 },
@@ -61,7 +62,7 @@
 "title":"HTML-Attributes",
 "desc":"Attributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of @, => and so on. ",
 "testname":"HAttrs",
-"data":{},
+"data":false,
 "mustaml":"%p(lang=\"en\") Yo!\n%input(type=text value=\"tryna edit me\" disabled)",
 "html":"<p lang=\"en\">Yo!</p><input type=\"text\" value=\"tryna edit me\" disabled=\"disabled\" />"
 },
@@ -69,7 +70,7 @@
 "title":"Old-School HTML-Attributes",
 "desc":"You can use some alternate syntax and even whitepace if you like: ",
 "testname":"HAttrsAlternates",
-"data":{},
+"data":false,
 "mustaml":"%p(lang=>\"en\") Yo!\n%input(type=>\"text\",value => \"tryna edit me\", disabled)",
 "html":"<p lang=\"en\">Yo!</p><input type=\"text\" value=\"tryna edit me\" disabled=\"disabled\" />"
 },
@@ -77,7 +78,7 @@
 "title":"Overriding HTML-Attributes",
 "desc":"When you specify id attributes in your attribute hash, it is overridden by the latter. ",
 "testname":"HAttrsOverride",
-"data":{},
+"data":false,
 "mustaml":"#old(id=new id=newer)",
 "html":"<div id=\"newer\"></div>"
 },
@@ -85,7 +86,7 @@
 "title":"HTML-Array-Attributes",
 "desc":"Some attributes can have a space-separated list of values. Currently these 3 are supported. ",
 "testname":"HArrayAttrs",
-"data":{},
+"data":false,
 "mustaml":"%link.foo(class=bar,rev=prev,rev=index,rel=shortlink,rel=\"home up\")",
 "html":"<link class=\"foo bar\" rev=\"prev index\" rel=\"shortlink home up\" />"
 },
@@ -93,7 +94,7 @@
 "title":"HTML-Comments",
 "desc":"You can insert html-comments too. ",
 "testname":"HComments",
-"data":{},
+"data":false,
 "mustaml":"%html\n  / created by Mustaml!",
 "html":"<html><!--  created by Mustaml! --></html>"
 },
@@ -101,7 +102,7 @@
 "title":"HTML-Comment-blocks",
 "desc":"End even put whole parts of your template into comment tags. This might come in handy if you don't want your users to see this part, but be able to check the rendering output. ",
 "testname":"HCommentBlock",
-"data":{},
+"data":false,
 "mustaml":"%html\n  / temporarily disabled:\n    %body %p",
 "html":"<html><!--  temporarily disabled:<body&gt;<p&gt;</p&gt;</body&gt; --></html>"
 },
@@ -112,7 +113,7 @@
 "title":"Inserting Data",
 "desc":"Of course a template engine does output strings. They are escaped for HTML-output by default. ",
 "testname":"BasicData",
-"data":{"varname":"Hello World!"},
+"data":"{\"varname\":\"Hello World!\"}",
 "mustaml":"%p =varname",
 "html":"<p>Hello World!</p>"
 },
@@ -121,7 +122,7 @@
 "title":"Undefined Data",
 "desc":"If you do not provide a piece of data, it will be silently ignored. ",
 "testname":"BasicDataUndefined",
-"data":{},
+"data":false,
 "mustaml":"%p =unexisting",
 "html":"<p></p>"
 },
@@ -130,7 +131,7 @@
 "title":"Inserting More Data",
 "desc":"The = tag doesn't want sub-nodes, so use parallel =tags like this: ",
 "testname":"BasicData2",
-"data":{"varname":"Hello World!","varname2":"Hello Venus!"},
+"data":"{\"varname\":\"Hello World!\",\"varname2\":\"Hello Venus!\"}",
 "mustaml":"%p\n  =varname\n  , \n  =varname2",
 "html":"<p>Hello World!, Hello Venus!</p>"
 },
@@ -140,7 +141,7 @@
 "title":"Looping",
 "desc":"You can loop over arrays. The current value is available as \".\". ",
 "testname":"BasicLoop",
-"data":{"planets":["World","Venus","Pluto"]},
+"data":"{\"planets\":[\"World\",\"Venus\",\"Pluto\"]}",
 "mustaml":"%ul\n  -planets\n    %li \n     Hello \n     =.\n     !",
 "html":"<ul><li>Hello World!</li><li>Hello Venus!</li><li>Hello Pluto!</li></ul>"
 },
@@ -149,7 +150,7 @@
 "title":"Looping Maps",
 "desc":"And you can loop over maps. Inside the loop, you can access the map keys like normal vars. ",
 "testname":"BasicAssocLoop",
-"data":{"planets":[{"name":"World","greeting":"Hello "},{"name":"Venus","greeting":"Ave "},{"name":"Pluto","greeting":"Hey tiny "}]},
+"data":"{\"planets\":[\n  {\"name\":\"World\",\"greeting\":\"Hello \"},\n  {\"name\":\"Venus\",\"greeting\":\"Ave \"},\n  {\"name\":\"Pluto\",\"greeting\":\"Hey tiny \"}\n]}",
 "mustaml":"%ul\n  -planets\n    %li\n      =greeting\n      =name\n      !",
 "html":"<ul><li>Hello World!</li><li>Ave Venus!</li><li>Hey tiny Pluto!</li></ul>"
 },
@@ -158,7 +159,7 @@
 "title":"Boolean Switches",
 "desc":"You can check for true/false values with the very same syntax. ",
 "testname":"BasicBoolean",
-"data":{"doIt":true},
+"data":"{\"doIt\":true}",
 "mustaml":"-doIt it's true\n-^doIt it's actually false",
 "html":"it's true"
 },
@@ -167,7 +168,7 @@
 "title":"Boolean Switches (false)",
 "desc":"A ^ indicates not, so the children are only shown if the value is false. ",
 "testname":"BasicBooleanFalseNot",
-"data":{"doIt":false},
+"data":"{\"doIt\":false}",
 "mustaml":"-doIt it's true\n-^doIt it's actually false",
 "html":"it's actually false"
 },
@@ -176,7 +177,7 @@
 "title":"Boolean Switches (false positive)",
 "desc":"Consequently, the text is not rendered, if you get a true value with ^.",
 "testname":"BasicBooleanNot",
-"data":{"doItNot":true},
+"data":"{\"doItNot\":true}",
 "mustaml":"-^doItNot but is was not false",
 "html":""
 },
@@ -185,7 +186,7 @@
 "title":"Boolean Switches (false positive)",
 "desc":"Another use of ^ is checking for unset values. ",
 "testname":"BasicBooleanIsset",
-"data":{},
+"data":false,
 "mustaml":"-^undefined Absent!",
 "html":"Absent!"
 },
@@ -195,7 +196,7 @@
 "title":"Empty Loops",
 "desc":"Another use of ^ is checking for empty arrays, strings and 0 numbers. ",
 "testname":"EmptryArray",
-"data":{"planets":[]},
+"data":"{\"planets\":[]}",
 "mustaml":"%ul\n  -planets\n    %li =.\n  -^planets\n    %li.grey No planets to visit today!",
 "html":"<ul><li class=\"grey\">No planets to visit today!</li></ul>"
 },
@@ -204,7 +205,7 @@
 "title":"Checking for empty Loops or Strings",
 "desc":"The notayim operator (^^) will inverse the not-operator. You can check if a loop would render at least one item. ",
 "testname":"EmptryArrayNot",
-"data":{"planets":[]},
+"data":"{\"planets\":[]}",
 "mustaml":"-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!",
 "html":"<p class=\"grey\">No planets to visit today!</p>"
 },
@@ -213,7 +214,7 @@
 "title":"Checking for empty Loops nevertheless",
 "desc":"I you use the  notayim operator on an defined value it will just render its subblocks as nothing had happended. ",
 "testname":"EmptryArrayNotWithValue",
-"data":{"planets":["World"]},
+"data":"{\"planets\":[\"World\"]}",
 "mustaml":"-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!",
 "html":"<ul><li>World</li></ul>"
 },
@@ -223,7 +224,7 @@
 "title":"Escaping",
 "desc":"If you want to start a text line with a meta-character otherwise interpreted as some kind of node, you can escape it with a backslash. ",
 "testname":"Escaping",
-"data":{},
+"data":false,
 "mustaml":"\\%p",
 "html":"%p"
 },
@@ -232,7 +233,7 @@
 "title":"Printing verbatim HTML",
 "desc":"Say you've preprocessed some Markdown and want to display it on a page, just use the string value with minus. '",
 "testname":"VerbatimHtml",
-"data":{"html":"<b>I'm bold!</b>"},
+"data":"{\"html\":\"<b>I'm bold!</b>\"}",
 "mustaml":"-html",
 "html":"<b>I'm bold!</b>"
 },
@@ -241,7 +242,7 @@
 "title":"Attributes with data",
 "desc":"You can provide a map for highly dynamic attributes, while still providing others directly. Last specified overrides. Note the double space to exit the varname. ",
 "testname":"AttrData",
-"data":{"linktag":{"rel":"stylesheet","href":"style/main.css"}},
+"data":"{\"linktag\":{\"rel\":\"stylesheet\",\"href\":\"style/main.css\"}}",
 "mustaml":"%link(=linktag  type=\"text\/css\")",
 "html":"<link rel=\"stylesheet\" href=\"style/main.css\" type=\"text\/css\" />"
 },
@@ -250,7 +251,7 @@
 "title":"Attributes with data-values",
 "desc":"You can even fill only the attribute's values with dynamic strings, and mix this with other attributes and old syntax. ",
 "testname":"AttrDataValues",
-"data":{"style":"style/main.css"},
+"data":"{\"style\":\"style/main.css\"}",
 "mustaml":"%link(rel=>stylesheet, href=>=style)",
 "html":"<link rel=\"stylesheet\" href=\"style/main.css\" />"
 },
@@ -259,7 +260,7 @@
 "title":"Mustaml-Comments",
 "desc":"Mustaml-Comments are not rendered at all. ",
 "testname":"mustamlComments",
-"data":{},
+"data":false,
 "mustaml":"-/ never rendered",
 "html":""
 },
@@ -267,7 +268,7 @@
 "title":"Mustaml-Comment-blocks",
 "desc":"Get rid of whole subtrees with Mustaml-Comments. ",
 "testname":"MustamlCommentBlock",
-"data":{},
+"data":false,
 "mustaml":"-/ temporarily disabled:\n    %body %p",
 "html":""
 }

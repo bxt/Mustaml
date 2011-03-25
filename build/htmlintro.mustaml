@@ -1,0 +1,12 @@
+%html
+	%head
+		%meta(charset=UTF-8)
+		%title =pagetitle
+		%link(rel=stylesheet href=doc.css)
+	%body #container
+		%a(name=top)
+		--
+		%p.footer %small
+			&copy; 2011 by 
+			%a(href="http://bernhardhaussner.de/") Bernhard Häussner 
+			\- generated with mustaml

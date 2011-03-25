@@ -1,30 +1,23 @@
-%html
-	%head
-		%meta(charset=UTF-8)
-		%title Mustaml Reference
-		%link(rel=stylesheet href=doc.css)
-	%body #container
-		%a(name=top)
-		%h1 Mustaml Reference
+-htmlintro.mustaml
+	%h1 =pagetitle
+	%p =desc
+	%h3 Contents
+	%ul
+	-unittests
+		%li %a(href=#=testname) =title
+	%br.clearfix
+	-unittests
+		%a.toplink(href=#top) top
+		%a(name==testname)
+		%h3 =title
 		%p =desc
-		%h3 Contents
-		%ul
-		-unittests
-			%li %a(href=#=testname) =title
-		%br.clearfix
-		-unittests
-			%a.toplink(href=#top) top
-			%a(name==testname)
-			%h3 =title
-			%p =desc
-			%p %b Mustaml:
-			%pre.mustaml =mustaml
-			%p %b Html output:
-			-^^html
-				%pre.html =html
-			-^html
-				%i (Empty output)
-		%p.footer %small
-			&copy; 2011 by 
-			%a(href="http://bernhardhaussner.de/") Bernhard Häussner 
-			\- generated from build/doc-unittests.json
+		%p %b Mustaml:
+		%pre.mustaml =mustaml
+		-^^data
+			%b %b Data:
+			%pre.json =data
+		%p %b Html output:
+		-^^html
+			%pre.html =html
+		-^html
+			%i (Empty output)
