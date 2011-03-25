@@ -2,8 +2,7 @@
 	%h1 =pagetitle
 	%p =desc
 	%h3 Contents
-	%ul
-	-unittests
+	%ul -unittests
 		%li %a(href=#=testname) =title
 	%br.clearfix
 	-unittests
@@ -11,12 +10,12 @@
 		%a(name==testname)
 		%h3 =title
 		%p =desc
-		%p %b Mustaml:
+		%h5 Mustaml:
 		%pre.mustaml =mustaml
 		-data
-			%b %b Data:
+			%h5 Data:
 			%pre.json =.
-		%p %b Html output:
+		%h5 Html output:
 		-^^html
 			%pre.html =html
 		-^html

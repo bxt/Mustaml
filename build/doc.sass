@@ -1,8 +1,9 @@
 $fontsize: 13px
 $fontsize_small: 11px
+$cicolor: #f90
 
 body
-	border-top: 30px #f90 solid
+	border-top: 30px $cicolor solid
 	margin: 0
 	padding: 0
 #container
@@ -14,11 +15,28 @@ body
 	line-height: 1.6
 h1
 	font-size: 45px
+	margin:
+		top: 1.6em
+		bottom: 1.4em
+	border-color: lighten($cicolor, 10%)
 h3
 	font-size: 21px
-	margin-top: 2em
+	margin:
+		top: 2.6em
+		bottom: 1.6em
+	border-color: lighten($cicolor, 20%)
+h5
+	font-size: $fontsize
+	border-color: lighten($cicolor, 45%)
 h1, h3
 	font-weight: normal
+h1, h3, h5
+	border-left: 
+		width: 10px
+		style: solid
+	margin-left: -20px
+	padding-left: 10px
+	line-height: 10px
 pre
 	overflow: auto
 	padding: 10px
@@ -27,6 +45,8 @@ pre
 pre.html
 	font:
 		size: $fontsize_small
+ul
+	padding-left: 23px
 li
 	list-style-type: circle
 	float: left
@@ -35,6 +55,8 @@ br.clearfix
 	clear: left
 	font-size: 1px
 	line-height: 1px
+a:hover, a:focus
+	color: darken($cicolor, 10%)
 a.toplink
 	float: right
 	margin-top: 37px
