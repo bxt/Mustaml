@@ -345,8 +345,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Boolean Switches (false)
    *
-   * A ^ indicates not, so the children are only shown if the value is
-   * false. 
+   * A caret operator (^) indicates not, so the children are only shown if
+   * the value is false. 
    */
   public function testBasicBooleanFalseNot() {
     $expectedHtml='it\'s actually false';
@@ -361,8 +361,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Boolean Switches (false positive)
    *
-   * Consequently, the text is not rendered, if you get a true value with
-   * ^.
+   * Consequently, the text is not rendered, if you get a true value after
+   * the caret.
    */
   public function testBasicBooleanNot() {
     $expectedHtml='';
@@ -376,7 +376,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Boolean Switches (false positive)
    *
-   * Another use of ^ is checking for unset values. 
+   * Another use of the caret is checking for unset values. 
    */
   public function testBasicBooleanIsset() {
     $expectedHtml='Absent!';
@@ -390,7 +390,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Empty Loops
    *
-   * Another use of ^ is checking for empty arrays, strings and 0 numbers. 
+   * Another use of the caret is checking for empty arrays, strings and 0
+   * numbers. 
    */
   public function testEmptryArray() {
     $expectedHtml='<ul><li class="grey">No planets to visit today!</li></ul>';
