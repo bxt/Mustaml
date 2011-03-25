@@ -20,7 +20,8 @@
 			%p %b Mustaml:
 			%pre.mustaml =mustaml
 			%p %b Html output:
-			%pre.html =html
+			-^^html
+				%pre.html =html
 			-^html
 				%i (Empty output)
 		%p.footer %small
