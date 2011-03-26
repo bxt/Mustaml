@@ -17,5 +17,37 @@ class MustamlTest extends \PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals('<p><div id="child"><p>override</p><p>inherit</p></div><div id="childblock"><span>bar</span><span>additional</span></div></p><p>bar</p><p>inherit</p>',$main());
 	}
+	public function testMaximumNestingLevel() {
+		$lvl=27;
+		
+		$mustaml='';
+		$ws='';
+		$html_a='';
+		$html_b='';
+		for($i=0;$i<$lvl;$i++) {
+			$mustaml.=$ws.'%p'."\n";
+			$ws.=' ';
+			$html_a.='<p>';
+			$html_b.='</p>';
+		}
+		
+		$main=new Mustaml($mustaml);
+		$this->assertEquals($html_a.$html_b,$main());
+	}
+	public function testMaximumNestingLevelOneliner() {
+		$lvl=27;
+		
+		$mustaml='';
+		$html_a='';
+		$html_b='';
+		for($i=0;$i<$lvl;$i++) {
+			$mustaml.='%p ';
+			$html_a.='<p>';
+			$html_b.='</p>';
+		}
+		
+		$main=new Mustaml($mustaml);
+		$this->assertEquals($html_a.$html_b,$main());
+	}
 }
 ?>
