@@ -8,10 +8,10 @@
 			%ul -navigation_data
 				%li %a(href==link) =label
 			%br.cearfix
-		#container
+		#content
 			%a(name=top)
 			--
-			%p.footer %small
-				&copy; 2011 by 
-				%a(href="http://bernhardhaussner.de/") Bernhard Häussner 
-				\- generated with mustaml
+		%p.footer %small
+			&copy; 2011 by 
+			%a(href="http://bernhardhaussner.de/") Bernhard Häussner 
+			\- generated with mustaml

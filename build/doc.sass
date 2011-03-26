@@ -1,10 +1,15 @@
 $fontsize: 13px
 $fontsize_small: 11px
 $cicolor: #f90
+$lightgrey: #eee
 
 body
 	margin: 0
 	padding: 0
+	font:
+		family: Georgia,Garamond,Times,"Times New Roman",serif
+		size: 13px
+	line-height: 1.6
 h1
 	font-size: 45px
 	margin:
@@ -33,7 +38,7 @@ pre
 	overflow: auto
 	padding: 10px
 	background:
-		color: #eee
+		color: $lightgrey
 pre.html
 	font:
 		size: $fontsize_small
@@ -60,13 +65,9 @@ br.clearfix
 				font:
 					weight: bold
 					size: $fontsize_small
-#container
+#content
 	padding: 0 50px
 	max-width: 600px
-	font:
-		family: Georgia,Garamond,Times,"Times New Roman",serif
-		size: 13px
-	line-height: 1.6
 	ul
 		padding-left: 23px
 	li
@@ -80,5 +81,7 @@ br.clearfix
 		margin-top: 37px
 		font:
 			size: $fontsize_small
-	p.footer
-		margin: 50px 0
+p.footer
+	border-top: 1px $lightgrey solid
+	margin: 40px 0 20px 0
+	padding: 10px 50px
