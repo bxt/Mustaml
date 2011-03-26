@@ -429,7 +429,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Empty-loop-check does nothing when loop has items
+   * Notayim ignored for nonemty loop
    *
    * I you use the  notayim operator on an defined value it will just
    * render its subblocks as nothing had happended. 
@@ -448,9 +448,9 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Checking for empty Strings
+   * Checking for empty strings
    *
-   * The notayim operator (^^) can be used to check if a String is ""
+   * The notayim operator (^^) can be used to check if a string is ""
    * (empty). In this example no paragraph is created if the string is
    * empty. 
    */
@@ -465,7 +465,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Empty-string-check does nothing when string has chars
+   * Notayim ignored for nonempty string
    *
    * If the string is not empty the subblock remains unaffected and is
    * rendered as usual. 
@@ -514,7 +514,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Using anything (e.g. Strings) with blocks
    *
-   * Don't get the above confused with calling blocks with Strings. You can
+   * Don't get the above confused with calling blocks with strings. You can
    * use every type of value to initialize blocks, it won't be rendered but
    * it will be availible as "." inside the block. 
    */

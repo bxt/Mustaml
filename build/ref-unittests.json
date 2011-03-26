@@ -212,7 +212,7 @@
 
 
 {
-"title":"Empty-loop-check does nothing when loop has items",
+"title":"Notayim ignored for nonemty loop",
 "desc":"I you use the  notayim operator on an defined value it will just render its subblocks as nothing had happended. ",
 "testname":"EmptryArrayNotWithValue",
 "data":"{\"planets\":[\"World\"]}",
@@ -222,8 +222,8 @@
 
 
 {
-"title":"Checking for empty Strings",
-"desc":"The notayim operator (^^) can be used to check if a String is \"\" (empty). In this example no paragraph is created if the string is empty. ",
+"title":"Checking for empty strings",
+"desc":"The notayim operator (^^) can be used to check if a string is \"\" (empty). In this example no paragraph is created if the string is empty. ",
 "testname":"EmptyStringNot",
 "data":"{\"stingray\":\"\"}",
 "mustaml":"-^^stingray %p =stingray\n",
@@ -231,7 +231,7 @@
 },
 
 {
-"title":"Empty-string-check does nothing when string has chars",
+"title":"Notayim ignored for nonempty string",
 "desc":"If the string is not empty the subblock remains unaffected and is rendered as usual. ",
 "testname":"EmptyStringNotWithValue",
 "data":"{\"stingray\":\"Corvette C2\"}",
@@ -260,7 +260,7 @@
 
 {
 "title":"Using anything (e.g. Strings) with blocks",
-"desc":"Don't get the above confused with calling blocks with Strings. You can use every type of value to initialize blocks, it won't be rendered but it will be availible as \".\" inside the block. ",
+"desc":"Don't get the above confused with calling blocks with strings. You can use every type of value to initialize blocks, it won't be rendered but it will be availible as \".\" inside the block. ",
 "testname":"BlockToStrong",
 "data":"{\"string\":\"Big Mike\"}",
 "mustaml":"-string\n  %b =.",
