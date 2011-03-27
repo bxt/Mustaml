@@ -154,11 +154,9 @@ class Compiler {
 		return $html;
 	}
 	private function render_children($ast,$data) {
-		$html='';
-		foreach($ast->children as $c) {
-			$html.=$this->render($c,$data);
+		for($i=count($ast->children);$i>0;$i--) {
+			$this->sheduleRender($ast->children[$i],$dat);
 		}
-		return $html;
 	}
 	private function html_attr($ast,$data) {
 		$attr_array=array();
