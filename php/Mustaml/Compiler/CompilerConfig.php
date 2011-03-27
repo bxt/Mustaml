@@ -9,18 +9,6 @@ class CompilerConfig {
 	private $autoloadedValues=array();
 	private $mustamlBoilerplate=false;
 	/**
-	 * Initialize with list of autoloaders
-	 *
-	 * Autoloaders are objects implementing 
-	 * Mustaml\\Autoloaders\\AutoloaderI or
-	 * callbacks that return a value given
-	 * a key or null. 
-	 * If multiple autoloaders can deliver
-	 * a value the last one in list is used. 
-	 */
-	public function __construct() {
-	}
-	/**
 	 * Return if or not a varname is autoloadable
 	 * 
 	 * Checks all autoloaders and performs their
