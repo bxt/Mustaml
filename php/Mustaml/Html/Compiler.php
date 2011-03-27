@@ -3,33 +3,71 @@ namespace Mustaml\Html;
 
 class Compiler {
 	private $config;
+	const L_DATA=0;
+	const L_PREHTML=1;
+	const L_CONTENT=2;
+	const L_AFTERHTML=3;
+	const L_PRZ=4;
 	public function __construct($config=null) {
 		$this->config=$config?:new CompilerConfig;
 	}
 	public function render($ast,$data=array()) {
-		$renderMethod='render_'.$ast->type;
-		return $this->$renderMethod($ast,$data);
+		$html='';
+		
+		$prelvl=0;
+		$todo=array();
+		array_push($todo,array(0,$ast));
+		$lvlinfo=array();
+		$lvlinfo[-1][self::L_DATA]=$data;
+		$lvlinfo[-1][self::L_CONTENT]='';
+		while ($cur=array_pop($todo)) {
+			$lvl=$todo[0];
+			$ast=$todo[1];
+			for(;$prelvl>$lvl;$prelvl--) {
+				$lvlinfo[$prelvl-1][self::L_CONTENT].=$lvlinfo[$prelvl][self::L_PREHTML];
+				if($lvlinfo[$prelvl][self::L_PRZ]) {
+					//prozess $lvlinfo[$prelvl][self::L_CONTENT]
+				} else {
+					$lvlinfo[$prelvl-1][self::L_CONTENT].=$lvlinfo[$prelvl][self::L_CONTENT];
+				}
+				$lvlinfo[$prelvl-1][self::L_CONTENT].=$lvlinfo[$prelvl][self::L_AFTERHTML];
+			}
+			$renderMethod='render_'.$ast->type;
+			list($lvlinfo[$lvl],$hasVisChildren) = $this->$renderMethod($ast,$lvlinfo[$lvl-1][self::L_DATA]);
+			if($hasVisChildren) {
+				foreach($ast->children as $child_ast) {
+					array_push($todo,array($lvl+1,$child_ast));
+				}
+			}
+		}
+		for(;$prelvl>=0;$prelvl--) {
+			// same as in obove loop!!
+		}
+		
+		return $html;
+	}
+	private function dafaultLvlData($data,$preHtml='',$afterHtml='',$afterPrz=false) {
+		$r[self::L_DATA]=$data;
+		$r[self::L_PREHTML]=$preHtml;
+		$r[self::L_CONTENT]='';
+		$r[self::L_AFTERHTML]=$afterHtml;
+		$r[self::L_PRZ]=$afterPrz;
+		return $r;
 	}
 	private function render_root($ast,$data) {
-		return $this->render_children($ast,$data);
+		return array($this->dafaultLvlData($data),true);
 	}
 	private function render_hecho($ast,$data) {
 		if($this->issetData($data,$ast->varname)) {
-			return htmlspecialchars($this->getData($data,$ast->varname));
+			return array($this->dafaultLvlData($data,htmlspecialchars($this->getData($data,$ast->varname))),false);
 		}
-		return '';
+		return array($this->dafaultLvlData($data),false);
 	}
 	private function render_notval($ast,$data) {
-		if( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) {
-			return $this->render_children($ast,$data);
-		}
-		return '';
+		return array($this->dafaultLvlData($data), ( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) );
 	}
 	private function render_notnotval($ast,$data) {
-		if( $this->issetData($data,$ast->varname) && $this->getData($data,$ast->varname) ) {
-			return $this->render_children($ast,$data);
-		}
-		return '';
+		return array($this->dafaultLvlData($data), ( $this->issetData($data,$ast->varname) && $this->getData($data,$ast->varname) ) );
 	}
 	private function render_val($ast,$data) {
 		$html='';
@@ -38,9 +76,9 @@ class Compiler {
 			if(is_callable($v)) {
 				$r=new \Mustaml\Ast\Node('root');
 				$r->children=$ast->children;
-				return $v($r,$data);
-			} elseif(is_array($v)) {			
-				foreach($v as $key=>$val) {
+				return array($this->dafaultLvlData($data$v($r,$data),),true);
+			} elseif(is_array($v)) {
+				foreach($v as $key=>$val) { /// TODO: uhm, wow?
 					$newdata=$data;
 					$newdata['.']=$val;
 					if(is_array($val)) {
@@ -49,8 +87,9 @@ class Compiler {
 					$html.=$this->render_children($ast,$newdata);
 				}
 			} elseif ($v===true) {
-				$html.=$this->render_children($ast,$data);
+				return array($this->dafaultLvlData($data),true);
 			} elseif ($v===false) {
+				return array($this->dafaultLvlData($data),false);
 			} else {
 				if(count($ast->children)<1) {
 					$html.=$v;
