@@ -3,57 +3,73 @@ namespace Mustaml\Html;
 
 class Compiler {
 	private $config;
+	// lvl buffers
 	const L_DATA=0;
 	const L_PREHTML=1;
 	const L_CONTENT=2;
 	const L_AFTERHTML=3;
-	const L_PRZ=4;
+	// shedule types
+	const S_NODE=0;
+	const S_BUFFERPUSH=1;
+	const S_ECHO=1;
+	const S_BUFFERPOP=1;
 	public function __construct($config=null) {
 		$this->config=$config?:new CompilerConfig;
 	}
 	public function render($ast,$data=array()) {
-		$html='';
-		
-		$prelvl=0;
-		$todo=array();
-		array_push($todo,array(0,$ast));
-		$lvlinfo=array();
-		$lvlinfo[-1][self::L_DATA]=$data;
-		$lvlinfo[-1][self::L_CONTENT]='';
-		while ($cur=array_pop($todo)) {
-			$lvl=$todo[0];
-			$ast=$todo[1];
-			for(;$prelvl>$lvl;$prelvl--) {
-				$lvlinfo[$prelvl-1][self::L_CONTENT].=$lvlinfo[$prelvl][self::L_PREHTML];
-				if($lvlinfo[$prelvl][self::L_PRZ]) {
-					//prozess $lvlinfo[$prelvl][self::L_CONTENT]
-				} else {
-					$lvlinfo[$prelvl-1][self::L_CONTENT].=$lvlinfo[$prelvl][self::L_CONTENT];
-				}
-				$lvlinfo[$prelvl-1][self::L_CONTENT].=$lvlinfo[$prelvl][self::L_AFTERHTML];
-			}
-			$renderMethod='render_'.$ast->type;
-			list($lvlinfo[$lvl],$hasVisChildren) = $this->$renderMethod($ast,$lvlinfo[$lvl-1][self::L_DATA]);
-			if($hasVisChildren) {
-				foreach($ast->children as $child_ast) {
-					array_push($todo,array($lvl+1,$child_ast));
-				}
-			}
-		}
-		for(;$prelvl>=0;$prelvl--) {
-			// same as in obove loop!!
-		}
-		
-		return $html;
+		$this->initialize();
+		$this->sheduleEcho();
+		$this->sheduleRender($ast,$dat);
+		while ($cur=$this->todoPopAndProzess());
+		return $this->outBuf;
 	}
-	private function dafaultLvlData($data,$preHtml='',$afterHtml='',$afterPrz=false) {
-		$r[self::L_DATA]=$data;
-		$r[self::L_PREHTML]=$preHtml;
-		$r[self::L_CONTENT]='';
-		$r[self::L_AFTERHTML]=$afterHtml;
-		$r[self::L_PRZ]=$afterPrz;
-		return $r;
+	private function initialize() {
+		$this->outBuf='';
+		$this->buffers=array();
+		$this->todo=array();
+		$this->bufferPush();
 	}
+	private function bufferPush() {
+		array_push($this->buffers,'');
+	}
+	private function bufferPop() {
+		return array_pop($this->buffers);
+	}
+	private function bufferAppend($str) {
+		$this->buffers[count($this->buffers)-1].=$str;
+	}
+	private function sheduleRender($ast,$data) {
+		array_push($this->todo,array(self::S_NODE,$ast,$data));
+	}
+	private function sheduleEcho($str='') {
+		array_push($this->todo,array(self::S_ECHO,$str));
+	}
+	private function todoPopAndProzess() {
+			$todo=array_pop();
+			if(!$todo) return $todo;
+			if($todo[0])==self::S_NODE) {
+				list(,$ast,$data)=$todo;
+				$renderMethod='render_'.$ast->type;
+				$this->$renderMethod($ast,$data);
+				
+			} elseif($todo[0])==self::S_ECHO) {
+				$this->bufferAppend($todo[1]);
+				
+			} elseif($todo[0])==self::S_BUFFERPUSH) {
+				$this->bufferPush();
+				
+			} elseif($todo[0])==self::S_BUFFERPOP) {
+				if($b=$this->bufferPop()) {
+					if($todo[1]) {
+						$f=$todo[1];
+						$b=$this->$f($b);
+					}
+					$this->outBuf.=$b;
+				}
+			}
+			return $todo;
+	}
+	
 	private function render_root($ast,$data) {
 		return array($this->dafaultLvlData($data),true);
 	}
