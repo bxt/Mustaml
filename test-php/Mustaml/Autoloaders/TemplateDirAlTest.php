@@ -3,6 +3,44 @@ namespace Mustaml\Autoloaders;
 require_once 'mustaml.php';
 
 class TemplateDirAlTest extends \PHPUnit_Framework_TestCase {
+	
+	/**
+	 * @dataProvider files
+	 */
+	public function testLoadingAFile($file) {
+		$dir='test-php/data';
+		$mustaml=$this->getMock('Mustaml\\Mustaml',array('getWithTemplate'),array(''));
+		$mustaml->expects($this->once())
+			->method('getWithTemplate')
+			->with($this->equalTo(file_get_contents($dir.'/'.$file)))
+			->will($this->returnValue('is passed to caller'));
+		$al=new TemplateDirAl($dir);
+		$al->setMustamlBoilerplate($mustaml);
+		$this->assertEquals('is passed to caller',$al->autoload($file));
+	}
+	public function files() {
+		return array(
+			array('hornshee.mustaml'),
+			array('ahorn.mustaml'),
+			array('banshee.mustaml'),
+		);
+	}
+	
+	public function testLoadingAFileWithJson() {
+		$dir='test-php/data';
+		$file='valid-json.mustaml';
+		$mustaml=$this->getMock('Mustaml\\Mustaml',array('getWithTemplate'),array(''));
+		$mustaml->expects($this->once())
+			->method('getWithTemplate')
+			->with($this->equalTo(file_get_contents($dir.'/'.$file)),$this->equalTo(array('fromjson'=>'jippeie!')))
+			->will($this->returnValue('is passed to caller'));
+		$al=new TemplateDirAl($dir);
+		$al->setMustamlBoilerplate($mustaml);
+		$this->assertEquals('is passed to caller',$al->autoload($file));
+	}
+	
+	// INTEGRATION TESTS
+	
 	public function testLoadingTwoNestedTemplate() {
 		
 		$data=array("love"=>"with love");
@@ -32,12 +70,21 @@ class TemplateDirAlTest extends \PHPUnit_Framework_TestCase {
 	}
 	public function testLoadingInvalidJSONData() {
 		
-		$data=array("love"=>"with love");
+		$data=array("frommustaml"=>"ahoi");
 		$config=new \Mustaml\Html\CompilerConfig();
 		$config->registerAutoloader(new TemplateDirAl('test-php/data'));
 		$main=new \Mustaml\Mustaml("-invalid-json.mustaml",$data,$config);
 		
 		$this->assertEquals('<p>invalid json is silenty ignored</p>',$main());
+	}
+	public function testLoadingValidJSONData() {
+		
+		$data=array("frommustaml"=>"ahoi");
+		$config=new \Mustaml\Html\CompilerConfig();
+		$config->registerAutoloader(new TemplateDirAl('test-php/data'));
+		$main=new \Mustaml\Mustaml("-valid-json.mustaml",$data,$config);
+		
+		$this->assertEquals('<p>jippeie!</p><p>ahoi</p>',$main());
 	}
 }
 ?>
