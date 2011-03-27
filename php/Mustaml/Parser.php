@@ -32,10 +32,6 @@ class Parser {
 				$parentNode=$node;
 			}
 			$parentBlocks[$level]=$parentNode;
-			//got multiple nodes from one line? use innermost one:
-			/*while(isset($parentBlocks[$level]->children[0])) {
-				$parentBlocks[$level]=$parentBlocks[$level]->children[0];
-			}*/
 		}
 		return $rootnode;
 	}
@@ -70,7 +66,6 @@ class Parser {
 	}
 	private function parse_hcomment($contents) {
 		$node=new Ast\Node('hcomment');
-		$node->children[]=$this->parse_node(substr($contents,1));
 		$this->restNodecode=substr($contents,1);
 		return $node;
 	}
