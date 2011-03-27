@@ -49,13 +49,10 @@ class Cli {
 			$filedir_al->setMustamlBoilerplate($al_bp);
 		}
 		
-		$p=new Parser\Parser();
-		$ast=$p->parseString($templateString);
-		//var_dump($ast);
-		$c=new Html\Compiler($config);
-		$html=$c->render($ast,$data)."\n";
+		$mustaml=new Mustaml($templateString,$data,$config);
+		echo $mustaml();
+		echo "\n";
 		
-		echo $html;
 		return 1;
 	}
 }
