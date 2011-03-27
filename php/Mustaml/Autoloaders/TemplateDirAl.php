@@ -25,7 +25,7 @@ class TemplateDirAl implements AutoloaderI,MustamlDependentAlI {
 			$possibleJSONString=@file_get_contents($this->templateDir.'/'.$m[1].'.json');
 			if($possibleJSONString) {
 				$jsonData=json_decode($possibleJSONString,true);
-				if($data!==null) $data=$jsonData;
+				if(is_array($jsonData)) $data=$jsonData;
 			}
 			
 			$possibleTemplateString=@file_get_contents($this->templateDir.'/'.$key);
