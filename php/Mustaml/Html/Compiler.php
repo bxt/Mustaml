@@ -18,11 +18,10 @@ class Compiler {
 	}
 	public function render($ast,$data=array()) {
 		$this->initialize();
-		$this->sheduleBufferPop();
+		$this->bufferPush();
 		$this->sheduleRender($ast,$data);
-		$this->sheduleBufferPush();
 		while ($cur=$this->todoPopAndProzess());
-		return $this->outBuf;
+		return $this->bufferPop();
 	}
 	private function initialize() {
 		$this->outBuf='';
@@ -57,7 +56,6 @@ class Compiler {
 	}
 	private function todoPopAndProzess() {
 			$todo=array_pop($this->todo);
-		var_dump($todo);
 			if(!$todo) return $todo;
 			if($todo[0]==self::S_NODE) {
 				list(,$ast,$data)=$todo;
@@ -76,7 +74,7 @@ class Compiler {
 						$f=$todo[1];
 						$b=$this->$f($b);
 					}
-					$this->outBuf.=$b;
+					$this->bufferAppend($b);
 				}
 			}
 			return $todo;
@@ -97,77 +95,75 @@ class Compiler {
 	}
 	private function render_notval($ast,$data) {
 		if( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) {
-			return $this->render_children($ast,$data);
+			$this->render_children($ast,$data);
 		}
-		return '';
 	}
 	private function render_notnotval($ast,$data) {
 		if( $this->issetData($data,$ast->varname) && $this->getData($data,$ast->varname) ) {
-			return $this->render_children($ast,$data);
+			$this->render_children($ast,$data);
 		}
-		return '';
 	}
 	private function render_val($ast,$data) {
-		$html='';
 		if($this->issetData($data,$ast->varname)) {
 			$v=$this->getData($data,$ast->varname);
 			if(is_callable($v)) {
 				$r=new \Mustaml\Ast\Node('root');
 				$r->children=$ast->children;
-				return $v($r,$data);
+				$this->sheduleEcho($v($r,$data));
 			} elseif(is_array($v)) {			
-				foreach($v as $key=>$val) {
+				for($i=count($v)-1;$i>=0;$i--) {
 					$newdata=$data;
-					$newdata['.']=$val;
-					if(is_array($val)) {
-						$newdata=array_merge($newdata,$val);
+					$newdata['.']=$v[$i];
+					if(is_array($v[$i])) {
+						$newdata=array_merge($newdata,$v[$i]);
 					}
-					$html.=$this->render_children($ast,$newdata);
+					$this->render_children($ast,$newdata);
 				}
 			} elseif ($v===true) {
-				$html.=$this->render_children($ast,$data);
+				$this->render_children($ast,$data);
 			} elseif ($v===false) {
 			} else {
 				if(count($ast->children)<1) {
-					$html.=$v;
-					$html.=$this->render_children($ast,$data);
+					$this->render_children($ast,$data);
+					$this->sheduleEcho($v);
 				} else { // whatever it is, we have a block and we give it to the block:
 					$newdata=$data;
 					$newdata['.']=$v;
-					$html.=$this->render_children($ast,$newdata);
+					$this->render_children($ast,$newdata);
 				}
 			}
 		}
-		return $html;
 	}
 	private function render_text($ast,$data) {
-		return $ast->contents.$this->render_children($ast,$data);
+		$this->render_children($ast,$data);
+		$this->sheduleEcho($ast->contents);
 	}
 	private function render_hcomment($ast,$data) {
-		$html='<!-- ';
-		$html.=str_replace(array('--','>'),array('&#x2d;&#x2d;','&gt;'),$this->render_children($ast,$data));
-		$html.=' -->';
-		return $html;
+		$this->sheduleEcho(' -->');
+		$this->sheduleBufferPop('process_hcomment');
+		$this->render_children($ast,$data);
+		$this->sheduleBufferPush();
+		$this->sheduleEcho('<!-- ');
+	}
+	private function process_hcomment($contents) {
+		return str_replace(array('--','>'),array('&#x2d;&#x2d;','&gt;'),$contents);
 	}
 	private function render_doctype($ast,$data) {
-		return '<!DOCTYPE html>';
+		$this->sheduleEcho('<!DOCTYPE html>');
 	}
 	private function render_comment($ast,$data) {
-		return ''; // don't touch children
+		// we don't touch children here
+		// and basicly do nothng ;)
 	}
 	private function render_htag($ast,$data) {
-		$html='';
-		$html.='<'.htmlspecialchars($ast->name).$this->html_attr($ast,$data);
-		$innerHtml=$this->render_children($ast,$data);
-		if($innerHtml==''&&$this->config->isHtmlSelfclosingTag($ast->name)) {
-			//self closing tag
-			$html.=' />';
+		$selfClose=(count($ast->children)==0&&$this->config->isHtmlSelfclosingTag($ast->name));
+		if ($selfClose) {
+			$this->sheduleEcho(' />');
 		} else {
-			$html.='>';
-			$html.=$innerHtml;
-			$html.='</'.htmlspecialchars($ast->name).'>';
+			$this->sheduleEcho('</'.htmlspecialchars($ast->name).'>');
+			$this->render_children($ast,$data);
 		}
-		return $html;
+		$this->sheduleEcho('<'.htmlspecialchars($ast->name).$this->html_attr($ast,$data).($selfClose?'':'>'));
 	}
 	private function html_attr($ast,$data) {
 		$attr_array=array();
