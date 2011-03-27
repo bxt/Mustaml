@@ -2,6 +2,7 @@
 namespace Mustaml;
 
 class Parser {
+	private $restNodecode=false;
 	public function parseString($templateString) {
 		$rootnode=new Ast\Node('root');
 		$lines=explode("\n",$templateString);
@@ -23,17 +24,23 @@ class Parser {
 			}
 			$level=count($indentLevels);
 			//echo $level.'---'.$nodecode."\n";
-			$node=$this->parse_node($nodecode);
-			$parentBlocks[$level]=$node;
-			//got multiple nodes from one line? use innermost one:
-			while(isset($parentBlocks[$level]->children[0])) {
-				$parentBlocks[$level]=$parentBlocks[$level]->children[0];
+			$this->restNodecode=$nodecode;
+			$parentNode=$parentBlocks[$level-1];
+			while ($this->restNodecode) {
+				$node=$this->parse_node($this->restNodecode);
+				$parentNode->children[]=$node;
+				$parentNode=$node;
 			}
-			$parentBlocks[$level-1]->children[]=$node;
+			$parentBlocks[$level]=$parentNode;
+			//got multiple nodes from one line? use innermost one:
+			/*while(isset($parentBlocks[$level]->children[0])) {
+				$parentBlocks[$level]=$parentBlocks[$level]->children[0];
+			}*/
 		}
 		return $rootnode;
 	}
 	private function parse_node($nodecode) {
+		$this->restNodecode=false; // usualy we don't expect more nodes in this line
 		switch(true) {
 			case (!isset($nodecode[1])): $node=$this->parse_text($nodecode);return $node; // at least 2 chars
 			case ($nodecode[0]=='-'): switch(true) {
@@ -64,6 +71,7 @@ class Parser {
 	private function parse_hcomment($contents) {
 		$node=new Ast\Node('hcomment');
 		$node->children[]=$this->parse_node(substr($contents,1));
+		$this->restNodecode=substr($contents,1);
 		return $node;
 	}
 	private function parse_hecho($nodecode) {
@@ -76,7 +84,7 @@ class Parser {
 		$node=new Ast\DataNode('notval');
 		$node->varname=$m[1];
 		if(isset($m[3])) {
-			$node->children[]=$this->parse_node($m[3]);
+			$this->restNodecode=$m[3];
 		}
 		return $node;
 	}
@@ -85,7 +93,7 @@ class Parser {
 		$node=new Ast\DataNode('notnotval');
 		$node->varname=$m[1];
 		if(isset($m[3])) {
-			$node->children[]=$this->parse_node($m[3]);
+			$this->restNodecode=$m[3];
 		}
 		return $node;
 	}
@@ -94,7 +102,7 @@ class Parser {
 		$node=new Ast\DataNode();
 		$node->varname=$m[1];
 		if(isset($m[3])) {
-			$node->children[]=$this->parse_node($m[3]);
+			$this->restNodecode=$m[3];
 		}
 		return $node;
 	}
@@ -133,7 +141,8 @@ class Parser {
 			$node->attributes=array_merge($node->attributes,$attr);
 		}
 		if(isset($m[10])&&$m[10]!='') {
-			$node->children[]=$this->parse_node($m[10]);
+			//$node->children[]=$this->parse_node($m[10]);
+			$this->restNodecode=$m[10];
 		}
 		return $node;
 	}
