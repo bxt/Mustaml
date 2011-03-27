@@ -26,6 +26,10 @@ class Compiler extends \Mustaml\Compiler\CompilerBase {
 		$this->sheduleEcho('<'.htmlspecialchars($ast->name).$this->html_attr($ast,$data).($selfClose?'':'>'));
 	}
 	private function html_attr($ast,$data) {
+		$attr_array=$this->html_attr_array($ast,$data);
+		return $this->html_attr_array_html($attr_array);
+	}
+	private function html_attr_array($ast,$data) {
 		$attr_array=array();
 		foreach($ast->attributes as $attrNode) {
 			if($attrNode->type=='val') {
@@ -53,7 +57,9 @@ class Compiler extends \Mustaml\Compiler\CompilerBase {
 				}
 			}
 		}
-		
+		return $attr_array;
+	}
+	private function html_attr_array_html($attr_array) {
 		$attr='';
 		foreach($attr_array as $key=>$val) {
 			switch(count($val)) {
