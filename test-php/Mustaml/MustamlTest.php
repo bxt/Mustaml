@@ -59,5 +59,64 @@ class MustamlTest extends \PHPUnit_Framework_TestCase {
 		$main=new Mustaml($mustaml);
 		$this->assertEquals($html_a.$html_b,$main());
 	}
+	/**
+	 * @expectedException \Mustaml\Parser\SyntaxErrorException
+	 */
+	public function testNestingError() {
+		$main=new Mustaml("%p normal\n  %p 2xindent\n %p 1xindent (bad)");
+		$main();
+	}
+	/**
+	 * @expectedException \Mustaml\Parser\SyntaxErrorException
+	 */
+	public function testAttributeNoVarnameError() {
+		$main=new Mustaml("%p(=)",array(""=>array("foo"=>"bar")));
+		var_dump($main());
+	}
+	/**
+	 * @expectedException \Mustaml\Parser\SyntaxErrorException
+	 */
+	public function testAttributeNoVarnameErrorInAttrValSimple() {
+		$main=new Mustaml("%p(foo==)");
+		var_dump($main());
+	}
+	/**
+	 * @expectedException \Mustaml\Parser\SyntaxErrorException
+	 */
+	public function testAttributeNoVarnameErrorInAttrVal() {
+		$main=new Mustaml("%p(foo=a= c)");
+		var_dump($main());
+	}
+	public function testCallbackAutoloader() {
+		$config=new \Mustaml\Html\CompilerConfig();
+		$config->registerAutoloader(array($this,'callbackForTesting'));
+		$main=new \Mustaml\Mustaml("%p =foo\n%p =bar",array("bar"=>"set"),$config);
+		$this->assertEquals('<p>instCB(foo)</p><p>set</p>',$main());
+	}
+	public function testStaticCallbackAutoloader() {
+		$config=new \Mustaml\Html\CompilerConfig();
+		$config->registerAutoloader(array('Mustaml\\MustamlTest','callbackForTesting'));
+		$main=new \Mustaml\Mustaml("%p =foo\n%p =bar",array("bar"=>"set"),$config);
+		$this->assertEquals('<p>staticCB(foo)</p><p>set</p>',$main());
+	}
+	public function callbackForTesting ($key) {
+		if(!isset($this) || !($this instanceof self)) return "staticCB($key)";
+		return "instCB($key)";
+	}
+	public function testInternalCallbackAutoloader() {
+		$config=new \Mustaml\Html\CompilerConfig();
+		$config->registerAutoloader('md5');
+		$main=new \Mustaml\Mustaml("%p =foo\n%p =bar",array("bar"=>"set"),$config);
+		$this->assertEquals('<p>'.md5('foo').'</p><p>set</p>',$main());
+	}
+	public function testLabmdaAutoloader() {
+		$config=new \Mustaml\Html\CompilerConfig();
+		$lambda=function($key){
+			return "inside($key)";
+		};
+		$config->registerAutoloader($lambda);
+		$main=new \Mustaml\Mustaml("%p =foo\n%p =bar",array("bar"=>"set"),$config);
+		$this->assertEquals('<p>inside(foo)</p><p>set</p>',$main());
+	}
 }
 ?>
