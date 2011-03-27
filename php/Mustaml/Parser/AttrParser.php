@@ -1,15 +1,45 @@
 <?php
 namespace Mustaml\Parser;
 
+/**
+ * Parsing an attribute string into an AST
+ */
 class AttrParser {
+	/**
+	 * Charlist considered as whitepsace token
+	 */
 	const ws=' ';
+	/**
+	 * Charlist considered as indentifier start token
+	 */
 	const a='A-Za-z';
+	/**
+	 * Charlist considered as optinal tokens after equals
+	 */
 	const gt='>';
+	/**
+	 * Charlist considered as indentifier content tokens
+	 */
 	const anum='0-9A-Za-z_-';
+	/**
+	 * Charlist considered as equals token
+	 */
 	const eq='=';
+	/**
+	 * Charlist considered as equals token introducing a dynamic attribute
+	 */
 	const dyneq='=';
+	/**
+	 * Charlist considered as separating token
+	 */
 	const sep=' ,';
+	/**
+	 * Charlist considered as quoting token
+	 */
 	const q='"';
+	/**
+	 * Parses an attribute string into an AST
+	 */
 	function parse_attr($s) {
 		
 		$attrs=array();
@@ -53,11 +83,17 @@ class AttrParser {
 		}
 		return $attrs;
 	}
+	/**
+	 * Parses an text attribute string into an AST
+	 */
 	private function construct_textnode($contents) {
 		$t=new \Mustaml\Ast\TextNode();
 		$t->contents=$contents;
 		return $t;
 	}
+	/**
+	 * Parses an dynamic attribute string into an AST if applicable
+	 */
 	private function parse_dynval($s) {
 		if($s->getOne(self::dyneq)) {
 			if($s->is(self::sep)) throw new SyntaxErrorException("No varname");

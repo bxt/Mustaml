@@ -1,6 +1,9 @@
 <?php
 namespace Mustaml\Html;
 
+/**
+ * Does the HTML-specific parts of compiling AST to HTML
+ */
 class Compiler extends \Mustaml\Compiler\CompilerBase {
 	protected function render_hcomment($ast,$data) {
 		$this->sheduleEcho(' -->');
@@ -25,6 +28,9 @@ class Compiler extends \Mustaml\Compiler\CompilerBase {
 		}
 		$this->sheduleEcho('<'.htmlspecialchars($ast->name).$this->html_attr($ast,$data).($selfClose?'':'>'));
 	}
+	/**
+	 * Parses an html attribute AST into corresponding HTML
+	 */
 	private function html_attr($ast,$data) {
 		$attr_array=$this->html_attr_array($ast,$data);
 		return $this->html_attr_array_html($attr_array);

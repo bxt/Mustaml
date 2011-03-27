@@ -1,12 +1,31 @@
 <?php
 namespace Mustaml\Compiler;
 
+/**
+ * Holds and manages options for parsing AST
+ */
 class CompilerConfig {
 	private $valueAutoloaders;
 	private $autoloadedValues=array();
+	/**
+	 * Initialize with list of autoloaders
+	 *
+	 * Autoloaders are objects implementing 
+	 * Mustaml\\Autoloaders\\AutoloaderI or
+	 * callbacks that return a value given
+	 * a key or null. 
+	 * If multiple autoloaders can deliver
+	 * a value the last one in list is used. 
+	 */
 	public function __construct($valueAutoloaders=array()) {
 		$this->valueAutoloaders=$valueAutoloaders;
 	}
+	/**
+	 * Return if or not a varname is autoloadable
+	 * 
+	 * Checks all autoloaders and performs their
+	 * autoload() functios
+	 */
 	public function isAutoloadable($key) {
 		if(isset($this->autoloadedValues[$key])) return true;
 		for($i=count($this->valueAutoloaders)-1;$i>=0;$i--) {
@@ -24,8 +43,11 @@ class CompilerConfig {
 		}
 		return false;
 	}
+	/**
+	 * Returns the autoloadable value of a varnames
+	 */
 	public function getAutoloadable($key) {
-		if(!$this->isAutoloadable($key)) throw new \OutOfRangeException("Tried to autoload an not-autoloadable key. ");
+		if(!$this->isAutoloadable($key)) throw new \OutOfRangeException("Tried to autoload a not-autoloadable key. ");
 		return $this->autoloadedValues[$key];
 	}
 }

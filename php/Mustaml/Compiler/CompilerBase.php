@@ -1,8 +1,14 @@
 <?php
 namespace Mustaml\Compiler;
 
+/**
+ * Does the non-HTML-specific parts of compiling AST
+ */
 abstract class CompilerBase extends CompilerEngine {
 	private $config;
+	/**
+	 * Intialize with a CompilerConfig
+	 */
 	public function __construct($config=null) {
 		$this->config=$config?:new CompilerConfig;
 	}

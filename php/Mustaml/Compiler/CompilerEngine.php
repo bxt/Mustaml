@@ -1,12 +1,18 @@
 <?php
 namespace Mustaml\Compiler;
 
+/**
+ * Engine for compiling AS-Trees iterativly
+ */
 class CompilerEngine {
 	// shedule types
 	const S_NODE=0;
 	const S_BUFFERPUSH=1;
 	const S_ECHO=2;
 	const S_BUFFERPOP=3;
+	/**
+	 * Given an AST start to shedule render jobs
+	 */
 	public final function render($ast,$data=array()) {
 		$this->initialize();
 		$this->sheduleRender($ast,$data);

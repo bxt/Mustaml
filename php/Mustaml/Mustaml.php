@@ -1,15 +1,33 @@
 <?php
 namespace Mustaml;
 
+/**
+ * Class providing a simple interface to mustaml
+ */
 class Mustaml {
+	/**
+	 * Holds the configuration used for rendering
+	 */
 	private $config;
+	/**
+	 * Holds the data always used for rendering
+	 */
 	private $data=array();
+	/**
+	 * Holds an AST or template string to render
+	 */
 	private $template='';
+	/**
+	 * Get a new Instance for a template optionally with prefilling data and a config
+	 */
 	public function __construct($template,$data=array(),$config=null) {
 		$this->config=$config?:new Html\CompilerConfig;
 		$this->data=$data;
 		$this->template=$template;
 	}
+	/**
+	 * Render the template, optionally making another AST with data availible as '-' for yield
+	 */
 	public function __invoke($yieldAst=false,$yieldData=array()) {
 			if($this->template instanceof Ast\Node) {
 				$ast=$this->template;

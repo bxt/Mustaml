@@ -1,6 +1,9 @@
 <?php
 namespace Mustaml\Autoloaders;
 
+/**
+ * Interface for objects that are able to dynamicly load data
+ */
 interface AutoloaderI {
 	/**
 	 * This method will be invoked for a undefined var. 

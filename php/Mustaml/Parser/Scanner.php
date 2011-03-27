@@ -3,15 +3,29 @@ namespace Mustaml\Parser;
 
 /**
  * A base for building stream parsers
+ * 
+ * Crawl through a String step by step using
+ * regexp-charclasses. 
  */
 class Scanner {
+	/**
+	 * Holds the rest of the input yet to parse
+	 */
+	private $input;
 	/**
 	 * Initalize with input string (scanner can only be used once)
 	 */
 	public function __construct($input) {
 		$this->input=$input;
-		$this->orig=$input;
+		//$this->orig=$input;
 	}
+	/**
+	 * Eats and returns next matching chars
+	 * 
+	 * Use lists of chars allowed as parameters. 
+	 * When called without parameters matches the
+	 * next input char. 
+	 */
 	public function get() {
 		$a=func_get_args();
 		if(count($a)==0) { // the next char:
@@ -25,6 +39,13 @@ class Scanner {
 		} 
 		return $new;
 	}
+	/**
+	 * Eats and returns next non matching chars
+	 * 
+	 * Use lists of chars to stop at as parameters. 
+	 * When called without parameters matches the
+	 * whole rest of the input string. 
+	 */
 	public function getUnless() {
 		$a=func_get_args();
 		if(count($a)==0) { // everything
@@ -39,6 +60,15 @@ class Scanner {
 		} 
 		return $new;
 	}
+	/**
+	 * Eats and returns next matching char
+	 * 
+	 * This method does the same as get() except
+	 * it will eat zero or one chars. 
+	 * Use lists of chars allowed as parameters. 
+	 * When called without parameters matches the
+	 * next input char. 
+	 */
 	public function getOne() {
 		$a=func_get_args();
 		if(count($a)==0) { // the next char:
@@ -51,6 +81,15 @@ class Scanner {
 		} 
 		return $new;
 	}
+	/**
+	 * Returns next matching chars
+	 * 
+	 * This method does the same as get() except
+	 * it will not eat chars. 
+	 * Use lists of chars allowed as parameters. 
+	 * When called without parameters matches the
+	 * next input char. 
+	 */
 	public function is() {
 		$a=func_get_args();
 		if(strlen($this->input)<=0) return false;

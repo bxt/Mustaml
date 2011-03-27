@@ -1,8 +1,20 @@
 <?php
 namespace Mustaml\Parser;
 
+/**
+ * Parseing a template string into an AST
+*/
 class Parser {
+	/**
+	 * When parsing multiple nodes in one line, holds
+	 * the string part not used for the first node. 
+	 *
+	 * Used to avoid recursive parsing. 
+	 */
 	private $restNodecode=false;
+	/**
+	 * Parse a template string into an AST
+	 */
 	public function parseString($templateString) {
 		$rootnode=new \Mustaml\Ast\Node('root');
 		$lines=explode("\n",$templateString);
@@ -35,6 +47,9 @@ class Parser {
 		}
 		return $rootnode;
 	}
+	/**
+	 * Parse a single node (~one line)
+	 */
 	private function parse_node($nodecode) {
 		$this->restNodecode=false; // usualy we don't expect more nodes in this line
 		switch(true) {
@@ -140,6 +155,9 @@ class Parser {
 		}
 		return $node;
 	}
+	/**
+	 * Build AST for a simple attribute
+	 */
 	private function get_attr_node($key,$val) {
 		$attr=new \Mustaml\Ast\TagNode('attr');
 		$attr->name=$key;
