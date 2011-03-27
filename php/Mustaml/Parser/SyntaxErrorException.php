@@ -1,4 +1,4 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Parser;
 
 class SyntaxErrorException extends \Exception {}

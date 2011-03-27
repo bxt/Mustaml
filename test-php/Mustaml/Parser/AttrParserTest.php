@@ -1,5 +1,5 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Parser;
 require_once 'mustaml.php';
 
 class AttrParserTest extends \PHPUnit_Framework_TestCase {

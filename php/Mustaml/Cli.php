@@ -32,7 +32,7 @@ class Cli {
 			$filedir_al->setMustamlBoilerplate($al_bp);
 		}
 		
-		$p=new Parser();
+		$p=new Parser\Parser();
 		$ast=$p->parseString($templateString);
 		//var_dump($ast);
 		$c=new Html\Compiler($config);

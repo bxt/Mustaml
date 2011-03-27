@@ -1,5 +1,5 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Parser;
 
 class AttrParser {
 	const ws=' ';
@@ -17,7 +17,7 @@ class AttrParser {
 			$s->get(self::ws);
 			if($s->is(self::a)) {
 				//identifier
-				$key=new Ast\TagNode('attr');
+				$key=new \Mustaml\Ast\TagNode('attr');
 				$key->name=$s->get(self::anum);
 				$s->get(self::ws);
 				if($s->getOne(self::eq)) {
@@ -54,7 +54,7 @@ class AttrParser {
 		return $attrs;
 	}
 	private function construct_textnode($contents) {
-		$t=new Ast\TextNode();
+		$t=new \Mustaml\Ast\TextNode();
 		$t->contents=$contents;
 		return $t;
 	}
@@ -64,7 +64,7 @@ class AttrParser {
 			$varname=$s->getUnless(self::sep);
 			$s->getOne(self::sep);
 			
-			$node=new Ast\DataNode();
+			$node=new \Mustaml\Ast\DataNode();
 			$node->varname=$varname;
 			return $node;
 		}

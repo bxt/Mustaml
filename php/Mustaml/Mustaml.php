@@ -14,7 +14,7 @@ class Mustaml {
 			if($this->template instanceof Ast\Node) {
 				$ast=$this->template;
 			} else {
-				$p=new Parser();
+				$p=new Parser\Parser();
 				$ast=$p->parseString($this->template);
 			}
 			

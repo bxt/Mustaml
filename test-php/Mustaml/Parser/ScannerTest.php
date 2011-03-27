@@ -1,5 +1,5 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Parser;
 require_once 'mustaml.php';
 
 class ScannerTest extends \PHPUnit_Framework_TestCase {

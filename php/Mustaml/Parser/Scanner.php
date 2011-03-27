@@ -1,5 +1,5 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Parser;
 
 /**
  * A base for building stream parsers

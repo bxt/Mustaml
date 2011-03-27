@@ -1,10 +1,10 @@
 <?php
-namespace Mustaml;
+namespace Mustaml\Parser;
 
 class Parser {
 	private $restNodecode=false;
 	public function parseString($templateString) {
-		$rootnode=new Ast\Node('root');
+		$rootnode=new \Mustaml\Ast\Node('root');
 		$lines=explode("\n",$templateString);
 		$indentLevels=array();
 		$parentBlocks=array();
@@ -57,7 +57,7 @@ class Parser {
 		}
 	}
 	private function parse_text($contents) {
-		$node=new Ast\TextNode();
+		$node=new \Mustaml\Ast\TextNode();
 		$node->contents=$contents;
 		return $node;
 	}
@@ -65,18 +65,18 @@ class Parser {
 		return $this->parse_text(substr($nodecode,1));
 	}
 	private function parse_hcomment($contents) {
-		$node=new Ast\Node('hcomment');
+		$node=new \Mustaml\Ast\Node('hcomment');
 		$this->restNodecode=substr($contents,1);
 		return $node;
 	}
 	private function parse_hecho($nodecode) {
-		$node=new Ast\DataNode('hecho');
+		$node=new \Mustaml\Ast\DataNode('hecho');
 		$node->varname=substr($nodecode,1);
 		return $node;
 	}
 	private function parse_notval($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,2),$m);
-		$node=new Ast\DataNode('notval');
+		$node=new \Mustaml\Ast\DataNode('notval');
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$this->restNodecode=$m[3];
@@ -85,7 +85,7 @@ class Parser {
 	}
 	private function parse_notnotval($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,3),$m);
-		$node=new Ast\DataNode('notnotval');
+		$node=new \Mustaml\Ast\DataNode('notnotval');
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$this->restNodecode=$m[3];
@@ -94,7 +94,7 @@ class Parser {
 	}
 	private function parse_val($nodecode) {
 		preg_match("/^(.+?)( (.*))?$/",substr($nodecode,1),$m);
-		$node=new Ast\DataNode();
+		$node=new \Mustaml\Ast\DataNode();
 		$node->varname=$m[1];
 		if(isset($m[3])) {
 			$this->restNodecode=$m[3];
@@ -102,15 +102,15 @@ class Parser {
 		return $node;
 	}
 	private function parse_doctype($nodecode) {
-		$node=new Ast\Node('doctype');
+		$node=new \Mustaml\Ast\Node('doctype');
 		return $node;
 	}
 	private function parse_comment($nodecode) {
-		$node=new Ast\Node('comment');
+		$node=new \Mustaml\Ast\Node('comment');
 		return $node;
 	}
 	private function parse_htag($nodecode) {
-		$node=new Ast\TagNode();
+		$node=new \Mustaml\Ast\TagNode();
 		preg_match("/^  (%(.+?))?  (\#(.+?))?  ((\..+?)*)  (\((.*?)\))?  (\ (.*))?  $/x",$nodecode,$m);
 		//var_dump($m);
 		if(isset($m[2])&&$m[2]!='') {
@@ -141,9 +141,9 @@ class Parser {
 		return $node;
 	}
 	private function get_attr_node($key,$val) {
-		$attr=new Ast\TagNode('attr');
+		$attr=new \Mustaml\Ast\TagNode('attr');
 		$attr->name=$key;
-		$t=new Ast\TextNode();
+		$t=new \Mustaml\Ast\TextNode();
 		$t->contents=$val;
 		$attr->children[]=$t;
 		return $attr;
