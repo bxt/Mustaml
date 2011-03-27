@@ -71,19 +71,25 @@ class Compiler {
 	}
 	
 	private function render_root($ast,$data) {
-		return array($this->dafaultLvlData($data),true);
+		return $this->render_children($ast,$data);
 	}
 	private function render_hecho($ast,$data) {
 		if($this->issetData($data,$ast->varname)) {
-			return array($this->dafaultLvlData($data,htmlspecialchars($this->getData($data,$ast->varname))),false);
+			return htmlspecialchars($this->getData($data,$ast->varname));
 		}
-		return array($this->dafaultLvlData($data),false);
+		return '';
 	}
 	private function render_notval($ast,$data) {
-		return array($this->dafaultLvlData($data), ( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) );
+		if( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) {
+			return $this->render_children($ast,$data);
+		}
+		return '';
 	}
 	private function render_notnotval($ast,$data) {
-		return array($this->dafaultLvlData($data), ( $this->issetData($data,$ast->varname) && $this->getData($data,$ast->varname) ) );
+		if( $this->issetData($data,$ast->varname) && $this->getData($data,$ast->varname) ) {
+			return $this->render_children($ast,$data);
+		}
+		return '';
 	}
 	private function render_val($ast,$data) {
 		$html='';
@@ -92,9 +98,9 @@ class Compiler {
 			if(is_callable($v)) {
 				$r=new \Mustaml\Ast\Node('root');
 				$r->children=$ast->children;
-				return array($this->dafaultLvlData($data$v($r,$data),),true);
-			} elseif(is_array($v)) {
-				foreach($v as $key=>$val) { /// TODO: uhm, wow?
+				return $v($r,$data);
+			} elseif(is_array($v)) {			
+				foreach($v as $key=>$val) {
 					$newdata=$data;
 					$newdata['.']=$val;
 					if(is_array($val)) {
@@ -103,9 +109,8 @@ class Compiler {
 					$html.=$this->render_children($ast,$newdata);
 				}
 			} elseif ($v===true) {
-				return array($this->dafaultLvlData($data),true);
+				$html.=$this->render_children($ast,$data);
 			} elseif ($v===false) {
-				return array($this->dafaultLvlData($data),false);
 			} else {
 				if(count($ast->children)<1) {
 					$html.=$v;
