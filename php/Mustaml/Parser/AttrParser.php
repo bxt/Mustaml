@@ -96,7 +96,7 @@ class AttrParser {
 	 */
 	private function parse_dynval($s) {
 		if($s->getOne(self::dyneq)) {
-			if($s->is(self::sep)) throw new SyntaxErrorException("No varname");
+			if($s->is(self::sep)||!$s->is()) throw new SyntaxErrorException("No varname");
 			$varname=$s->getUnless(self::sep);
 			$s->getOne(self::sep);
 			
