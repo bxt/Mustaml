@@ -4,7 +4,7 @@ namespace Mustaml\Autoloaders;
 /**
  * Loads *.mustaml files from a certain directory when used in template
  */
-class TemplateDirAl implements AutoloaderI {
+class TemplateDirAl implements AutoloaderI,MustamlDependentAlI {
 	private $templateDir;
 	private $mustamlBoilerplate;
 	/**

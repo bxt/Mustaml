@@ -16,7 +16,7 @@ class CompilerConfig extends \Mustaml\Compiler\CompilerConfig {
 	/**
 	 * Initialize with autoloaders, list of self-closing tag names, list of space-separated values contaning attributes
 	 */
-	public function __construct($valueAutoloaders=array(),$htmlSelfclosingTags=null,$htmlArrayAttrs=null) {
+	public function __construct($htmlSelfclosingTags=null,$htmlArrayAttrs=null) {
 		$at=$htmlArrayAttrs?:array('class','rel','rev');
 		$this->htmlArrayAttrs=array_fill_keys($at,true); // ~= convert list to set
 		
@@ -33,8 +33,6 @@ class CompilerConfig extends \Mustaml\Compiler\CompilerConfig {
 		 */
 		$ct=$htmlSelfclosingTags?:array('br','img','input','meta','link','hr','frame','param');
 		$this->htmlSelfclosingTags=array_fill_keys($ct,true);
-		
-		parent::__construct($valueAutoloaders);
 	}
 	/**
 	 * Returns if an attribute does or not contain space-separated values

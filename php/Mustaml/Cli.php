@@ -35,18 +35,10 @@ class Cli {
 		}
 		$templateString=file_get_contents($filename);
 		
-		$alList=array();
-		$pwd_al=new Autoloaders\TemplateDirAl('.');
-		array_push($alList,$pwd_al);
+		$config=new Html\CompilerConfig();
+		$config->registerAutoloader(new Autoloaders\TemplateDirAl('.'));
 		if(dirname($filename)!='.') {
-			$filedir_al=new Autoloaders\TemplateDirAl(dirname($filename));
-			array_push($alList,$filedir_al);
-		}
-		$config=new Html\CompilerConfig($alList);
-		$al_bp=new Mustaml('',array(),$config);
-		$pwd_al->setMustamlBoilerplate($al_bp);
-		if(isset($filedir_al)) {
-			$filedir_al->setMustamlBoilerplate($al_bp);
+			$config->registerAutoloader(new Autoloaders\TemplateDirAl(dirname($filename)));
 		}
 		
 		$mustaml=new Mustaml($templateString,$data,$config);
