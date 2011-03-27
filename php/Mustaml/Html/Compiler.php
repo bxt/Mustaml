@@ -11,15 +11,16 @@ class Compiler {
 	// shedule types
 	const S_NODE=0;
 	const S_BUFFERPUSH=1;
-	const S_ECHO=1;
-	const S_BUFFERPOP=1;
+	const S_ECHO=2;
+	const S_BUFFERPOP=3;
 	public function __construct($config=null) {
 		$this->config=$config?:new CompilerConfig;
 	}
 	public function render($ast,$data=array()) {
 		$this->initialize();
-		$this->sheduleEcho();
-		$this->sheduleRender($ast,$dat);
+		$this->sheduleBufferPop();
+		$this->sheduleRender($ast,$data);
+		$this->sheduleBufferPush();
 		while ($cur=$this->todoPopAndProzess());
 		return $this->outBuf;
 	}
@@ -44,21 +45,32 @@ class Compiler {
 	private function sheduleEcho($str='') {
 		array_push($this->todo,array(self::S_ECHO,$str));
 	}
+	private function sheduleBufferPush() {
+		array_push($this->todo,array(self::S_BUFFERPUSH));
+	}
+	private function sheduleBufferPop($cb=false) {
+		if($cb) {
+			array_push($this->todo,array(self::S_BUFFERPOP,$cb));
+		} else {
+			array_push($this->todo,array(self::S_BUFFERPOP));
+		}
+	}
 	private function todoPopAndProzess() {
-			$todo=array_pop();
+			$todo=array_pop($this->todo);
+		var_dump($todo);
 			if(!$todo) return $todo;
-			if($todo[0])==self::S_NODE) {
+			if($todo[0]==self::S_NODE) {
 				list(,$ast,$data)=$todo;
 				$renderMethod='render_'.$ast->type;
 				$this->$renderMethod($ast,$data);
 				
-			} elseif($todo[0])==self::S_ECHO) {
+			} elseif($todo[0]==self::S_ECHO) {
 				$this->bufferAppend($todo[1]);
 				
-			} elseif($todo[0])==self::S_BUFFERPUSH) {
+			} elseif($todo[0]==self::S_BUFFERPUSH) {
 				$this->bufferPush();
 				
-			} elseif($todo[0])==self::S_BUFFERPOP) {
+			} elseif($todo[0]==self::S_BUFFERPOP) {
 				if($b=$this->bufferPop()) {
 					if($todo[1]) {
 						$f=$todo[1];
@@ -69,15 +81,19 @@ class Compiler {
 			}
 			return $todo;
 	}
+	private function render_children($ast,$data) {
+		for($i=count($ast->children)-1;$i>=0;$i--) {
+			$this->sheduleRender($ast->children[$i],$data);
+		}
+	}
 	
 	private function render_root($ast,$data) {
-		return $this->render_children($ast,$data);
+		$this->render_children($ast,$data);
 	}
 	private function render_hecho($ast,$data) {
 		if($this->issetData($data,$ast->varname)) {
-			return htmlspecialchars($this->getData($data,$ast->varname));
+			$this->sheduleEcho(htmlspecialchars($this->getData($data,$ast->varname)));
 		}
-		return '';
 	}
 	private function render_notval($ast,$data) {
 		if( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) {
@@ -152,11 +168,6 @@ class Compiler {
 			$html.='</'.htmlspecialchars($ast->name).'>';
 		}
 		return $html;
-	}
-	private function render_children($ast,$data) {
-		for($i=count($ast->children);$i>0;$i--) {
-			$this->sheduleRender($ast->children[$i],$dat);
-		}
 	}
 	private function html_attr($ast,$data) {
 		$attr_array=array();
