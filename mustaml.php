@@ -1,6 +1,8 @@
 <?php
 namespace Mustaml;
 
+//xdebug_start_trace("mustaml");
+
 init();
 
 if(isset($argv[0])&&basename(__FILE__)==basename($argv[0])) {
