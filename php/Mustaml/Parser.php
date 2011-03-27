@@ -136,7 +136,6 @@ class Parser {
 			$node->attributes=array_merge($node->attributes,$attr);
 		}
 		if(isset($m[10])&&$m[10]!='') {
-			//$node->children[]=$this->parse_node($m[10]);
 			$this->restNodecode=$m[10];
 		}
 		return $node;
