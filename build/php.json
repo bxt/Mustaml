@@ -1,0 +1,16 @@
+{
+"sub_navigations":[{"class":"phpnav","data":[
+	{"link":"php.html","label":"PHP & Mustaml"},
+	{"link":"../phpuml/index.htm","label":"Class Reference","attrs":{"target":"_blank"}},
+	{"link":"../test-coverage/php_Mustaml.html","label":"Unittests","attrs":{"target":"_blank"}},
+	{"link":"../phploc.txt","label":"Phploc","attrs":{"target":"_blank"}}
+]}],
+"pagetitle":"PHP & Mustaml",
+"desc":"Here are some examples on how to use Mustaml in your PHP scripts",
+"examples":[
+{"title":"Inline-Templates","snippets":[
+	{"desc":"The simplest method is hardcoded inline templates","php":"<?php\n$m=new Mustaml('%html'); echo $m;","html":"<html></html>"},
+	{"desc":"You can pass data as second parameter","php":"<?php\n$m=new Mustaml('=foo',array('foo'=>'bar')); echo $m;","html":"bar"},
+	{"desc":"I you render the same template with different data, you can save reccources by reusing: ","php":"<?php\n$m=new Mustaml('=foo');\necho $m(array('foo'=>'bar'));\necho $m(array('foo'=>'baz'));","html":"barbaz"}
+]}
+]}

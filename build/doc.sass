@@ -46,7 +46,7 @@ br.clearfix
 	clear: left
 	font-size: 1px
 	line-height: 1px
-#nav
+.nav
 	background: $cicolor
 	padding: 0 50px
 	height: 30px
@@ -57,14 +57,17 @@ br.clearfix
 		li
 			display: block
 			float: left
-			line-height: 30px
-			padding: 0 5px
+			line-height: 29px
+			padding: 0 8px
 			a
 				color: #fff
 				text-decoration: none
 				font:
 					weight: bold
 					size: $fontsize_small
+.phpnav
+	background: lighten($cicolor, 20%)
+	clear: left
 #content
 	padding: 0 50px
 	max-width: 600px

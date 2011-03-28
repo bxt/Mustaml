@@ -1,3 +1,5 @@
-{
-"navigation_data":[{"link":"index.html","label":"Home"},{"link":"ref.html","label":"Reference"}]
-}
+{"navigation_data":[
+	{"link":"index.html","label":"Home"},
+	{"link":"ref.html","label":"Language Reference"},
+	{"link":"php.html","label":"PHP"}
+]}

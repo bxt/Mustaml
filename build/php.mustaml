@@ -1,0 +1,11 @@
+-htmlintro.mustaml
+	%h1 =pagetitle
+	%p =desc
+	-examples
+		%h3 =title
+		-snippets
+			%p =desc
+			%h5 PHP:
+			%pre.php =php
+			%h5 Output:
+			%pre.html =html

@@ -4,10 +4,15 @@
 		%title =pagetitle
 		%link(rel=stylesheet href=doc.css)
 	%body
-		#nav
+		#nav.nav
 			%ul -navigation_data
-				%li %a(href==link) =label
+				%li %a(href==link  =attrs) =label
 			%br.cearfix
+		-sub_navigations
+			.nav(class==class)
+				%ul -data
+					%li %a(href==link  =attrs) =label
+				%br.cearfix
 		#content
 			%a(name=top)
 			--
