@@ -49,8 +49,17 @@ abstract class CompilerBase extends CompilerEngine {
 				$r=new \Mustaml\Ast\Node('root');
 				$r->children=$ast->children;
 				$this->sheduleEcho($v($r,$data));
-			} elseif(is_array($v)) {			
+			} elseif(is_array($v)) {
+				$isAssoc=false;
 				for($i=count($v)-1;$i>=0;$i--) {
+					if (isset($v[$i])) continue;
+					$isAssoc=true;
+					$newdata=$data;
+					$newdata=array_merge($newdata,$v);
+					$this->renderChildren($ast,$newdata);
+					break;
+				}
+				for($i=count($v)-1;$i>=0&&!$isAssoc;$i--) {
 					$newdata=$data;
 					$newdata['.']=$v[$i];
 					if(is_array($v[$i])) {

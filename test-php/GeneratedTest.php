@@ -286,11 +286,29 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
-   * Looping
+   * Maps
    *
    * The minus operator (-) marks special blocks that behave depending on
-   * the var content. For arrays the block will be looped. The current
-   * value is available as ".". 
+   * the var content. For maps, their entries will be availible in the
+   * scope
+   */
+  public function testBasicMap() {
+    $expectedHtml='Athlon, 2.2';
+    $template='-cpu
+  =name
+  , 
+  =ghz';
+    $data=json_decode('{"cpu":{"name":"Athlon","ghz":2.2}}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Looping
+   *
+   * The minus operator (-) on arrays (vectors) the block will be looped.
+   * The current value is available as ".". 
    */
   public function testBasicLoop() {
     $expectedHtml='<ul><li>Hello World!</li><li>Hello Venus!</li><li>Hello Pluto!</li></ul>';
