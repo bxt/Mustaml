@@ -307,8 +307,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Looping
    *
-   * The minus operator (-) on arrays (vectors) the block will be looped.
-   * The current value is available as ".". 
+   * The minus operator (-) on arrays (vectors) loops the block. The
+   * current value is available as ".". 
    */
   public function testBasicLoop() {
     $expectedHtml='<ul><li>Hello World!</li><li>Hello Venus!</li><li>Hello Pluto!</li></ul>';
