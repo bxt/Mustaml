@@ -13,6 +13,15 @@ class MustamlTest extends \PHPUnit_Framework_TestCase {
 	const MAX_NESTING_LVL=400;
 	//const MAX_NESTING_LVL=4000;
 	
+	public function testInvoke() {
+		$m=new Mustaml("%p");
+		$this->assertEquals('<p></p>',$m());
+	}
+	public function testToString() {
+		$m=(string)new Mustaml("%p");
+		$this->assertEquals('<p></p>',$m);
+	}
+	
 	public function testNstingWithoutSubblock() {
 		
 		$child=new Mustaml("#child\n  %p =foo\n  %p =bam",array("foo"=>"override"));
