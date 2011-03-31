@@ -53,7 +53,8 @@ class Parser {
 	private function parse_node($nodecode) {
 		$this->restNodecode=false; // usualy we don't expect more nodes in this line
 		switch(true) {
-			case (!isset($nodecode[1])): $node=$this->parse_text($nodecode);return $node; // at least 2 chars
+			case ($nodecode[0]=='/'): $node=$this->parse_hcomment($nodecode) ;return $node;
+			case (!isset($nodecode[1])): $node=$this->parse_text($nodecode);return $node; // all following need at least 2 chars
 			case ($nodecode[0]=='-'): switch(true) {
 				case ($nodecode[1]=='/'): $node=$this->parse_comment($nodecode); return $node;
 				case ($nodecode[1]=='^'): if(isset($nodecode[2])&&$nodecode[2]=='^') {
@@ -62,7 +63,6 @@ class Parser {
 				default: $node=$this->parse_val($nodecode);return $node;
 			}
 			case ($nodecode[0]=='='): $node=$this->parse_hecho($nodecode); return $node;
-			case ($nodecode[0]=='/'): $node=$this->parse_hcomment($nodecode) ;return $node;
 			case ($nodecode[0]=='\\'): $node=$this->parse_excapedText($nodecode); return $node;
 			case ($nodecode[0]=='%'):
 			case ($nodecode[0]=='.'):
