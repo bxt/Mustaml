@@ -73,7 +73,7 @@ demos: phar cleandemos
 	@echo "Running some demos..."
 	@echo
 	@echo "----------------------------------------"
-	
+	php mustaml.phar demos/test.json demos/test.mustaml > demos/out/test.html
 
 gen: test-php/GeneratedTest.php target/docs/ref.html target/docs/index.html target/docs/php.html
 	@echo "----------------------------------------"
