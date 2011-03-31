@@ -290,7 +290,7 @@
 "desc":"You can provide a map for highly dynamic attributes, while still defining others in your template. Last specified overrides. ",
 "testname":"AttrData",
 "data":"{\"linktag\":{\"rel\":\"stylesheet\",\"href\":\"style/main.css\"}}",
-"mustaml":"%link(=linktag  type=\"text\/css\")",
+"mustaml":"%link(=linktag type=\"text\/css\")",
 "html":"<link rel=\"stylesheet\" href=\"style/main.css\" type=\"text\/css\" />"
 },
 

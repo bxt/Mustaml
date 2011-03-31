@@ -6,12 +6,12 @@
 	%body
 		#nav.nav
 			%ul -navigation_data
-				%li %a(href==link  =attrs) =label
+				%li %a(href==link =attrs) =label
 			%br.cearfix
 		-sub_navigations
 			.nav(class==class)
 				%ul -data
-					%li %a(href==link  =attrs) =label
+					%li %a(href==link =attrs) =label
 				%br.cearfix
 		#content
 			%a(name=top)

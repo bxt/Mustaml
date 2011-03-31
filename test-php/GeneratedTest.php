@@ -570,7 +570,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    */
   public function testAttrData() {
     $expectedHtml='<link rel="stylesheet" href="style/main.css" type="text/css" />';
-    $template='%link(=linktag  type="text/css")';
+    $template='%link(=linktag type="text/css")';
     $data=json_decode('{"linktag":{"rel":"stylesheet","href":"style/main.css"}}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
