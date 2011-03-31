@@ -1,14 +1,14 @@
 {
 "pagetitle":"Mustaml",
-"intro":"Mustaml is a html template language that aims to be best for creating modern web pages' markup and uses \"logic-less\" templates as known from {{ mustache }} plus pythonish indentation and shortcuts like HAML to build html-tags. ",
-"desc":[
-"I tried to bring the best of both worlds together and fix some stuff that annoyed me about either of them. With HAML it was the ruby-specific syntax all over the place, which made most implementations for other languages, namely JS, PHP and Java really incompatible and diverse. But I want to use my templates in all the corners AJAX applications have. ",
-"Mustaml gets this pretty well. On the other hand I wanted to avoid the verbosity of double-mustaches and HTML tags that mustache templates suffer from. ",
-"So I ended up cherry-picking the best HAML and mustache features and putting them together into a new language. "
-],
+"intro":"Mustaml is a html template language that aims to be the best for creating modern web pages' markup. Mustaml-templates may be used independend from any view logic. It uses \"logic-less\" templates as known from {{ mustache }} plus pythonish indentation and shortcuts like HAML to build html-tags. ",
 "key-features":[
-"Language-Indendent",
+"Language-Independent",
 "\"Logic-less\"",
 "Creating HTML5 in no time",
-"With neat syntax"
-]}
+"Neat syntax"
+],
+"example":{
+"mustache":"<h1>{{header}}</h1>\n{{#bug}}\n{{/bug}}\n\n{{#items}}\n  {{#first}}\n    <li><strong>{{name}}</strong></li>\n  {{/first}}\n  {{#link}}\n   \n<li><a href=\"{{url}}\">{{name}}</a></li>\n  {{/link}}\n{{/items}}\n\n{{#empty}}\n  <p>The list is empty.</p>\n{{/empty}}\n",
+"mustaml":"%h1 =header\n-bug\n-items\n  -first\n    %li %strong =name\n  -link\n    %li %a(href==url) =name\n\n-empty %p The list is empty.\n",
+"html":"<h1>Colors</h1>\n<li><strong>red</strong></li>\n<li><a href=\"#Green\">green</a></li>\n<li><a href=\"#Blue\">blue</a></li>"
+}}

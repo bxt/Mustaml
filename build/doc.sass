@@ -2,10 +2,15 @@ $fontsize: 13px
 $fontsize_small: 11px
 $cicolor: #f90
 $lightgrey: #eee
+$content_width:600px 
+$content_padding:50px 
 
-body
+@mixin nospace
 	margin: 0
 	padding: 0
+
+body
+	@include nospace
 	font:
 		family: Georgia,Garamond,Times,"Times New Roman",serif
 		size: 13px
@@ -39,20 +44,19 @@ pre
 	padding: 10px
 	background:
 		color: $lightgrey
-pre.html
 	font:
 		size: $fontsize_small
-br.clearfix
+.clearfix
 	clear: left
+br.clearfix
 	font-size: 1px
 	line-height: 1px
 .nav
 	background: $cicolor
-	padding: 0 50px
+	padding: 0 $content_padding
 	height: 30px
 	ul
-		padding: 0
-		margin: 0
+		@include nospace
 		list-style: none
 		li
 			display: block
@@ -69,8 +73,8 @@ br.clearfix
 	background: lighten($cicolor, 20%)
 	clear: left
 #content
-	padding: 0 50px
-	max-width: 600px
+	padding: 0 $content_padding
+	max-width: $content_width
 	ul
 		padding-left: 23px
 	li
@@ -84,7 +88,16 @@ br.clearfix
 		margin-top: 37px
 		font:
 			size: $fontsize_small
+	hr
+		border: 0
+		background-color: darken($lightgrey, 10%)
+		margin: 40px 0
+		height: 1px
+	#example
+		.mustaml, .html
+			float: left
+			margin-right: 45px
 p.footer
 	border-top: 1px $lightgrey solid
 	margin: 40px 0 20px 0
-	padding: 10px 50px
+	padding: 10px $content_padding

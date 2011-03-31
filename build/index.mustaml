@@ -7,4 +7,18 @@
 	%br.clearfix
 	-desc
 		%p =.
-	%p %a(href=ref.html) Language Reference
+	%h3 Example
+	#example -example
+		.mustaml
+			%h5 Mustaml Template
+			%pre =mustaml
+		.html
+			%h5 Resulting HTML
+			%pre =html
+	%br.clearfix
+	%h3 %a(href=ref.html) Language Reference
+	%p The Language Reference lists all the features that come with Mustaml. 
+	%hr
+	.mustache
+		%h5 PS: The above example in old Mustache
+		%pre -example =mustache
