@@ -73,7 +73,7 @@ class AttrParserTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('biz',$attr[0]->children[1]->varname);
 	}
 	public function testSimpleAndVarAttr() {
-		$s=new Scanner('foo==biz,bar');
+		$s=new Scanner('foo==biz=bar');
 		$p=new AttrParser();
 		$attr=$p->parse_attr($s);
 		$this->assertEquals(1,count($attr));
@@ -88,7 +88,7 @@ class AttrParserTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('bar',$attr[0]->children[1]->contents);
 	}
 	public function testSimpleVarAndSimpleAttr() {
-		$s=new Scanner('foo=bar=biz boo');
+		$s=new Scanner('foo=bar=biz=boo');
 		$p=new AttrParser();
 		$attr=$p->parse_attr($s);
 		$this->assertEquals(1,count($attr));

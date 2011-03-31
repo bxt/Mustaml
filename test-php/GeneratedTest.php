@@ -581,9 +581,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * Attributes with data-values
    *
    * You can even fill only the attribute's values with dynamic strings,
-   * and mix this with other attributes and old syntax. Note that you have
-   * to use separators (space or comma) to end the varname string and the
-   * attribute value string. 
+   * and mix this with other attributes and old syntax.  
    */
   public function testAttrDataValues() {
     $expectedHtml='<link rel="stylesheet" href="style/main.css" />';
@@ -597,13 +595,12 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Attributes with data-values and text
    *
-   * You can mix usal text and dynamic values in your attributes. This is
-   * why you have to use separators to end the varname string and the
-   * attribute value string. 
+   * You can mix usal text and dynamic values in your attributes. Place an
+   * = between the end of your varname and the text
    */
   public function testAttrDataValuesWithText() {
     $expectedHtml='<a href="#12-headline">go</a>';
-    $template='%a(href=#=anchorNo -=anchor) go';
+    $template='%a(href=#=anchorNo=-=anchor) go';
     $data=json_decode('{"anchor":"headline","anchorNo":"12"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
@@ -617,8 +614,8 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * value. 
    */
   public function testAttrDataValuesWithTextQuoted() {
-    $expectedHtml='<a href="#=anchorNo -=anchor">go</a>';
-    $template='%a(href="#=anchorNo -=anchor") go';
+    $expectedHtml='<a href="#=anchorNo=-=anchor">go</a>';
+    $template='%a(href="#=anchorNo=-=anchor") go';
     $data=json_decode('{"anchor":"headline","anchorNo":"12"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();

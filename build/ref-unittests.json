@@ -296,7 +296,7 @@
 
 {
 "title":"Attributes with data-values",
-"desc":"You can even fill only the attribute's values with dynamic strings, and mix this with other attributes and old syntax. Note that you have to use separators (space or comma) to end the varname string and the attribute value string. ",
+"desc":"You can even fill only the attribute's values with dynamic strings, and mix this with other attributes and old syntax.  ",
 "testname":"AttrDataValues",
 "data":"{\"style\":\"style/main.css\"}",
 "mustaml":"%link(rel=>stylesheet, href=>=style)",
@@ -305,10 +305,10 @@
 
 {
 "title":"Attributes with data-values and text",
-"desc":"You can mix usal text and dynamic values in your attributes. This is why you have to use separators to end the varname string and the attribute value string. ",
+"desc":"You can mix usal text and dynamic values in your attributes. Place an = between the end of your varname and the text",
 "testname":"AttrDataValuesWithText",
 "data":"{\"anchor\":\"headline\",\"anchorNo\":\"12\"}",
-"mustaml":"%a(href=#=anchorNo -=anchor) go",
+"mustaml":"%a(href=#=anchorNo=-=anchor) go",
 "html":"<a href=\"#12-headline\">go</a>"
 },
 
@@ -317,8 +317,8 @@
 "desc":"To avoid parsing the equal sings as vars just quote the attribute value. ",
 "testname":"AttrDataValuesWithTextQuoted",
 "data":"{\"anchor\":\"headline\",\"anchorNo\":\"12\"}",
-"mustaml":"%a(href=\"#=anchorNo -=anchor\") go",
-"html":"<a href=\"#=anchorNo -=anchor\">go</a>"
+"mustaml":"%a(href=\"#=anchorNo=-=anchor\") go",
+"html":"<a href=\"#=anchorNo=-=anchor\">go</a>"
 },
 
 {

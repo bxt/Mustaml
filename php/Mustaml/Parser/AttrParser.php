@@ -97,8 +97,8 @@ class AttrParser {
 	private function parse_dynval($s) {
 		if($s->getOne(self::dyneq)) {
 			if($s->is(self::sep)||!$s->is()) throw new SyntaxErrorException("No varname");
-			$varname=$s->getUnless(self::sep);
-			$s->getOne(self::sep);
+			$varname=$s->getUnless(self::sep,self::dyneq);
+			$s->getOne(self::dyneq);
 			
 			$node=new \Mustaml\Ast\DataNode();
 			$node->varname=$varname;
