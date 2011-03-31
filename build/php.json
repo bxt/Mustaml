@@ -11,6 +11,6 @@
 {"title":"Inline-Templates","snippets":[
 	{"desc":"The simplest method is hardcoded inline templates","php":"<?php\ninclude('mustaml.phar');\necho new Mustaml('%html');","html":"<html></html>"},
 	{"desc":"You can pass data as second parameter","php":"<?php\necho new Mustaml('=foo',array('foo'=>'bar'));","html":"bar"},
-	{"desc":"I you render the same template with different data, you can save reccources by reusing: ","php":"<?php\n$m=new Mustaml('=foo');\necho $m(array('foo'=>'bar'));\necho $m(array('foo'=>'baz'));","html":"barbaz"}
+	{"desc":"I you render the same template with different data, you may reuse a parsed template: ","php":"<?php\ninclude('mustaml.phar');\nuse Mustaml\\Parser\\Parser;\nuse Mustaml\\Mustaml;\n\n$parser=new Parser();\n$ast=$parser->parseString('=foo');\n\necho new Mustaml($ast,array('foo'=>'bar'));\necho new Mustaml($ast,array('foo'=>'baz'));","html":"barbaz"}
 ]}
 ]}

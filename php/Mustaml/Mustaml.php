@@ -28,15 +28,15 @@ class Mustaml {
 	/**
 	 * Alias for action(), all parameters optional
 	 *
-	 * With this you can do `$m= new Mustaml(); $m();`
+	 * With this you can do `$m= new Mustaml("tmpl"); $m();`
 	 */
 	public function __invoke($yieldAst=false,$yieldData=array()) {
 		return $this->action($yieldAst,$yieldData);
 	}
 	/**
-	 * Alias for action()
+	 * Alias for action(), without parameters
 	 *
-	 * With this you can do `echo new Mustaml();`
+	 * With this you can do `echo new Mustaml("tmpl");`
 	 */
 	public function __toString() {
 		return $this->action(false,array());
