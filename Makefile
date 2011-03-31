@@ -14,7 +14,7 @@ clean:
 	rm -Rvf target
 	rm -vf ${BUILD_NAME}.phar
 	@echo "----------------------------------------"
-	mkdir -vp target/{dist,docs/{phpuml,phpdoc,reference}}
+	mkdir -vp target/{dist,docs/{phpuml,phpdoc}}
 
 phar: clean
 	@echo "----------------------------------------"
