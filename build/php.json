@@ -1,9 +1,9 @@
 {
 "sub_navigations":[{"class":"phpnav","data":[
 	{"link":"php.html","label":"PHP & Mustaml"},
-	{"link":"../phpuml/index.htm","label":"Class Reference","attrs":{"target":"_blank"}},
-	{"link":"../test-coverage/php_Mustaml.html","label":"Unittests","attrs":{"target":"_blank"}},
-	{"link":"../phploc.txt","label":"Phploc","attrs":{"target":"_blank"}}
+	{"link":"phpuml/index.htm","label":"Class Reference","attrs":{"target":"_blank"}},
+	{"link":"test-coverage/php_Mustaml.html","label":"Unittests","attrs":{"target":"_blank"}},
+	{"link":"phploc.txt","label":"Phploc","attrs":{"target":"_blank"}}
 ]}],
 "pagetitle":"PHP & Mustaml",
 "desc":"Here are some examples on how to use Mustaml in your PHP scripts",
