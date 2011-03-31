@@ -9,8 +9,8 @@
 "desc":"Here are some examples on how to use Mustaml in your PHP scripts",
 "examples":[
 {"title":"Inline-Templates","snippets":[
-	{"desc":"The simplest method is hardcoded inline templates","php":"<?php\n$m=new Mustaml('%html'); echo $m;","html":"<html></html>"},
-	{"desc":"You can pass data as second parameter","php":"<?php\n$m=new Mustaml('=foo',array('foo'=>'bar')); echo $m;","html":"bar"},
+	{"desc":"The simplest method is hardcoded inline templates","php":"<?php\ninclude('mustaml.phar');\necho new Mustaml('%html');","html":"<html></html>"},
+	{"desc":"You can pass data as second parameter","php":"<?php\necho new Mustaml('=foo',array('foo'=>'bar'));","html":"bar"},
 	{"desc":"I you render the same template with different data, you can save reccources by reusing: ","php":"<?php\n$m=new Mustaml('=foo');\necho $m(array('foo'=>'bar'));\necho $m(array('foo'=>'baz'));","html":"barbaz"}
 ]}
 ]}
