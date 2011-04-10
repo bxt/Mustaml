@@ -1,0 +1,9 @@
+{
+"pagetitle":"Javascript & Mustaml",
+"desc":"Here are some examples on how to use Mustaml in with Javscript",
+"examples":[
+{"title":"In the Browser","snippets":[
+	{"desc":"Include the minifiyed version of mustaml.js and use the methods returned by the htmlCompiler function","js":"<script src=\"mustaml.min.js\"></script> \n<script>\nmustaml.htmlCompiler().render(null,'%p =foo',{\"foo\":\"bar\"},function(err,html){\n  document.getElementById(\"placeholder\").innerHTML=html;\n});\n</script>","html":"<p>bar</p>"},
+	{"desc":"I you render the same template with different data, you may reuse a parsed template: ","js":"var ast=mustaml.parser().parseString('%p =foo');\nvar htmlCompiler=mustaml.htmlCompiler()\nhtmlCompiler.render(null,ast,{\"foo\":\"bar\"},function(err,html){\ndocument.getElementById('placeholder1').innerHTML=html;\n});\nhtmlCompiler.render(null,ast,{\"foo\":\"baz\"},function(err,html){\ndocument.getElementById('placeholder2').innerHTML=html;\n});","html":"<div id=\"placeholder1\"><p>baz</p></div><div id=\"placeholder2\"><p>baz</p></div>"}
+]}
+]}

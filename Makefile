@@ -102,13 +102,14 @@ demos: phar cleandemos
 	@echo "----------------------------------------"
 	php mustaml.phar demos/test.json demos/test.mustaml > demos/out/test.html
 
-gen: test-php/GeneratedTest.php  target/docs/ref.html target/docs/index.html target/docs/php.html gen-js
+gen: test-php/GeneratedTest.php gen-js gen-docs
 	@echo "----------------------------------------"
 	@echo
 	@echo "Building various..."
 	@echo
 	@echo "----------------------------------------"
 
+gen-docs: target/docs/ref.html target/docs/index.html target/docs/php.html target/docs/js.html
 
 gen-js: test-js-browser/index.html test-js-browser/dist.html test-js-node/generated.test.js
 
@@ -135,6 +136,9 @@ target/docs/index.html: target/docs/doc.css build/index.json build/index.mustaml
 
 target/docs/php.html: target/docs/doc.css build/php.json build/php.mustaml build/php.json build/htmlintro.mustaml build/htmlintro.json
 	php mustaml.php build/php.json build/php.mustaml > target/docs/php.html
+
+target/docs/js.html: target/docs/doc.css build/js.json build/js.mustaml build/js.json build/htmlintro.mustaml build/htmlintro.json
+	php mustaml.php build/js.json build/js.mustaml > target/docs/js.html
 
 install: 
 	ln -s $(PWD)/bin/mustaml ~/bin/mustaml
