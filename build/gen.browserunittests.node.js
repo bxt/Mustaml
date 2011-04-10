@@ -12,18 +12,22 @@ fs.readFile(process.argv[2], function (err, filedata) {
 	testJs+='<html>\n';
 	testJs+='<head>\n';
 	testJs+='<title>Test '+testdata.pagetitle+'</title>\n';
-	testJs+='<script>var mustaml={};</script>\n';
-	testJs+='<script src="../js/ast.js"></script>\n';
-	testJs+='<script src="../js/attrParser.js"></script>\n';
-	testJs+='<script src="../js/htmlCompiler.js"></script>\n';
-	testJs+='<script src="../js/htmlCompilerAttrs.js"></script>\n';
-	testJs+='<script src="../js/scanner.js"></script>\n';
-	testJs+='<script src="../js/parser.js"></script>\n';
+	if(process.argv[3]&&process.argv[3]=='dist') {
+		testJs+='<script src="../mustaml.min.js"></script>\n';
+	} else {
+		testJs+='<script>var mustaml={};</script>\n';
+		testJs+='<script src="../js/ast.js"></script>\n';
+		testJs+='<script src="../js/attrParser.js"></script>\n';
+		testJs+='<script src="../js/htmlCompiler.js"></script>\n';
+		testJs+='<script src="../js/htmlCompilerAttrs.js"></script>\n';
+		testJs+='<script src="../js/scanner.js"></script>\n';
+		testJs+='<script src="../js/parser.js"></script>\n';
+	}
 	testJs+='</head>\n';
 	testJs+='<body>\n';
-	testJs+='<h1>'+testdata.pagetitle+'</h1>\n';
+	testJs+='<h1>Test '+testdata.pagetitle+'</h1>\n';
 	testJs+='<p>'+testdata.desc+'</p>\n';
-	testJs+='<p id="result">Waiting for tests to finish...</p>\n';
+	testJs+='<p>Result: <span id="result">Waiting for tests to finish...</span></p>\n';
 	testJs+='<script>\n';
 	
 	testJs+='var htmlCompiler=mustaml.htmlCompiler();\n\n';
