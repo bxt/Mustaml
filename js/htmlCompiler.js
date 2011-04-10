@@ -20,9 +20,7 @@
 		
 		var renderer={};
 		renderer.root=function(err,tmpl,data,cb) {
-			renderChildren(err,tmpl,data,function(err,childrenHtml){
-				cb(err,childrenHtml);
-			})
+			renderChildren(err,tmpl,data,cb);
 		}
 		renderer.htag=function(err,tmpl,data,cb) {
 			var aHtml=false;
@@ -59,9 +57,7 @@
 		renderer.notval=function(err,tmpl,data,cb) {
 			var myval=data[tmpl.varname];
 			if( !myval || (is_vector(myval) && !myval.length)) {
-				renderChildren(err,tmpl,data,function(err,childrenHtml){
-					cb(err,childrenHtml);
-				});
+				renderChildren(err,tmpl,data,cb);
 			} else {
 				cb(err,'');
 			}
@@ -69,9 +65,7 @@
 		renderer.notnotval=function(err,tmpl,data,cb) {
 			var myval=data[tmpl.varname];
 			if( myval && (!is_vector(myval) || is_vector(myval) && myval.length)) {
-				renderChildren(err,tmpl,data,function(err,childrenHtml){
-					cb(err,childrenHtml);
-				});
+				renderChildren(err,tmpl,data,cb);
 			} else {
 				cb(err,'');
 			}
@@ -103,20 +97,14 @@
 				}
 			} else if(myval && typeof myval==='object') { // switch scope
 				var newdata=extended(myval,data);
-				renderChildren(err,tmpl,newdata,function(err,childrenHtml){
-					cb(err,childrenHtml);
-				});
+				renderChildren(err,tmpl,newdata,cb);
 			} else if(myval===false) { //nothing
 				cb(err,'');
 			} else if(myval===true) { // render children
-				renderChildren(err,tmpl,data,function(err,childrenHtml){
-					cb(err,childrenHtml);
-				});
+				renderChildren(err,tmpl,data,cb);
 			} else if(tmpl.children.length) { // whatever, register as . and call block
 				var newdata=extended({'.':myval},data);
-				renderChildren(err,tmpl,newdata,function(err,childrenHtml){
-					cb(err,childrenHtml);
-				});
+				renderChildren(err,tmpl,newdata,cb);
 			} else { // toString
 				cb(err,myval.toString());
 			}
