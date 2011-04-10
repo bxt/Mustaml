@@ -172,9 +172,9 @@ htmlCompiler.render(null,'%html\n  / temporarily disabled:\n    %body %p',{},fun
 //
 // Of course a template engine does output strings. They are escaped for HTML-output by default. 
 testsCalled.testBasicData=false;
-htmlCompiler.render(null,'%p =varname',{"varname":"Hello World!"},function(err,html){
+htmlCompiler.render(null,'%p =varname',{"varname":"<\"Hello World!\"> &"},function(err,html){
   a.ok(!err);
-  a.strictEqual('<p>Hello World!</p>',html);
+  a.strictEqual('<p>&lt;&quot;Hello World!&quot;&gt; &amp;</p>',html);
   testsCalled.testBasicData=true;
 });
 

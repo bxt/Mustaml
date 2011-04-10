@@ -113,9 +113,9 @@
 "title":"Inserting Data",
 "desc":"Of course a template engine does output strings. They are escaped for HTML-output by default. ",
 "testname":"BasicData",
-"data":"{\"varname\":\"Hello World!\"}",
+"data":"{\"varname\":\"<\\\"Hello World!\\\"> &\"}",
 "mustaml":"%p =varname",
-"html":"<p>Hello World!</p>"
+"html":"<p>&lt;&quot;Hello World!&quot;&gt; &amp;</p>"
 },
 
 {

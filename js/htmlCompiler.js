@@ -52,7 +52,7 @@
 			}
 		}
 		renderer.hecho=function(err,tmpl,data,cb) {
-			cb(err,htmlspecialchars(data[tmpl.varname]));
+			cb(err,htmlspecialchars(data[tmpl.varname]?data[tmpl.varname]:''));
 		}
 		renderer.notval=function(err,tmpl,data,cb) {
 			var myval=data[tmpl.varname];
@@ -157,7 +157,7 @@
 	}
 	
 	function htmlspecialchars(str) {
-		return str;
+		return str.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	}
 	
 	function isVector(a) {

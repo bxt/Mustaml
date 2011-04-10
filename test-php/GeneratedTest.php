@@ -245,9 +245,9 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * HTML-output by default. 
    */
   public function testBasicData() {
-    $expectedHtml='<p>Hello World!</p>';
+    $expectedHtml='<p>&lt;&quot;Hello World!&quot;&gt; &amp;</p>';
     $template='%p =varname';
-    $data=json_decode('{"varname":"Hello World!"}',true);
+    $data=json_decode('{"varname":"<\\"Hello World!\\"> &"}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
