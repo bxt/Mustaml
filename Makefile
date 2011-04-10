@@ -17,7 +17,7 @@ clean:
 	rm -Rvf target
 	rm -vf ${BUILD_NAME}.phar
 	rm -vf ${BUILD_NAME}.js
-	rm -vf ${BUILD_NAME}.min
+	rm -vf ${BUILD_NAME}.min.js
 	@echo "----------------------------------------"
 	mkdir -vp target/{dist,docs/{phpuml,phpdoc}}
 
