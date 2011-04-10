@@ -5,7 +5,7 @@
 			"htmlSelfclosingTags":{"br":true,"img":true,"input":true,"meta":true,"link":true,"hr":true,"frame":true,"param":true}
 		};
 		parser=parser||(mustaml.parser&&mustaml.parser())||require('./parser')();
-		htmlCompilerAttrs=(mustaml.htmlCompilerAttrs&&mustaml.htmlCompilerAttrs())||require('./htmlCompilerAttrs')(config);
+		htmlCompilerAttrs=(mustaml.htmlCompilerAttrs||require('./htmlCompilerAttrs'))(config);
 		
 		var htmlCompiler={};
 		
