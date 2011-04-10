@@ -1,4 +1,8 @@
 (function(undefined) {
+	var LINE_REGEX=/^([\t ]*)(.*)/;
+	var MULTINODE_REGEX=/^(.+?)( (.*))?$/;
+	var TAGNODE_REGEX=/^(%(.+?))?(\#(.+?))?((\..+?)*)(\((.*?)\))?(\ (.*))?$/;
+	
 	var self=function (ast){
 		ast=mustaml.ast||require('./ast');
 		scanner=mustaml.scanner||require('./scanner');
@@ -6,19 +10,7 @@
 		
 		var parser={};
 		
-		var LINE_REGEX=/^([\t ]*)(.*)/;
-		var MULTINODE_REGEX=/^(.+?)( (.*))?$/;
-		var TAGNODE_REGEX=/^(%(.+?))?(\#(.+?))?((\..+?)*)(\((.*?)\))?(\ (.*))?$/;
-		
 		var restNodecode=false;
-		
-		function array_sum (array) {
-			var sum=0;
-			for(var i=0;i<array.length;i++) {
-				sum+=array[i];
-			}
-			return sum;
-		}
 		
 		function parseString(templateString) {
 			var rootnode=ast.node('root');
@@ -31,7 +23,7 @@
 				var indent=startWs[1].replace('\t','        ').length;
 				var nodecode=startWs[2];
 				if(nodecode=='') continue; // ignore empty lines
-				var preIndent=array_sum(indentLevels);
+				var preIndent=sumArray(indentLevels);
 				if(indent>preIndent) {
 					indentLevels.push(indent-preIndent);
 				}
@@ -164,6 +156,14 @@
 		return parser;
 	};
 	
+	function sumArray (array) {
+		var sum=0;
+		for(var i=0;i<array.length;i++) {
+			sum+=array[i];
+		}
+		return sum;
+	}
+		
 	var mustaml={};
 	if(this.mustaml!==undefined) {
 		this.mustaml.parser=self;

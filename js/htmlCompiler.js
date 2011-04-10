@@ -56,7 +56,7 @@
 		}
 		renderer.notval=function(err,tmpl,data,cb) {
 			var myval=data[tmpl.varname];
-			if( !myval || (is_vector(myval) && !myval.length)) {
+			if( !myval || (isVector(myval) && !myval.length)) {
 				renderChildren(err,tmpl,data,cb);
 			} else {
 				cb(err,'');
@@ -64,7 +64,7 @@
 		}
 		renderer.notnotval=function(err,tmpl,data,cb) {
 			var myval=data[tmpl.varname];
-			if( myval && (!is_vector(myval) || is_vector(myval) && myval.length)) {
+			if( myval && (!isVector(myval) || isVector(myval) && myval.length)) {
 				renderChildren(err,tmpl,data,cb);
 			} else {
 				cb(err,'');
@@ -74,14 +74,14 @@
 			var myval=data[tmpl.varname];
 			if(typeof myval==='function') { // summon black magic
 				myval(err,data,cb)
-			} else if(is_vector(myval)) { // register current (or subobj) and call block
+			} else if(isVector(myval)) { // register current (or subobj) and call block
 				var noJobs=true;
 				var anzChildren=0;
 				var htmlChildren=[];
 				if(myval.length) {
 					noJobs=false;
 					for(var i=0;i<myval.length;i++) {
-						var baseData=extended(is_map(myval[i])?myval[i]:{'.':myval[i]},data);
+						var baseData=extended(isMap(myval[i])?myval[i]:{'.':myval[i]},data);
 						//console.log(baseData,);
 						renderChildren(err,tmpl,baseData,function(err,html){
 							if(err) return cb(err);
@@ -148,41 +148,41 @@
 			}
 		}
 		
-		function htmlcommentescape(str) {
-			return str.replace(/--/g,'&#x2d;&#x2d;').replace(/>/g,'&gt;');
-		}
-		
-		function htmlspecialchars(str) {
-			return str;
-		}
-		
-		function is_vector(a) {
-			return Object.prototype.toString.call(a) === '[object Array]';
-		}
-		
-		function is_map(a) {
-			return a&&typeof a==='object';
-		}
-		
-		function extended(a,b) {
-			var name,e={};
-			for (name in a) {
-				if(a[name]!==undefined) {
-					e[name]=a[name];
-				}
-			}
-			for (name in b) {
-				if(a[name]===undefined&&b[name]!==undefined) {
-					e[name]=b[name];
-				}
-			}
-			return e;
-		}
-		
 		htmlCompiler.render=render;
 		return htmlCompiler;
 	};
 	
+	function htmlcommentescape(str) {
+		return str.replace(/--/g,'&#x2d;&#x2d;').replace(/>/g,'&gt;');
+	}
+	
+	function htmlspecialchars(str) {
+		return str;
+	}
+	
+	function isVector(a) {
+		return Object.prototype.toString.call(a) === '[object Array]';
+	}
+	
+	function isMap(a) {
+		return a&&typeof a==='object';
+	}
+	
+	function extended(a,b) {
+		var name,e={};
+		for (name in a) {
+			if(a[name]!==undefined) {
+				e[name]=a[name];
+			}
+		}
+		for (name in b) {
+			if(a[name]===undefined&&b[name]!==undefined) {
+				e[name]=b[name];
+			}
+		}
+		return e;
+	}
+		
 	var mustaml={};
 	if(this.mustaml!==undefined) {
 		this.mustaml.htmlCompiler=self;
