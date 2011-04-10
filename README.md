@@ -1,7 +1,7 @@
 Mustaml - Mustache's logic-less in HAML's style
 ===============================================
 
-Version 0.9
+Version 0.9.1
 
 [Mustaml Documentation](http://bernhardhaeussner.de/odd/mustaml "Mustaml")
 
