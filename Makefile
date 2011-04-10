@@ -40,6 +40,14 @@ test: clean test-php/GeneratedTest.php
 	@echo "----------------------------------------"
 	phpunit --coverage-html target/docs/test-coverage/ test-php/
 
+test-js: test-js-node/generated.test.js
+	@echo "----------------------------------------"
+	@echo
+	@echo "Running JS tests..."
+	@echo
+	@echo "----------------------------------------"
+	node test-js-node/generated.test.js
+
 dist: phar test cleandemos
 	@echo "----------------------------------------"
 	@echo
@@ -75,7 +83,7 @@ demos: phar cleandemos
 	@echo "----------------------------------------"
 	php mustaml.phar demos/test.json demos/test.mustaml > demos/out/test.html
 
-gen: test-php/GeneratedTest.php target/docs/ref.html target/docs/index.html target/docs/php.html
+gen: test-php/GeneratedTest.php test-js-node/generated.test.js target/docs/ref.html target/docs/index.html target/docs/php.html
 	@echo "----------------------------------------"
 	@echo
 	@echo "Building various..."
@@ -86,6 +94,9 @@ gen: test-php/GeneratedTest.php target/docs/ref.html target/docs/index.html targ
 
 test-php/GeneratedTest.php: build/gen-unittests.php build/ref-unittests.json
 	php build/gen-unittests.php build/ref-unittests.json > test-php/GeneratedTest.php
+
+test-js-node/generated.test.js: build/gen.unittests.node.js build/ref-unittests.json
+	node build/gen.unittests.node.js build/ref-unittests.json > test-js-node/generated.test.js
 
 target/docs/doc.css: build/doc.sass
 	sass build/doc.sass:target/docs/doc.css

@@ -1,0 +1,443 @@
+// Mustaml Reference
+//
+// Mustaml is a html template language that enforces "logic-less" templates as known from {{ mustache }} but using pythonish indentation like HAML to build html-tags. Here are some Examples of Mustaml usage. 
+
+var htmlCompiler=require('../js/htmlCompiler.js')();
+
+var a=require('assert');
+
+var testsCalled={};
+
+// Creating HTML-tags quickly
+//
+// You can create tags with the %tag styntax. Nesting is done via indentation. Tags are automatically closed. 
+testsCalled.testBasicIndented=false;
+htmlCompiler.render(null,'%html\n  %head\n    %title Yippiyeah!\n  %body\n   %p\n     Everything closing automatically. ',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<html><head><title>Yippiyeah!</title></head><body><p>Everything closing automatically. </p></body></html>',html);
+  testsCalled.testBasicIndented=true;
+});
+
+
+// Creating HTML-tags even quicker
+//
+// You can append child nodes directly to save lines:
+testsCalled.testBasicNonIndented=false;
+htmlCompiler.render(null,'%html\n  %head %title Yippiyeah!\n  %body %p Everything closing automatically. ',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<html><head><title>Yippiyeah!</title></head><body><p>Everything closing automatically. </p></body></html>',html);
+  testsCalled.testBasicNonIndented=true;
+});
+
+
+// Mixing nesting and appending
+//
+// For every node you append, we're nesting all child nodes that level deeper. This happens when mixing appending and nesting: 
+testsCalled.testBasicIndentedAndNonIndented=false;
+htmlCompiler.render(null,'%p %span\n  %b Wow. \n  Really. ',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p><span><b>Wow. </b>Really. </span></p>',html);
+  testsCalled.testBasicIndentedAndNonIndented=true;
+});
+
+
+// Adding classes and ids in CSS-syntax
+//
+// One of the Key features is quickly adding the common class and id attributes, with a syntax well known from CSS. 
+testsCalled.testBasicClassAndId=false;
+htmlCompiler.render(null,'%p#first.nice Text\n%p.nice.middle Text too\n%p\n  %span.inner\n    Weeehah',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p id="first" class="nice">Text</p><p class="nice middle">Text too</p><p><span class="inner">Weeehah</span></p>',html);
+  testsCalled.testBasicClassAndId=true;
+});
+
+
+// Implicit Divs
+//
+// To make things even easier, you can leave out %tag and Mustaml will guess it's a %div
+testsCalled.testImplicitDivs=false;
+htmlCompiler.render(null,'#page.container\n  #header\n  #content\n    #sidebar\n  #footer',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<div id="page" class="container"><div id="header"></div><div id="content"><div id="sidebar"></div></div><div id="footer"></div></div>',html);
+  testsCalled.testImplicitDivs=true;
+});
+
+
+// Generating a Doctype
+//
+// Mustaml provides the short triple-bang for inserting your doctype declaration. It currently supports only the HTML5 one. 
+testsCalled.testBasicDoctype=false;
+htmlCompiler.render(null,'!!!\n%html',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<!DOCTYPE html><html></html>',html);
+  testsCalled.testBasicDoctype=true;
+});
+
+
+// Self-Closing tags
+//
+// You can configure a list of tags that should be self-closed when empty. Here are the defaults: 
+testsCalled.testSelfClosingTags=false;
+htmlCompiler.render(null,'%br\n%img\n%input\n%meta\n%link\n%hr\n%frame\n%param',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<br /><img /><input /><meta /><link /><hr /><frame /><param />',html);
+  testsCalled.testSelfClosingTags=true;
+});
+
+
+// HTML-Attributes
+//
+// Attributes are defined as usual but are appended in brackets. Yes, this is HTML-syntax and not some language-specific map with lots of :, @, => and so on. 
+testsCalled.testHAttrs=false;
+htmlCompiler.render(null,'%p(lang="en") Yo!\n%input(type=text value="tryna edit me" disabled)',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />',html);
+  testsCalled.testHAttrs=true;
+});
+
+
+// Old-School HTML-Attributes
+//
+// You can use some alternate syntax and whitepace as you like: 
+testsCalled.testHAttrsAlternates=false;
+htmlCompiler.render(null,'%p(lang=>"en") Yo!\n%input(type=>"text",value => "tryna edit me", disabled)',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p lang="en">Yo!</p><input type="text" value="tryna edit me" disabled="disabled" />',html);
+  testsCalled.testHAttrsAlternates=true;
+});
+
+
+// Overriding HTML-Attributes
+//
+// When you specify id attributes in your attribute hash, it is overridden by the latter. 
+testsCalled.testHAttrsOverride=false;
+htmlCompiler.render(null,'#old(id=new id=newer)',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<div id="newer"></div>',html);
+  testsCalled.testHAttrsOverride=true;
+});
+
+
+// HTML-Array-Attributes
+//
+// Some attributes can have a space-separated list of values. Currently these 3 are supported. 
+testsCalled.testHArrayAttrs=false;
+htmlCompiler.render(null,'%link.foo(class=bar,rev=prev,rev=index,rel=shortlink,rel="home up")',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<link class="foo bar" rev="prev index" rel="shortlink home up" />',html);
+  testsCalled.testHArrayAttrs=true;
+});
+
+
+// HTML-Comments
+//
+// You can insert html-comments too. 
+testsCalled.testHComments=false;
+htmlCompiler.render(null,'%html\n  / created by Mustaml!',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<html><!--  created by Mustaml! --></html>',html);
+  testsCalled.testHComments=true;
+});
+
+
+// HTML-Comment-blocks
+//
+// End even put whole parts of your template into comment tags. This might come in handy if you don't want your users to see this part, but be able to check the rendering output. 
+testsCalled.testHCommentBlock=false;
+htmlCompiler.render(null,'%html\n  / temporarily disabled:\n    %body %p',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<html><!--  temporarily disabled:<body&gt;<p&gt;</p&gt;</body&gt; --></html>',html);
+  testsCalled.testHCommentBlock=true;
+});
+
+
+// Inserting Data
+//
+// Of course a template engine does output strings. They are escaped for HTML-output by default. 
+testsCalled.testBasicData=false;
+htmlCompiler.render(null,'%p =varname',{"varname":"Hello World!"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p>Hello World!</p>',html);
+  testsCalled.testBasicData=true;
+});
+
+
+// Undefined Data
+//
+// If you do not provide a piece of data, it will be silently ignored. 
+testsCalled.testBasicDataUndefined=false;
+htmlCompiler.render(null,'%p =nonexisting',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p></p>',html);
+  testsCalled.testBasicDataUndefined=true;
+});
+
+
+// Inserting More Data
+//
+// You can define text and vars as children.  (The = tag doesn't want sub-nodes. )
+testsCalled.testBasicData2=false;
+htmlCompiler.render(null,'%p\n  =varname\n  , \n  =varname2',{"varname":"Hello World","varname2":"hello Venus!"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p>Hello World, hello Venus!</p>',html);
+  testsCalled.testBasicData2=true;
+});
+
+
+// Maps
+//
+// The minus operator (-) marks special blocks that behave depending on the var content. For maps, their entries will be availible in the scope
+testsCalled.testBasicMap=false;
+htmlCompiler.render(null,'-cpu\n  =name\n  , \n  =ghz',{"cpu":{"name":"Athlon","ghz":2.2}},function(err,html){
+  a.ok(!err);
+  a.strictEqual('Athlon, 2.2',html);
+  testsCalled.testBasicMap=true;
+});
+
+
+// Looping
+//
+// The minus operator (-) on arrays (vectors) loops the block. The current value is available as ".". 
+testsCalled.testBasicLoop=false;
+htmlCompiler.render(null,'%ul\n  -planets\n    %li \n     Hello \n     =.\n     !',{"planets":["World","Venus","Pluto"]},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<ul><li>Hello World!</li><li>Hello Venus!</li><li>Hello Pluto!</li></ul>',html);
+  testsCalled.testBasicLoop=true;
+});
+
+
+// Looping Maps
+//
+// And you can loop over arrays containing maps. Inside the loop, you can access the map keys like normal vars. 
+testsCalled.testBasicAssocLoop=false;
+htmlCompiler.render(null,'%ul\n  -planets\n    %li\n      =greeting\n      =name\n      !',{"planets":[
+  {"name":"World","greeting":"Hello "},
+  {"name":"Venus","greeting":"Ave "},
+  {"name":"Pluto","greeting":"Hey tiny "}
+]},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<ul><li>Hello World!</li><li>Ave Venus!</li><li>Hey tiny Pluto!</li></ul>',html);
+  testsCalled.testBasicAssocLoop=true;
+});
+
+
+// Boolean Switches
+//
+// You can check for true/false values with the very same syntax. 
+testsCalled.testBasicBoolean=false;
+htmlCompiler.render(null,'-doIt it\'s true',{"doIt":true},function(err,html){
+  a.ok(!err);
+  a.strictEqual('it\'s true',html);
+  testsCalled.testBasicBoolean=true;
+});
+
+
+// Boolean Switches (false)
+//
+// A caret operator (^) indicates not, so the children are only shown if the value is false. 
+testsCalled.testBasicBooleanFalseNot=false;
+htmlCompiler.render(null,'-doIt it\'s true\n-^doIt it\'s actually false',{"doIt":false},function(err,html){
+  a.ok(!err);
+  a.strictEqual('it\'s actually false',html);
+  testsCalled.testBasicBooleanFalseNot=true;
+});
+
+
+// Boolean Switches (false positive)
+//
+// Consequently, the text is not rendered, if you get a true value after the caret.
+testsCalled.testBasicBooleanNot=false;
+htmlCompiler.render(null,'-^doItNot but is was not false',{"doItNot":true},function(err,html){
+  a.ok(!err);
+  a.strictEqual('',html);
+  testsCalled.testBasicBooleanNot=true;
+});
+
+
+// Boolean Switches (false positive)
+//
+// Another use of the caret is checking for unset values. 
+testsCalled.testBasicBooleanIsset=false;
+htmlCompiler.render(null,'-^undefined Absent!',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('Absent!',html);
+  testsCalled.testBasicBooleanIsset=true;
+});
+
+
+// Empty Loops
+//
+// Another use of the caret is checking for empty arrays, strings and 0 numbers. 
+testsCalled.testEmptryArray=false;
+htmlCompiler.render(null,'%ul\n  -planets\n    %li =.\n  -^planets\n    %li.grey No planets to visit today!',{"planets":[]},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<ul><li class="grey">No planets to visit today!</li></ul>',html);
+  testsCalled.testEmptryArray=true;
+});
+
+
+// Checking for empty Loops
+//
+// The notayim operator (^^) will inverse the not-operator. You can check if a loop would render at least one item. In this example the <ul> tag is only rendered if there are any "planets". 
+testsCalled.testEmptyArrayNot=false;
+htmlCompiler.render(null,'-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!',{"planets":[]},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p class="grey">No planets to visit today!</p>',html);
+  testsCalled.testEmptyArrayNot=true;
+});
+
+
+// Notayim ignored for nonemty loop
+//
+// I you use the  notayim operator on an defined value it will just render its subblocks as nothing had happended. 
+testsCalled.testEmptryArrayNotWithValue=false;
+htmlCompiler.render(null,'-^^planets %ul\n  -planets\n    %li =.\n-^planets\n    %p.grey No planets to visit today!',{"planets":["World"]},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<ul><li>World</li></ul>',html);
+  testsCalled.testEmptryArrayNotWithValue=true;
+});
+
+
+// Checking for empty strings
+//
+// The notayim operator (^^) can be used to check if a string is "" (empty). In this example no paragraph is created if the string is empty. 
+testsCalled.testEmptyStringNot=false;
+htmlCompiler.render(null,'-^^stingray %p =stingray\n',{"stingray":""},function(err,html){
+  a.ok(!err);
+  a.strictEqual('',html);
+  testsCalled.testEmptyStringNot=true;
+});
+
+
+// Notayim ignored for nonempty string
+//
+// If the string is not empty the subblock remains unaffected and is rendered as usual. 
+testsCalled.testEmptyStringNotWithValue=false;
+htmlCompiler.render(null,'-^^stingray %p =stingray\n',{"stingray":"Corvette C2"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p>Corvette C2</p>',html);
+  testsCalled.testEmptyStringNotWithValue=true;
+});
+
+
+// Escaping
+//
+// If you want to start a text line with a meta-character otherwise interpreted as some kind of node, you can escape it with a backslash. 
+testsCalled.testEscaping=false;
+htmlCompiler.render(null,'\\%p',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('%p',html);
+  testsCalled.testEscaping=true;
+});
+
+
+// Printing verbatim HTML
+//
+// The minus operator applied on string values prints them verbatim. Say you've preprocessed some Markdown and want to display it on a page, just insert the string value's varname after the minus. 
+testsCalled.testVerbatimHtml=false;
+htmlCompiler.render(null,'-html',{"html":"<b>I'm bold!</b>"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<b>I\'m bold!</b>',html);
+  testsCalled.testVerbatimHtml=true;
+});
+
+
+// Using anything (e.g. Strings) with blocks
+//
+// Don't get the above confused with calling blocks with strings. You can use every type of value to initialize blocks, it won't be rendered but it will be availible as "." inside the block. 
+testsCalled.testBlockToStrong=false;
+htmlCompiler.render(null,'-string\n  %b =.',{"string":"Big Mike"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<b>Big Mike</b>',html);
+  testsCalled.testBlockToStrong=true;
+});
+
+
+// Using srtings with with blocks vs notayim
+//
+// However, other than the notayim-operator, using only minus it will render its block for empty strings too. 
+testsCalled.testBlockToStrongEmpty=false;
+htmlCompiler.render(null,'-string\n  %b =.',{"string":""},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<b></b>',html);
+  testsCalled.testBlockToStrongEmpty=true;
+});
+
+
+// Attributes with data
+//
+// You can provide a map for highly dynamic attributes, while still defining others in your template. Last specified overrides. 
+testsCalled.testAttrData=false;
+htmlCompiler.render(null,'%link(=linktag type="text/css")',{"linktag":{"rel":"stylesheet","href":"style/main.css"}},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<link rel="stylesheet" href="style/main.css" type="text/css" />',html);
+  testsCalled.testAttrData=true;
+});
+
+
+// Attributes with data-values
+//
+// You can even fill only the attribute's values with dynamic strings, and mix this with other attributes and old syntax.  
+testsCalled.testAttrDataValues=false;
+htmlCompiler.render(null,'%link(rel=>stylesheet, href=>=style)',{"style":"style/main.css"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<link rel="stylesheet" href="style/main.css" />',html);
+  testsCalled.testAttrDataValues=true;
+});
+
+
+// Attributes with data-values and text
+//
+// You can mix usal text and dynamic values in your attributes. Place an = between the end of your varname and the text
+testsCalled.testAttrDataValuesWithText=false;
+htmlCompiler.render(null,'%a(href=#=anchorNo=-=anchor) go',{"anchor":"headline","anchorNo":"12"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<a href="#12-headline">go</a>',html);
+  testsCalled.testAttrDataValuesWithText=true;
+});
+
+
+// Attributes with equal signs in them
+//
+// To avoid parsing the equal sings as vars just quote the attribute value. 
+testsCalled.testAttrDataValuesWithTextQuoted=false;
+htmlCompiler.render(null,'%a(href="#=anchorNo=-=anchor") go',{"anchor":"headline","anchorNo":"12"},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<a href="#=anchorNo=-=anchor">go</a>',html);
+  testsCalled.testAttrDataValuesWithTextQuoted=true;
+});
+
+
+// Mustaml-Comments
+//
+// Mustaml-Comments are not rendered at all. 
+testsCalled.testmustamlComments=false;
+htmlCompiler.render(null,'-/ never rendered',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('',html);
+  testsCalled.testmustamlComments=true;
+});
+
+
+// Mustaml-Comment-blocks
+//
+// Get rid of whole subtrees with Mustaml-Comments. 
+testsCalled.testMustamlCommentBlock=false;
+htmlCompiler.render(null,'-/ temporarily disabled:\n    %body %p',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('',html);
+  testsCalled.testMustamlCommentBlock=true;
+});
+
+
+process.addListener('exit', function() {
+  var allPassed=true;
+  for(var testname in testsCalled) {
+    allPassed=allPassed&&testsCalled[testname];
+    if(!testsCalled[testname]) {
+      console.log(' ✗ '+testname+' failed! ');
+    }
+  }
+  a.ok(allPassed);  console.log(' ✓ All Mustaml tests passed. ');
+});
+
