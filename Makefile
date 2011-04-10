@@ -98,6 +98,9 @@ test-php/GeneratedTest.php: build/gen-unittests.php build/ref-unittests.json
 test-js-node/generated.test.js: build/gen.unittests.node.js build/ref-unittests.json
 	node build/gen.unittests.node.js build/ref-unittests.json > test-js-node/generated.test.js
 
+test-js-browser/index.html: build/gen.browserunittests.node.js build/ref-unittests.json
+	node build/gen.browserunittests.node.js build/ref-unittests.json > test-js-browser/index.html
+
 target/docs/doc.css: build/doc.sass
 	sass build/doc.sass:target/docs/doc.css
 
