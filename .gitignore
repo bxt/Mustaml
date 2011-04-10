@@ -1,4 +1,6 @@
 mustaml.phar
+mustaml.js
+mustaml.min.js
 target
 demos/out
 .sass-cache/
