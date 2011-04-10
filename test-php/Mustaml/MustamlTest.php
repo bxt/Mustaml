@@ -127,5 +127,17 @@ class MustamlTest extends \PHPUnit_Framework_TestCase {
 		$main=new \Mustaml\Mustaml("%p =foo\n%p =bar",array("bar"=>"set"),$config);
 		$this->assertEquals('<p>inside(foo)</p><p>set</p>',$main());
 	}
+	public function testHtmlCommentWithDirectChildAsText() {
+		
+		$main=new Mustaml("%p / %p und?");
+		
+		$this->assertEquals('<p><!--  %p und? --></p>',$main());
+	}
+	public function testHtmlCommentWithDirectChildAsTag() {
+		
+		$main=new Mustaml("%p /%p und?");
+		
+		$this->assertEquals('<p><!-- <p&gt;und?</p&gt; --></p>',$main());
+	}
 }
 ?>
