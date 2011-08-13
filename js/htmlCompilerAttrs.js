@@ -12,7 +12,7 @@
 				for(var i=0;i<tmpl.attributes.length;i++) {
 					renderer[tmpl.attributes[i].type](err,tmpl.attributes[i],data,function(err,attrName,attrVal,dontcount){
 						if(err) return cb(err);
-						rawAttributes[attrName]=(rawAttributes[attrName]||[]).concat(attrVal);
+						if(attrName) rawAttributes[attrName]=(rawAttributes[attrName]||[]).concat(attrVal);
 						anzAttributes+=(dontcount?0:1);
 						if(anzAttributes==tmpl.attributes.length) {
 							finilaze(err,rawAttributes,cb);
@@ -62,6 +62,7 @@
 			}
 		}
 		renderer.val=function(err,tmpl,data,cb) {
+			if(!data[tmpl.varname]) return cb(err);
 			var counted=false;
 			for(var name in data[tmpl.varname]) {
 				if(counted) {
