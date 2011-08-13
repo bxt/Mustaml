@@ -4,7 +4,8 @@ BUILD_FILELIST=README.md
 BUILD_FILELIST_PHP=demos
 BUILD_FILELIST_JS=
 BUILD_JS_CONCATS=js/ast.js js/attrParser.js js/htmlCompiler.js js/htmlCompilerAttrs.js js/parser.js js/scanner.js
-PHP_PATH=/usr/bin
+PHP=$$(which php5)
+PHAR=$$(which phar)
 
 default: docs gen dist demos
 
@@ -27,10 +28,10 @@ phar: clean
 	@echo "Creating ${BUILD_NAME}.phar..."
 	@echo
 	@echo "----------------------------------------"
-	find php -type f -iname "*.php" | xargs -n 1 ${PHP_PATH}/php -l
+	find php -type f -iname "*.php" | xargs -n 1 ${PHP} -l
 	@echo "----------------------------------------"
-	find lib -type f -iname "*.php" | xargs ${PHP_PATH}/php -d phar.readonly=0 ${PHP_PATH}/phar pack -f "${BUILD_NAME}.phar"
-	find php -type f -iname "*.php" | xargs ${PHP_PATH}/php -d phar.readonly=0 ${PHP_PATH}/phar pack -f "${BUILD_NAME}.phar" -s "${BUILD_NAME}.php" 
+	find lib -type f -iname "*.php" | xargs ${PHP} -d phar.readonly=0 ${PHAR} pack -f "${BUILD_NAME}.phar"
+	find php -type f -iname "*.php" | xargs ${PHP} -d phar.readonly=0 ${PHAR} pack -f "${BUILD_NAME}.phar" -s "${BUILD_NAME}.php" 
 	chmod a+x "${BUILD_NAME}.phar"
 
 test: test-php test-js
@@ -100,7 +101,7 @@ demos: phar cleandemos
 	@echo "Running some demos..."
 	@echo
 	@echo "----------------------------------------"
-	php mustaml.phar demos/test.json demos/test.mustaml > demos/out/test.html
+	${PHP} mustaml.phar demos/test.json demos/test.mustaml > demos/out/test.html
 
 gen: test-php/GeneratedTest.php gen-js gen-docs
 	@echo "----------------------------------------"
@@ -114,7 +115,7 @@ gen-docs: target/docs/ref.html target/docs/index.html target/docs/php.html targe
 gen-js: test-js-browser/index.html test-js-browser/dist.html test-js-node/generated.test.js
 
 test-php/GeneratedTest.php: build/gen-unittests.php build/ref-unittests.json
-	php build/gen-unittests.php build/ref-unittests.json > test-php/GeneratedTest.php
+	${PHP} build/gen-unittests.php build/ref-unittests.json > test-php/GeneratedTest.php
 
 test-js-node/generated.test.js: build/gen.unittests.node.js build/ref-unittests.json
 	node build/gen.unittests.node.js build/ref-unittests.json > test-js-node/generated.test.js
@@ -129,16 +130,16 @@ target/docs/doc.css: build/doc.sass
 	sass build/doc.sass:target/docs/doc.css
 
 target/docs/ref.html: target/docs/doc.css build/ref-unittests.json build/ref.mustaml build/htmlintro.mustaml build/htmlintro.json
-	php mustaml.php build/ref-unittests.json build/ref.mustaml > target/docs/ref.html
+	${PHP} mustaml.php build/ref-unittests.json build/ref.mustaml > target/docs/ref.html
 
 target/docs/index.html: target/docs/doc.css build/index.json build/index.mustaml build/index.json build/htmlintro.mustaml build/htmlintro.json
-	php mustaml.php build/index.json build/index.mustaml > target/docs/index.html
+	${PHP} mustaml.php build/index.json build/index.mustaml > target/docs/index.html
 
 target/docs/php.html: target/docs/doc.css build/php.json build/php.mustaml build/php.json build/htmlintro.mustaml build/htmlintro.json
-	php mustaml.php build/php.json build/php.mustaml > target/docs/php.html
+	${PHP} mustaml.php build/php.json build/php.mustaml > target/docs/php.html
 
 target/docs/js.html: target/docs/doc.css build/js.json build/js.mustaml build/js.json build/htmlintro.mustaml build/htmlintro.json
-	php mustaml.php build/js.json build/js.mustaml > target/docs/js.html
+	${PHP} mustaml.php build/js.json build/js.mustaml > target/docs/js.html
 
 install: 
 	ln -s $(PWD)/bin/mustaml ~/bin/mustaml
