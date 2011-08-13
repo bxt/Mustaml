@@ -1,6 +1,6 @@
 // Mustaml Reference
 //
-// Mustaml is a html template language that enforces "logic-less" templates as known from {{ mustache }} but using pythonish indentation like HAML to build html-tags. Here are some Examples of Mustaml usage. 
+// Mustaml is a html template language that enforces "logic-less" templates as known from {{ mustache }} but using pythonish indentation like HAML to build html-tags. Here are some Examples of Mustaml usage. 
 
 var htmlCompiler=require('../js/htmlCompiler.js')();
 

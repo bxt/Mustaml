@@ -1,6 +1,6 @@
 {
 "pagetitle":"Mustaml Reference",
-"desc":"Mustaml is a html template language that enforces \"logic-less\" templates as known from {{ mustache }} but using pythonish indentation like HAML to build html-tags. Here are some Examples of Mustaml usage. ",
+"desc":"Mustaml is a html template language that enforces \"logic-less\" templates as known from {{\u00A0mustache\u00A0}} but using pythonish indentation like HAML to build html-tags. Here are some Examples of Mustaml usage. ",
 "unittests":[
 {
 "title":"Creating HTML-tags quickly",

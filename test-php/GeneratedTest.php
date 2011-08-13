@@ -9,9 +9,9 @@ require_once 'mustaml.php';
  * Mustaml for PHP
  *
  * Mustaml is a html template language that enforces "logic-less"
- * templates as known from {{ mustache }} but using pythonish indentation
- * like HAML to build html-tags. Here are some Examples of Mustaml usage.
- * 
+ * templates as known from {{ mustache }} but using pythonish
+ * indentation like HAML to build html-tags. Here are some Examples of
+ * Mustaml usage. 
  */
 class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
