@@ -68,6 +68,15 @@ class TemplateDirAlTest extends \PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals('',$main());
 	}
+	public function testNotMatchingTemplateFilename() {
+		
+		$data=array();
+		$config=new \Mustaml\Html\CompilerConfig();
+		$config->registerAutoloader(new TemplateDirAl('test-php/data'));
+		$main=new \Mustaml\Mustaml("-nonexistent",$data,$config);
+		
+		$this->assertEquals('',$main());
+	}
 	public function testLoadingInvalidJSONData() {
 		
 		$data=array("frommustaml"=>"ahoi");
@@ -86,5 +95,15 @@ class TemplateDirAlTest extends \PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals('<p>jippeie!</p><p>ahoi</p>',$main());
 	}
+	public function testLoadingTwoNestedTemplateWithJsonOverwrites() {
+		
+		$data=array("myvar"=>"(outer var value)");
+		$config=new \Mustaml\Html\CompilerConfig();
+		$config->registerAutoloader(new TemplateDirAl('test-php/data'));
+		$main=new \Mustaml\Mustaml("%p =myvar\n-subtmpl.mustaml\n %b =myvar",$data,$config);
+		
+		$this->assertEquals('<p>(outer var value)</p><div id="subtmpl"><i>(var of subtmpl)</i><div class="sub"><b>(outer var value)</b></div></div>',$main());
+	}
+
 }
 ?>
