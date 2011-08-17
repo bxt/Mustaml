@@ -91,11 +91,7 @@ class CompilerEngine {
 	 * For subclasses to shedule decrease of buffer level
 	 */
 	protected final function sheduleBufferPop($cb=false) {
-		if($cb) {
-			array_push($this->todo,array(self::S_BUFFERPOP,$cb));
-		} else {
-			array_push($this->todo,array(self::S_BUFFERPOP));
-		}
+		array_push($this->todo,array(self::S_BUFFERPOP,$cb));
 	}
 	/**
 	 * Internal function to process the uppermost element
@@ -117,9 +113,12 @@ class CompilerEngine {
 				$this->bufferPush();
 				
 			} elseif($todo[0]==self::S_BUFFERPOP) {
-				if($b=$this->bufferPop()) {
+				if($b=$this->bufferPop()) { // note that cb is not called for empty strings
 					if($todo[1]) {
-						$f=$todo[1];
+						$f=(string)$todo[1];
+						if(!method_exists($this,$f)) {
+							throw new \InvalidArgumentException('Processing callback must be string with name of method!');
+						}
 						$b=$this->$f($b);
 					}
 					$this->bufferAppend($b);
