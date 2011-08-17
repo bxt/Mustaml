@@ -1,3 +1,8 @@
+/**
+ * A base for building stream parsers
+ * 
+ * Crawl through a string using regexp patterns
+ */
 (function(undefined) {
 	var self=function (input){
 		input=input||'';

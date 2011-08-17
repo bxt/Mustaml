@@ -1,3 +1,6 @@
+/**
+ * Parse a template string into an ast
+ */
 (function(undefined) {
 	var LINE_REGEX=/^([\t ]*)(.*)/;
 	var MULTINODE_REGEX=/^(.+?)( (.*))?$/;
@@ -68,6 +71,10 @@
 		
 		var parse={};
 		(function(){
+			/**
+			 * Helper function to process only the first
+			 * part of a line whtih multiple nodes
+			 */
 			function firstNodecode(nodecode) {
 				var m=nodecode.match(MULTINODE_REGEX);
 				if(m[3]) {
@@ -156,6 +163,9 @@
 		return parser;
 	};
 	
+	/**
+	 * Sums all the elements of an array
+	 */
 	function sumArray (array) {
 		var sum=0;
 		for(var i=0;i<array.length;i++) {

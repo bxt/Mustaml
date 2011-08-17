@@ -1,3 +1,6 @@
+/**
+ * Renderer for html attribute list
+ */
 (function(undefined) {
 	var self=function (config){
 		var htmlCompilerAttrs={};

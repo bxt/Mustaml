@@ -10,10 +10,12 @@ namespace Mustaml\Parser;
 class Scanner {
 	/**
 	 * Holds the rest of the input yet to parse
+	 * @var String
 	 */
 	private $input;
 	/**
 	 * Initalize with input string (scanner can only be used once)
+	 * @param String String to walk over
 	 */
 	public function __construct($input) {
 		$this->input=$input;

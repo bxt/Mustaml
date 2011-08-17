@@ -1,3 +1,6 @@
+/**
+ * Parser for tempates attribute strings
+ */
 (function(undefined) {
 	var WS=' ',A='A-Za-z',GT='>',ANUM='0-9A-Za-z_-',EQ='=',DYNEQ='=',SEP=' ,',Q='"';
 	var self=function (ast){

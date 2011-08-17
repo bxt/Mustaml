@@ -10,6 +10,9 @@ interface AutoloaderI {
 	 *
 	 * Its single parameter is the varname, and it should return
 	 * the vars value on success, and null otherwise. 
+	 * 
+	 * @param String name of var to be autoloaded
+	 * @retrun mixed Whatever the var references to
 	 */
 	public function autoload($key);
 }

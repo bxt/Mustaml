@@ -1,3 +1,6 @@
+/**
+ * The units the ast is made of
+ */
 (function(undefined) {
 	var self={};
 	self.node=function(type) {

@@ -39,6 +39,7 @@ class AttrParser {
 	const q='"';
 	/**
 	 * Parses an attribute string into an AST
+	 * @param Scanner A Scanner holding the attribute string
 	 */
 	function parse_attr($s) {
 		
@@ -85,6 +86,7 @@ class AttrParser {
 	}
 	/**
 	 * Parses an text attribute string into an AST
+	 * @param String value of the text node
 	 */
 	private function construct_textnode($contents) {
 		$t=new \Mustaml\Ast\TextNode();
@@ -93,6 +95,8 @@ class AttrParser {
 	}
 	/**
 	 * Parses an dynamic attribute string into an AST if applicable
+	 * @param Scanner A Scanner with cursor at possible dyn. attr.
+	 * @return boolean|\Mustaml\Ast\DataNode False, if not a dyn. attr., else the node
 	 */
 	private function parse_dynval($s) {
 		if($s->getOne(self::dyneq)) {

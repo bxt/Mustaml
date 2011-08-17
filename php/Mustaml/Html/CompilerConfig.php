@@ -15,6 +15,8 @@ class CompilerConfig extends \Mustaml\Compiler\CompilerConfig {
 	private $htmlSelfclosingTags;
 	/**
 	 * Initialize with autoloaders, list of self-closing tag names, list of space-separated values contaning attributes
+	 * @param array List of tags that may be self-closed as &lt;br/&gt;
+	 * @param array List of attributes that may contain a whole space separated list of values
 	 */
 	public function __construct($htmlSelfclosingTags=null,$htmlArrayAttrs=null) {
 		$at=$htmlArrayAttrs?:array('class','rel','rev');
@@ -36,12 +38,14 @@ class CompilerConfig extends \Mustaml\Compiler\CompilerConfig {
 	}
 	/**
 	 * Returns if an attribute does or not contain space-separated values
+	 * @param String attribute name
 	 */
 	public function isHtmlArrayAttr($attr) {
 		return isset($this->htmlArrayAttrs[$attr]);
 	}
 	/**
 	 * Returns if or not an html tag should be self-closing
+	 * @param String tag name
 	 */
 	public function isHtmlSelfclosingTag($tag) {
 		return isset($this->htmlSelfclosingTags[$tag]);

@@ -5,8 +5,20 @@ namespace Mustaml\Compiler;
  * Holds and manages options for parsing AST
  */
 class CompilerConfig {
+	/**
+	 * Holds a ordered list of autoloaders
+	 * @var array
+	 */
 	private $valueAutoloaders;
+	/**
+	 * Caches already autoloaded values
+	 * @var array
+	 */
 	private $autoloadedValues=array();
+	/**
+	 * Holds the boilerplate
+	 * @var \Mustaml\Mustaml
+	 */
 	private $mustamlBoilerplate=false;
 	/**
 	 * Return if or not a varname is autoloadable

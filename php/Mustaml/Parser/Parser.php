@@ -10,6 +10,7 @@ class Parser {
 	 * the string part not used for the first node. 
 	 *
 	 * Used to avoid recursive parsing. 
+	 * @var String|boolean
 	 */
 	private $restNodecode=false;
 	/**

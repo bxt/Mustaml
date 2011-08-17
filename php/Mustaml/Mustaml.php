@@ -3,6 +3,9 @@ namespace Mustaml;
 
 /**
  * Class providing a simple interface to mustaml
+ * 
+ * This class is used for propagating data and configuration
+ * throgh multiple (nested) tempates, too. 
  */
 class Mustaml {
 	/**
@@ -11,6 +14,7 @@ class Mustaml {
 	private $config;
 	/**
 	 * Holds the data always used for rendering
+	 * @var array
 	 */
 	private $data=array();
 	/**

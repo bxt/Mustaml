@@ -7,10 +7,12 @@ namespace Mustaml\Ast;
 class Node {
 	/**
 	 * Holds  a type identifying string
+	 * @var string
 	 */
 	public $type;
 	/**
 	 * Holds the node's children nodes
+	 * @var array
 	 */
 	public $children=array();
 	/**

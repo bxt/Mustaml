@@ -12,36 +12,74 @@ abstract class CompilerBase extends CompilerEngine {
 	public function __construct($config=null) {
 		$this->config=$config?:new CompilerConfig;
 	}
+	/**
+	 * Return current CompilerConfig
+	 */
 	protected final function getConfig() {
 		return $this->config;
 	}
+	/**
+	 * Check if a variable is set or at least autoloadable
+	 * @param array Current template data to use
+	 * @param String Varname
+	 */
 	protected function issetData($data,$key) {
 		if(isset($data[$key])) return true;
 		return $this->config->isAutoloadable($key);
 	}
+	/**
+	 * Get a variables contents
+	 * @param array Current template data to use
+	 * @param String Varname
+	 */
 	protected function getData($data,$key) {
 		if(isset($data[$key])) return $data[$key];
 		return $this->config->getAutoloadable($key);
 	}
-
+	
+	/**
+	 * Render function for the root node
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	protected function render_root($ast,$data) {
 		$this->renderChildren($ast,$data);
 	}
+	/**
+	 * Render function for '='-Operator, html-escaped textoutput
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	protected function render_hecho($ast,$data) {
 		if($this->issetData($data,$ast->varname)) {
 			$this->sheduleEcho(htmlspecialchars($this->getData($data,$ast->varname)));
 		}
 	}
+	/**
+	 * Render function for '^'-operator
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	protected function render_notval($ast,$data) {
 		if( !$this->issetData($data,$ast->varname) || !$this->getData($data,$ast->varname) ) {
 			$this->renderChildren($ast,$data);
 		}
 	}
+	/**
+	 * Render function for '^^'-operator
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	protected function render_notnotval($ast,$data) {
 		if( $this->issetData($data,$ast->varname) && $this->getData($data,$ast->varname) ) {
 			$this->renderChildren($ast,$data);
 		}
 	}
+	/**
+	 * Render function for Minus-operator
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	protected function render_val($ast,$data) {
 		if($this->issetData($data,$ast->varname)) {
 			$v=$this->getData($data,$ast->varname);
@@ -82,17 +120,51 @@ abstract class CompilerBase extends CompilerEngine {
 			}
 		}
 	}
+	/**
+	 * Render function for direct output
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	protected function render_text($ast,$data) {
 		$this->renderChildren($ast,$data);
 		$this->sheduleEcho($ast->contents);
 	}
+	/**
+	 * Render function for comment nodes
+	 *
+	 * Does nothing. 
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	protected function render_comment($ast,$data) {
 		// we don't touch children here
 		// and basicly do nothng ;)
 	}
 	
+	// Abstract render functions to be implemented by subclasses
+	
+	/**
+	 * Render function for html comment nodes
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	abstract protected function render_hcomment($ast,$data);
+	/**
+	 * Processing function for html comment nodes' output
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	abstract protected function process_hcomment($contents);
+	/**
+	 * Processing function for the doctype declatation
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	abstract protected function render_doctype($ast,$data);
+	/**
+	 * Processing function for html tags
+	 * @param Node Child nodes
+	 * @param array Current template data to use
+	 */
 	abstract protected function render_htag($ast,$data);
 }
