@@ -12,7 +12,11 @@
 		function render(err,tmpl,data,cb) {
 			if(err) cb(err);
 			if(arguments.length==2) return render(err,tmpl,{},data);
-			if(typeof(tmpl)=='string') tmpl=parser.parseString(tmpl);
+			try {
+				if(typeof(tmpl)=='string') tmpl=parser.parseString(tmpl);
+			} catch (e) {
+				return cb(e);
+			}
 			
 			renderer[tmpl.type](err,tmpl,data,cb);
 			
