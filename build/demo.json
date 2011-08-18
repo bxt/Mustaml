@@ -1,0 +1,7 @@
+{
+"pagetitle":"Interactive Mustaml Demo",
+"demo":true,
+"intro":"Type into orange boxes and see what happens:",
+"mustaml":"%p =lol",
+"json":"{\"lol\":\"Aha!\"}"
+}

@@ -1,0 +1,18 @@
+-htmlintro.mustaml
+	%h1 =pagetitle
+	=intro
+	#demo
+		#mustaml
+			%h5 Mustaml Template
+			%textarea#mustamlInput =mustaml
+		#json
+			%h5 JSON Data
+			%textarea#jsonInput =json
+		%br.clearfix
+		#html
+			%h5 Resulting HTML
+			%pre#htmlOutput (please enable Javascript to use this demo)
+		#result
+			%h5 Display
+			%div#resultOutput (please enable Javascript to use this demo)
+	%br.clearfix

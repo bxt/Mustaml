@@ -110,7 +110,7 @@ gen: test-php/GeneratedTest.php gen-js gen-docs
 	@echo
 	@echo "----------------------------------------"
 
-gen-docs: target/docs/ref.html target/docs/index.html target/docs/php.html target/docs/js.html
+gen-docs: target/docs/ref.html target/docs/index.html target/docs/php.html target/docs/js.html target/docs/demo.html target/docs/mustaml.min.js target/docs/demo.js
 
 gen-js: test-js-browser/index.html test-js-browser/dist.html test-js-node/generated.test.js
 
@@ -140,6 +140,15 @@ target/docs/php.html: target/docs/doc.css build/php.json build/php.mustaml build
 
 target/docs/js.html: target/docs/doc.css build/js.json build/js.mustaml build/js.json build/htmlintro.mustaml build/htmlintro.json
 	${PHP} mustaml.php build/js.json build/js.mustaml > target/docs/js.html
+
+target/docs/demo.html: target/docs/doc.css build/demo.json build/demo.mustaml build/htmlintro.mustaml build/htmlintro.json
+	${PHP} mustaml.php build/demo.json build/demo.mustaml > target/docs/demo.html
+
+target/docs/mustaml.min.js: dist-js mustaml.min.js
+	cp mustaml.min.js target/docs/mustaml.min.js
+
+target/docs/demo.js: build/demo.js
+	cp build/demo.js target/docs/demo.js
 
 install: 
 	ln -s $(PWD)/bin/mustaml ~/bin/mustaml

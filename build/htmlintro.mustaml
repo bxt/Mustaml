@@ -20,3 +20,6 @@
 			&copy; 2011 by 
 			%a(href="http://bernhardhaussner.de/") Bernhard Häussner 
 			\- generated with mustaml
+		-demo
+			%script(src=mustaml.min.js)
+			%script(src=demo.js)

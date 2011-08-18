@@ -1,5 +1,6 @@
 {"navigation_data":[
 	{"link":"index.html","label":"Home"},
+	{"link":"demo.html","label":"Demo"},
 	{"link":"ref.html","label":"Language Reference"},
 	{"link":"js.html","label":"Javascript"},
 	{"link":"php.html","label":"PHP"}
