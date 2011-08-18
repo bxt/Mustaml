@@ -683,5 +683,20 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($expectedHtml,$html);
   }
   
+  /**
+   * Empty tag operators
+   *
+   * If you use the tag creating operators without a name, they will just
+   * create a div. 
+   */
+  public function testEmptyOperatorDivCreating() {
+    $expectedHtml='<div><div><div>some divs</div></div></div>';
+    $template='. # % some divs';
+    $data=array();
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
 }
 ?>

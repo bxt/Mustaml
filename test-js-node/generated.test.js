@@ -452,6 +452,17 @@ htmlCompiler.render(null,'-/ temporarily disabled:\n    %body %p',{},function(er
 });
 
 
+// Empty tag operators
+//
+// If you use the tag creating operators without a name, they will just create a div. 
+testsCalled.testEmptyOperatorDivCreating=false;
+htmlCompiler.render(null,'. # % some divs',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<div><div><div>some divs</div></div></div>',html);
+  testsCalled.testEmptyOperatorDivCreating=true;
+});
+
+
 process.addListener('exit', function() {
   var allPassed=true;
   for(var testname in testsCalled) {

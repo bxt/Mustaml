@@ -134,6 +134,11 @@
 			}
 			parse.htag=function(nodecode) {
 				var node=ast.tagnode();
+				if(nodecode.charAt(1)==' ') {
+					node.name='div';
+					restNodecode=nodecode.substr(2);
+					return node;
+				}
 				var m=nodecode.match(TAGNODE_REGEX);
 				if(m[2]!==undefined) {
 					node.name=m[2];

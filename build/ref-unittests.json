@@ -345,6 +345,7 @@
 "mustaml":"-/ never rendered",
 "html":""
 },
+
 {
 "title":"Mustaml-Comment-blocks",
 "desc":"Get rid of whole subtrees with Mustaml-Comments. ",
@@ -352,6 +353,15 @@
 "data":false,
 "mustaml":"-/ temporarily disabled:\n    %body %p",
 "html":""
+},
+
+{
+"title":"Empty tag operators",
+"desc":"If you use the tag creating operators without a name, they will just create a div. ",
+"testname":"EmptyOperatorDivCreating",
+"data":false,
+"mustaml":". # % some divs",
+"html":"<div><div><div>some divs</div></div></div>"
 }
 
 ]}

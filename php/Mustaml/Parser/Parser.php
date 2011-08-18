@@ -127,6 +127,11 @@ class Parser {
 	}
 	private function parse_htag($nodecode) {
 		$node=new \Mustaml\Ast\TagNode();
+		if($nodecode[1]==' ') {
+			$node->name="div";
+			$this->restNodecode=substr($nodecode,2);
+			return $node;
+		}
 		preg_match("/^  (%(.+?))?  (\#(.+?))?  ((\..+?)*)  (\((.*?)\))?  (\ (.*))?  $/x",$nodecode,$m);
 		//var_dump($m);
 		if(isset($m[2])&&$m[2]!='') {
