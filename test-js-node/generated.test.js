@@ -463,6 +463,17 @@ htmlCompiler.render(null,'. # % some divs',{},function(err,html){
 });
 
 
+// Separation with multiple spaces
+//
+// If you separate two seemingly elements with more then one space, the latter turns out as text. 
+testsCalled.testSeparationWithMultipleSpaces=false;
+htmlCompiler.render(null,'%p  %b',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<p> %b</p>',html);
+  testsCalled.testSeparationWithMultipleSpaces=true;
+});
+
+
 process.addListener('exit', function() {
   var allPassed=true;
   for(var testname in testsCalled) {

@@ -698,5 +698,20 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals($expectedHtml,$html);
   }
   
+  /**
+   * Separation with multiple spaces
+   *
+   * If you separate two seemingly elements with more then one space, the
+   * latter turns out as text. 
+   */
+  public function testSeparationWithMultipleSpaces() {
+    $expectedHtml='<p> %b</p>';
+    $template='%p  %b';
+    $data=array();
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
 }
 ?>

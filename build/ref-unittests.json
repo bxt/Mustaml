@@ -362,6 +362,15 @@
 "data":false,
 "mustaml":". # % some divs",
 "html":"<div><div><div>some divs</div></div></div>"
+},
+
+{
+"title":"Separation with multiple spaces",
+"desc":"If you separate two seemingly elements with more then one space, the latter turns out as text. ",
+"testname":"SeparationWithMultipleSpaces",
+"data":false,
+"mustaml":"%p  %b",
+"html":"<p> %b</p>"
 }
 
 ]}
