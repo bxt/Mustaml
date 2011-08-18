@@ -21,16 +21,13 @@ function refresh() {
 }
 
 function pp(html) {
-	var pphtml='',pad='  ',lvl=0,i=0,inEndtag=false,wasTagEnd=true,wasTagEndNeu;
+	var pphtml='',pad='  ',lvl=0,i=0,inEndtag=false;
 	for (;i<html.length;i++) {
-		wasTagEndNeu=false;
 		if(html.charAt(i)=='>') {
-			wasTagEndNeu=true;
 			pphtml+=html.charAt(i);
-			if(inEndtag) {
+			if(inEndtag||html.charAt(i-1)=='/') {
 				inEndtag=false;
-				wasTagEndNeu=true;
-				if (html.charAt(i+1)!='<') {
+				if (html.charAt(i+1)!='<'||html.charAt(i+2)!='/') {
 					pphtml+='\n'+times(pad,lvl);
 				}
 			} else {
@@ -42,13 +39,12 @@ function pp(html) {
 			lvl--;
 			pphtml+='\n'+times(pad,lvl);
 			pphtml+=html.charAt(i);
-		} else if(html.charAt(i)=='<'&&!wasTagEnd) {
+		} else if(html.charAt(i)=='<'&&html.charAt(i-1)!='>'&&html.charAt(i-1)!='') {
 			pphtml+='\n'+times(pad,lvl);
 			pphtml+=html.charAt(i);
 		} else {
 			pphtml+=html.charAt(i);
 		}
-		wasTagEnd=wasTagEndNeu;
 	}
 	return pphtml;
 }
