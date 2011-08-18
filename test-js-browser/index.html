@@ -337,6 +337,28 @@ htmlCompiler.render(null,'-^^stingray %p =stingray\n',{"stingray":"Corvette C2"}
 });
 
 
+// Unset Vars with Minus
+//
+// When using minus operator with a not existing var name. it's children are not rendered. 
+testsCalled.testUnsetVarsMinus=false;
+htmlCompiler.render(null,'(rendered)\n-undefined (not rendered)',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('(rendered)',html);
+  testsCalled.testUnsetVarsMinus=true;
+});
+
+
+// Unset Vars with Equal
+//
+// When using equals operator with a not existing var's name, it does not output anything. 
+testsCalled.testUnsetVarsEqual=false;
+htmlCompiler.render(null,'nothing: \n=undefined',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('nothing: ',html);
+  testsCalled.testUnsetVarsEqual=true;
+});
+
+
 // Escaping
 //
 // If you want to start a text line with a meta-character otherwise interpreted as some kind of node, you can escape it with a backslash. 

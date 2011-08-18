@@ -102,7 +102,7 @@
 			} else if(myval && typeof myval==='object') { // switch scope
 				var newdata=extended(myval,data);
 				renderChildren(err,tmpl,newdata,cb);
-			} else if(myval===false) { //nothing
+			} else if(myval===false || typeof myval==="undefined") { //nothing
 				cb(err,'');
 			} else if(myval===true) { // render children
 				renderChildren(err,tmpl,data,cb);

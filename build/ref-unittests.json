@@ -200,7 +200,6 @@
 "html":"Absent!"
 },
 
-
 {
 "title":"Empty Loops",
 "desc":"Another use of the caret is checking for empty arrays, strings and 0 numbers. ",
@@ -248,6 +247,23 @@
 "html":"<p>Corvette C2</p>"
 },
 
+{
+"title":"Unset Vars with Minus",
+"desc":"When using minus operator with a not existing var name. it's children are not rendered. ",
+"testname":"UnsetVarsMinus",
+"data":false,
+"mustaml":"(rendered)\n-undefined (not rendered)",
+"html":"(rendered)"
+},
+
+{
+"title":"Unset Vars with Equal",
+"desc":"When using equals operator with a not existing var's name, it does not output anything. ",
+"testname":"UnsetVarsEqual",
+"data":false,
+"mustaml":"nothing: \n=undefined",
+"html":"nothing: "
+},
 
 {
 "title":"Escaping",

@@ -499,6 +499,38 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
+   * Unset Vars with Minus
+   *
+   * When using minus operator with a not existing var name. it's children
+   * are not rendered. 
+   */
+  public function testUnsetVarsMinus() {
+    $expectedHtml='(rendered)';
+    $template='(rendered)
+-undefined (not rendered)';
+    $data=array();
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Unset Vars with Equal
+   *
+   * When using equals operator with a not existing var's name, it does not
+   * output anything. 
+   */
+  public function testUnsetVarsEqual() {
+    $expectedHtml='nothing: ';
+    $template='nothing: 
+=undefined';
+    $data=array();
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
    * Escaping
    *
    * If you want to start a text line with a meta-character otherwise
