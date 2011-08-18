@@ -2,6 +2,6 @@
 "pagetitle":"Interactive Mustaml Demo",
 "demo":true,
 "intro":"Type into orange boxes and see what happens:",
-"mustaml":"%p =lol",
-"json":"{\"lol\":\"Aha!\"}"
+"mustaml":"#container\n  %h2 %a(href=#)\n       Mustaml!\n  %p This rocks! \n    %b =affirmation\n  %p\n    -bool bool good!\n    -^bool bool bad.\n  %ul -arr\n    %li =.\n  %br.clearfix\n  %p Maps: \n    -maps =k\n    -^maps keine!",
+"json":"{\n\"affirmation\":\"Yes!\",\n\"bool\":false,\n\"arr\":[\"one\",\"two\",\"333\"],\n\"maps\":[\n  {\"k\":\"test1 \"},\n  {\"k\":\"test2\"}\n]\n}"
 }
