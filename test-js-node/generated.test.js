@@ -482,6 +482,6 @@ process.addListener('exit', function() {
       console.log(' ✗ '+testname+' failed! ');
     }
   }
-  a.ok(allPassed);  console.log(' ✓ All Mustaml tests passed. ');
+  a.ok(allPassed);  console.log(' ✓ Mustaml reference tests passed. ');
 });
 

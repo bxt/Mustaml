@@ -35,7 +35,7 @@ fs.readFile(process.argv[2], function (err, filedata) {
 	testJs+='    }\n';
 	testJs+='  }\n';
 	testJs+='  a.ok(allPassed);';
-	testJs+='  console.log(\' ✓ All Mustaml tests passed. \');\n';
+	testJs+='  console.log(\' ✓ Mustaml reference tests passed. \');\n';
 	testJs+='});\n';
 	require('sys').puts(testJs);
 });

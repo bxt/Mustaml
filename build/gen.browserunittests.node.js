@@ -56,7 +56,7 @@ fs.readFile(process.argv[2], function (err, filedata) {
 	testJs+='    }\n';
 	testJs+='  }\n';
 	testJs+='  a.ok(allPassed);';
-	testJs+='  document.getElementById("result").firstChild.nodeValue=(\' ✓ All Mustaml tests passed. \');\n';
+	testJs+='  document.getElementById("result").firstChild.nodeValue=(\' ✓ Mustaml reference tests passed. \');\n';
 	testJs+='},100);\n';
 	
 	testJs+='</script>\n';

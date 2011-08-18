@@ -55,6 +55,7 @@ test-js: test-js-node/generated.test.js
 	@echo
 	@echo "----------------------------------------"
 	node test-js-node/generated.test.js
+	node test-js-node/errors.test.js
 
 dist: dist-php dist-js
 
