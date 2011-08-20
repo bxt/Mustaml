@@ -1,0 +1,10 @@
+%li
+	%form.checkbox(method=POST)
+		-state
+			%input(type=checkbox,name=state,value=X,checked)
+		-^state
+			%input(type=checkbox,name=state,value=X)
+		%input(type=hidden,name=id,value==id)
+		%input(name=ajax,value=false,type=hidden)
+		%input.nojs(type=submit,value=go)
+	=text

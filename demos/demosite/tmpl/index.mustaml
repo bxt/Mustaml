@@ -1,0 +1,29 @@
+!!!
+%html
+	%head
+		%title Mustaml Demo Site
+		%script(src==jquery)
+		%script(src=mustaml.min.js)
+		%script(src=script.js)
+		%link(rel=stylesheet,href=style.css)
+	%body
+		%h1 Mustaml Demo Site
+		%h2 What's this all about?
+		%p
+			This is a little demo site to demonstrate how you can use mustaml 
+			templates on the server as well as on the client. This page is 
+			rendered first by PHP on the server, and then creates some parts 
+			on the client, depending e.g. on user input. 
+		%h2 Todo-List
+		-did
+			-error
+				%p.error =error
+			-^error
+				%p.good Success!
+		%ul
+			-items 
+				-todo.mustaml
+			%li#adderli %form#adder(method=POST)
+				%input(name=text)
+				%input(name=ajax,value=false,type=hidden)
+				%input(type=submit,value=+)
