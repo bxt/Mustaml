@@ -87,6 +87,11 @@ abstract class CompilerBase extends CompilerEngine {
 				$r=new \Mustaml\Ast\Node('root');
 				$r->children=$ast->children;
 				$this->sheduleEcho($v($r,$data));
+			} elseif(is_object($v)) {
+					$newdata=$data;
+					$addeddata=\Mustaml\Util\Object2Map::convert($v);
+					$newdata=array_merge($newdata,$addeddata);
+					$this->renderChildren($ast,$newdata);
 			} elseif(is_array($v)) {
 				$isAssoc=false;
 				for($i=count($v)-1;$i>=0;$i--) {
@@ -102,6 +107,9 @@ abstract class CompilerBase extends CompilerEngine {
 					$newdata['.']=$v[$i];
 					if(is_array($v[$i])) {
 						$newdata=array_merge($newdata,$v[$i]);
+					}
+					if(is_object($v[$i])) {
+						$newdata=array_merge($newdata,\Mustaml\Util\Object2Map::convert($v[$i]));
 					}
 					$this->renderChildren($ast,$newdata);
 				}
