@@ -56,10 +56,11 @@ test-js: test-js-node/generated.test.js
 	@echo "----------------------------------------"
 	node test-js-node/generated.test.js
 	node test-js-node/errors.test.js
+	node test-js-node/specialCases.test.js
 
-dist: dist-php dist-js
+dist: test-php dist-php test-js dist-js
 
-dist-php: phar test cleandemos
+dist-php: phar cleandemos
 	@echo "----------------------------------------"
 	@echo
 	@echo "Packing into dist..."
@@ -67,7 +68,7 @@ dist-php: phar test cleandemos
 	@echo "----------------------------------------"
 	find lib -type f ! -iname "*.php" | xargs zip -r "target/dist/${BUILD_NAME}-${BUILD_VERSION}.zip" ${BUILD_FILELIST} "${BUILD_NAME}.phar"
 
-dist-js: test-js
+dist-js:
 	@echo "----------------------------------------"
 	@echo
 	@echo "Packing JS into dist..."
