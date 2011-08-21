@@ -1,21 +1,28 @@
+/**
+ * Demosite Stylesheet
+ * 
+ * Here we set up some (very) basic
+ * styling for our demo site. 
+ */
+
+
+/* Basic styling of texts */
 * {padding:0;margin:0;}
-
 body {width:500px;font-size:12px;font-family:Arial,sans-serif;padding:50px;}
-
 p, h1, h2 {padding:10px 0;}
 
-.jsenabled .nojs {display:none;}
-
+/* Our item list and form controls */
 ul {list-style:none;}
-
 form.checkbox {float:left;width:45px;}
-.jsenabled form.checkbox {width:20px;}
-
 #adder {padding-left:45px;}
-.jsenabled #adder {padding-left:20px;}
-
 li {clear:left;line-height:25px;}
 
+/* Error/success-messages */
 .good, .error {margin:10px 0;padding:10px;}
 .good {background:#0f0;}
 .error {background:#f00;}
+
+/* If JS is availible, we hide submitbuttons */
+.jsenabled .nojs {display:none;}
+.jsenabled form.checkbox {width:20px;}
+.jsenabled #adder {padding-left:20px;}

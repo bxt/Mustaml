@@ -1,3 +1,5 @@
+-/ The Mustaml-Template for one item, 
+-/ includes a form for state update
 %li
 	%form.checkbox(method=POST)
 		-state

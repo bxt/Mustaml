@@ -1,3 +1,5 @@
+-/ The Mustaml-Template for the
+-/ whole page except the items
 !!!
 %html
 	%head
