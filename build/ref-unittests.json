@@ -329,6 +329,15 @@
 },
 
 {
+"title":"Attributes with unset data-values",
+"desc":"When you use unset vars in attributes, the attributes will exist, but with empty contents at the vars. ",
+"testname":"AttrDataValuesUnset",
+"data":"{}",
+"mustaml":"%a(=unset,href==unset2) foo",
+"html":"<a href=\"\">foo</a>"
+},
+
+{
 "title":"Attributes with boolean data",
 "desc":"If the referenced data-values point to boolean values only, the attribute will be set if all of them are true. ",
 "testname":"AttrDataBooleans",

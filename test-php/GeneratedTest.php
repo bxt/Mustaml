@@ -640,6 +640,21 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   }
   
   /**
+   * Attributes with unset data-values
+   *
+   * When you use unset vars in attributes, the attributes will exist, but
+   * with empty contents at the vars. 
+   */
+  public function testAttrDataValuesUnset() {
+    $expectedHtml='<a href="">foo</a>';
+    $template='%a(=unset,href==unset2) foo';
+    $data=json_decode('{}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
    * Attributes with boolean data
    *
    * If the referenced data-values point to boolean values only, the

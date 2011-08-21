@@ -43,7 +43,7 @@
 					scanner.get(SEP);
 					attrs.push(key);
 				}
-				var dynval2=parseDynval(scanner);
+				var dynval2=parseDynval(scanner,true);
 				if(dynval2) attrs.push(dynval2);
 			}
 			return attrs;
@@ -55,11 +55,11 @@
 			return t;
 		}
 		
-		function parseDynval(scanner) {
+		function parseDynval(scanner,outer) {
 			if(scanner.getOne(DYNEQ)) {
 				if(scanner.is(SEP)||!scanner.is()) throw ('Syntax Error: No varname');
 				var varname=scanner.getUnless(SEP,DYNEQ);
-				scanner.getOne(DYNEQ);
+				scanner.getOne(outer?SEP:DYNEQ);
 				
 				var node=ast.datanode();
 				node.varname=varname;

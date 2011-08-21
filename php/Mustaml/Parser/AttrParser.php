@@ -79,7 +79,7 @@ class AttrParser {
 				$s->get(self::sep);
 				$attrs[]=$key;
 			}
-			$dynval=self::parse_dynval($s);
+			$dynval=self::parse_dynval($s,true);
 			if($dynval) $attrs[]=$dynval;
 		}
 		return $attrs;
@@ -98,11 +98,11 @@ class AttrParser {
 	 * @param Scanner A Scanner with cursor at possible dyn. attr.
 	 * @return boolean|\Mustaml\Ast\DataNode False, if not a dyn. attr., else the node
 	 */
-	private function parse_dynval($s) {
+	private function parse_dynval($s,$outer=false) {
 		if($s->getOne(self::dyneq)) {
 			if($s->is(self::sep)||!$s->is()) throw new SyntaxErrorException("No varname");
 			$varname=$s->getUnless(self::sep,self::dyneq);
-			$s->getOne(self::dyneq);
+			$s->getOne($outer?self::sep:self::dyneq);
 			
 			$node=new \Mustaml\Ast\DataNode();
 			$node->varname=$varname;

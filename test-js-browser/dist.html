@@ -430,6 +430,17 @@ htmlCompiler.render(null,'%a(href=#=anchorNo=-=anchor) go',{"anchor":"headline",
 });
 
 
+// Attributes with unset data-values
+//
+// When you use unset vars in attributes, the attributes will exist, but with empty contents at the vars. 
+testsCalled.testAttrDataValuesUnset=false;
+htmlCompiler.render(null,'%a(=unset,href==unset2) foo',{},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<a href="">foo</a>',html);
+  testsCalled.testAttrDataValuesUnset=true;
+});
+
+
 // Attributes with boolean data
 //
 // If the referenced data-values point to boolean values only, the attribute will be set if all of them are true. 

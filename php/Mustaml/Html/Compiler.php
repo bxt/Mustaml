@@ -77,6 +77,7 @@ class Compiler extends \Mustaml\Compiler\CompilerBase {
 				$val='';
 				$hasVal=false;
 				foreach($attrNode->children as $attValPart) {
+					if($attValPart->type=='val') $hasVal=true;;
 					if($attValPart->type=='val'&&$this->issetData($data,$attValPart->varname)) {
 						$hasVal=true;
 						$dataPart=$this->getData($data,$attValPart->varname);
