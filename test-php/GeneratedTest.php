@@ -627,7 +627,7 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
   /**
    * Attributes with data-values and text
    *
-   * You can mix usal text and dynamic values in your attributes. Place an
+   * You can mix usual text and dynamic values in your attributes. Place an
    * = between the end of your varname and the text. 
    */
   public function testAttrDataValuesWithText() {

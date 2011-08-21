@@ -321,7 +321,7 @@
 
 {
 "title":"Attributes with data-values and text",
-"desc":"You can mix usal text and dynamic values in your attributes. Place an = between the end of your varname and the text. ",
+"desc":"You can mix usual text and dynamic values in your attributes. Place an = between the end of your varname and the text. ",
 "testname":"AttrDataValuesWithText",
 "data":"{\"anchor\":\"headline\",\"anchorNo\":\"12\"}",
 "mustaml":"%a(href=#=anchorNo=-=anchor) go",
