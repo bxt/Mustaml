@@ -34,7 +34,12 @@
 			for(var name in rawAttributes) {
 				switch(rawAttributes[name].length) {
 					case 0: html+=' '+htmlspecialchars(name)+'="'+htmlspecialchars(name)+'"';continue;
-					case 1: html+=' '+htmlspecialchars(name)+'="'+htmlspecialchars(rawAttributes[name][0])+'"';continue;
+					case 1: 
+						if(typeof rawAttributes[name][0]=="boolean") {
+							if(rawAttributes[name][0]) html+=' '+htmlspecialchars(name)+'="'+htmlspecialchars(name)+'"';
+							continue;
+						}
+						html+=' '+htmlspecialchars(name)+'="'+htmlspecialchars(rawAttributes[name][0])+'"';continue;
 					default: html+=' '+htmlspecialchars(name)+'="'+htmlspecialchars((config.htmlArrayAttrs[name]?rawAttributes[name].join(' '):rawAttributes[name][rawAttributes[name].length-1]))+'"';continue;
 				}
 			}
@@ -55,7 +60,13 @@
 						cntSubnodes[i]=content;
 						anzSubnodes++;
 						if(anzSubnodes==tmpl.children.length) {
-							cb(err,name,[cntSubnodes.join('')]);
+							var boolval=true;
+							var isBoolval=anzSubnodes>0;
+							for(var k=0;k<anzSubnodes&&isBoolval;k++) {
+								isBoolval=isBoolval && typeof cntSubnodes[k]=="boolean";
+								boolval=boolval && cntSubnodes[k];
+							}
+							cb(err,name,isBoolval ? boolval : [cntSubnodes.join('')]);
 						}
 					});
 				}
@@ -65,7 +76,7 @@
 			}
 		}
 		renderer.val=function(err,tmpl,data,cb) {
-			if(!data[tmpl.varname]) return cb(err);
+			if(data[tmpl.varname]===undefined) return cb(err,'');
 			var counted=false;
 			for(var name in data[tmpl.varname]) {
 				if(counted) {
@@ -77,18 +88,15 @@
 			}
 		}
 		renderer.innerval=function(err,tmpl,data,cb) {
-			if(data[tmpl.varname]) {
-				cb(err,data[tmpl.varname]);
-			} else {
-				cb(err,'');
-			}
+			if(data[tmpl.varname]===undefined) return cb(err,'');
+			cb(err,data[tmpl.varname]);
 		}
 		renderer.innertext=function(err,tmpl,data,cb) {
 			cb(err,tmpl.contents);
 		}
 		
 		function htmlspecialchars(str) {
-			return str;
+			return str.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 		}
 		
 		htmlCompilerAttrs.render=render;

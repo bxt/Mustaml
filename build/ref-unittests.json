@@ -321,11 +321,20 @@
 
 {
 "title":"Attributes with data-values and text",
-"desc":"You can mix usal text and dynamic values in your attributes. Place an = between the end of your varname and the text",
+"desc":"You can mix usal text and dynamic values in your attributes. Place an = between the end of your varname and the text. ",
 "testname":"AttrDataValuesWithText",
 "data":"{\"anchor\":\"headline\",\"anchorNo\":\"12\"}",
 "mustaml":"%a(href=#=anchorNo=-=anchor) go",
 "html":"<a href=\"#12-headline\">go</a>"
+},
+
+{
+"title":"Attributes with boolean data",
+"desc":"If the referenced data-values point to boolean values only, the attribute will be set if all of them are true. ",
+"testname":"AttrDataBooleans",
+"data":"{\"test1\":true,\"test2\":true}",
+"mustaml":"%input(type=checkbox,checked==test1==test2)",
+"html":"<input type=\"checkbox\" checked=\"checked\" />"
 },
 
 {

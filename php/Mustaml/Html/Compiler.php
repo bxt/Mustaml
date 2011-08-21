@@ -79,7 +79,10 @@ class Compiler extends \Mustaml\Compiler\CompilerBase {
 				foreach($attrNode->children as $attValPart) {
 					if($attValPart->type=='val'&&$this->issetData($data,$attValPart->varname)) {
 						$hasVal=true;
-						$val.=$this->getData($data,$attValPart->varname);
+						$dataPart=$this->getData($data,$attValPart->varname);
+						if(is_bool($dataPart)&&$val==='') $val=$dataPart;
+						else if(is_bool($dataPart)&&is_bool($val)) $val=$val&&$dataPart;
+						else $val.=$dataPart;
 					} elseif ($attValPart->type=='text') {
 						$hasVal=true;
 						$val.=$attValPart->contents;
@@ -99,8 +102,13 @@ class Compiler extends \Mustaml\Compiler\CompilerBase {
 		$attr='';
 		foreach($attr_array as $key=>$val) {
 			switch(count($val)) {
-				case 0: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($key).'"'; break;
-				case 1: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[0]).'"'; break;
+				case 0: $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($key).'"'; continue;
+				case 1: 
+					if(is_bool($val[0])) {
+						if($val[0]) $attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($key).'"';
+						continue;
+					}
+					$attr.=' '.htmlspecialchars($key).'="'.htmlspecialchars($val[0]).'"'; continue;
 				default:
 					if($this->getConfig()->isHtmlArrayAttr($key)) {
 						$attr.= ' '.htmlspecialchars($key).'="'.htmlspecialchars(implode(' ',$val)).'"';

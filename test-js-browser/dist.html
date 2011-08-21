@@ -421,12 +421,23 @@ htmlCompiler.render(null,'%link(rel=>stylesheet, href=>=style)',{"style":"style/
 
 // Attributes with data-values and text
 //
-// You can mix usal text and dynamic values in your attributes. Place an = between the end of your varname and the text
+// You can mix usal text and dynamic values in your attributes. Place an = between the end of your varname and the text. 
 testsCalled.testAttrDataValuesWithText=false;
 htmlCompiler.render(null,'%a(href=#=anchorNo=-=anchor) go',{"anchor":"headline","anchorNo":"12"},function(err,html){
   a.ok(!err);
   a.strictEqual('<a href="#12-headline">go</a>',html);
   testsCalled.testAttrDataValuesWithText=true;
+});
+
+
+// Attributes with boolean data
+//
+// If the referenced data-values point to boolean values only, the attribute will be set if all of them are true. 
+testsCalled.testAttrDataBooleans=false;
+htmlCompiler.render(null,'%input(type=checkbox,checked==test1==test2)',{"test1":true,"test2":true},function(err,html){
+  a.ok(!err);
+  a.strictEqual('<input type="checkbox" checked="checked" />',html);
+  testsCalled.testAttrDataBooleans=true;
 });
 
 

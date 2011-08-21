@@ -628,12 +628,27 @@ class GeneratedTest extends \PHPUnit_Framework_TestCase {
    * Attributes with data-values and text
    *
    * You can mix usal text and dynamic values in your attributes. Place an
-   * = between the end of your varname and the text
+   * = between the end of your varname and the text. 
    */
   public function testAttrDataValuesWithText() {
     $expectedHtml='<a href="#12-headline">go</a>';
     $template='%a(href=#=anchorNo=-=anchor) go';
     $data=json_decode('{"anchor":"headline","anchorNo":"12"}',true);
+    $m=new Mustaml($template,$data);
+    $html=$m();
+    $this->assertEquals($expectedHtml,$html);
+  }
+  
+  /**
+   * Attributes with boolean data
+   *
+   * If the referenced data-values point to boolean values only, the
+   * attribute will be set if all of them are true. 
+   */
+  public function testAttrDataBooleans() {
+    $expectedHtml='<input type="checkbox" checked="checked" />';
+    $template='%input(type=checkbox,checked==test1==test2)';
+    $data=json_decode('{"test1":true,"test2":true}',true);
     $m=new Mustaml($template,$data);
     $html=$m();
     $this->assertEquals($expectedHtml,$html);
