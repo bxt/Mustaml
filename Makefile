@@ -1,8 +1,6 @@
 BUILD_NAME=mustaml
-BUILD_VERSION=$$(sed -n -e "4s/Version //p" README.md)
+BUILD_VERSION=$$(git describe --match 'v[.0-9]*' | sed -e 's/.//' || sed -n -e "4s/Version //p" README.md)
 BUILD_FILELIST=README.md
-BUILD_FILELIST_PHP=demos
-BUILD_FILELIST_JS=
 BUILD_JS_CONCATS=js/ast.js js/attrParser.js js/htmlCompiler.js js/htmlCompilerAttrs.js js/parser.js js/scanner.js
 PHP=$$(which php5)
 PHAR=$$(which phar)
@@ -12,10 +10,10 @@ default: docs gen dist demos
 clean:
 	@echo "----------------------------------------"
 	@echo
-	@echo "Cleaning up build and dist..."
+	@echo "Cleaning up build and docs..."
 	@echo
 	@echo "----------------------------------------"
-	rm -Rvf target
+	rm -Rvf target/docs
 	rm -vf ${BUILD_NAME}.phar
 	rm -vf ${BUILD_NAME}.js
 	rm -vf ${BUILD_NAME}.min.js
@@ -60,7 +58,7 @@ test-js: test-js-node/generated.test.js
 
 dist: test-php dist-php test-js dist-js
 
-dist-php: phar cleandemos
+dist-php: phar
 	@echo "----------------------------------------"
 	@echo
 	@echo "Packing into dist..."
