@@ -26,12 +26,12 @@ function init(){
 		$path=__DIR__.'/';
 	}
 	
-	if(!class_exists("SplClassLoader")) {
+	if(!class_exists("\\SplClassLoader")) {
 		require $path.'lib/SplClassLoader.php';
 	}
-	$l_own=new SplClassLoader(__NAMESPACE__,$path.'php/');
+	$l_own=new \SplClassLoader(__NAMESPACE__,$path.'php');
 	$l_own->register();
-	$l_lib=new SplClassLoader(null,$path.'lib/');
+	$l_lib=new \SplClassLoader(null,$path.'lib');
 	$l_lib->register();
 }
 
