@@ -26,12 +26,12 @@ function init(){
 		$path=__DIR__.'/';
 	}
 	
-	if(!class_exists("\\SplClassLoader")) {
-		require $path.'lib/SplClassLoader.php';
+	if(!class_exists("\\Bxt\\ClassLoader")) {
+		require $path.'lib/Bxt/ClassLoader.php';
 	}
-	$l_own=new \SplClassLoader(__NAMESPACE__,$path.'php');
+	$l_own=new \Bxt\ClassLoader(__NAMESPACE__,$path.'php/');
 	$l_own->register();
-	$l_lib=new \SplClassLoader(null,$path.'lib');
+	$l_lib=new \Bxt\ClassLoader(null,$path.'lib/');
 	$l_lib->register();
 }
 

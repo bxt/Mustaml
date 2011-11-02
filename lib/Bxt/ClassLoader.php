@@ -1,23 +1,16 @@
-<?php
+<?php namespace Bxt;
 
 /**
- * SplClassLoader implementation that implements the technical interoperability
- * standards for PHP 5.3 namespaces and class names.
- *
- * http://groups.google.com/group/php-standards/web/final-proposal
+ * ClassLoader implementation
  *
  *     // Example which loads classes for the Doctrine Common package in the
  *     // Doctrine\Common namespace.
  *     $classLoader = new SplClassLoader('Doctrine\Common', '/path/to/doctrine');
  *     $classLoader->register();
  *
- * @author Jonathan H. Wage <jonwage@gmail.com>
- * @author Roman S. Borschel <roman@code-factory.org>
- * @author Matthew Weier O'Phinney <matthew@zend.com>
- * @author Kris Wallsmith <kris.wallsmith@gmail.com>
- * @author Fabien Potencier <fabien.potencier@symfony-project.org>
+ * @version 1.0
  */
-class SplClassLoader
+class ClassLoader
 {
     private $_fileExtension = '.php';
     private $_namespace;
@@ -25,7 +18,7 @@ class SplClassLoader
     private $_namespaceSeparator = '\\';
 
     /**
-     * Creates a new <tt>SplClassLoader</tt> that loads classes of the
+     * Creates a new <tt>\Bxt\ClassLoader</tt> that loads classes of the
      * specified namespace.
      * 
      * @param string $ns The namespace to use.
@@ -34,26 +27,6 @@ class SplClassLoader
     {
         $this->_namespace = $ns;
         $this->_includePath = $includePath;
-    }
-
-    /**
-     * Sets the namespace separator used by classes in the namespace of this class loader.
-     * 
-     * @param string $sep The separator to use.
-     */
-    public function setNamespaceSeparator($sep)
-    {
-        $this->_namespaceSeparator = $sep;
-    }
-
-    /**
-     * Gets the namespace seperator used by classes in the namespace of this class loader.
-     *
-     * @return void
-     */
-    public function getNamespaceSeparator()
-    {
-        return $this->_namespaceSeparator;
     }
 
     /**
@@ -129,8 +102,12 @@ class SplClassLoader
                 $fileName = str_replace($this->_namespaceSeparator, DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
             }
             $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . $this->_fileExtension;
-
-            require ($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
+            $fileName = ( $this->_includePath!==null ? $this->_includePath.DIRECTORY_SEPARATOR : '' ) . $fileName;
+            
+            $success = (@include $fileName) !== false;
+            return $success;
         }
+        
+        return false;
     }
 }
