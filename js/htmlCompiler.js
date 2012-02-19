@@ -140,14 +140,16 @@
 			if(tmpl.children.length) {
 				noJobs=false;
 				for(var i=0;i<tmpl.children.length;i++) {
-					render(err,tmpl.children[i],data,function(err,html){
-						if(err) return cb(err);
-						htmlChildren[i]=html;
-						anzChildren++;
-						if((anzChildren==tmpl.children.length)) {
-							cb(err,htmlChildren.join(''));
-						}
-					});
+					(function(){ var myi=i; // need to copy i
+						render(err,tmpl.children[i],data,function(err,html){
+							if(err) return cb(err);
+							htmlChildren[myi]=html;
+							anzChildren++;
+							if((anzChildren==tmpl.children.length)) {
+								cb(err,htmlChildren.join(''));
+							}
+						});
+					})();
 				}
 			} else {
 				cb(err,'');
