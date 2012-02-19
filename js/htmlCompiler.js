@@ -86,15 +86,17 @@
 					noJobs=false;
 					for(var i=0;i<myval.length;i++) {
 						var baseData=extended(isMap(myval[i])?myval[i]:{'.':myval[i]},data);
-						//console.log(baseData,);
-						renderChildren(err,tmpl,baseData,function(err,html){
-							if(err) return cb(err);
-							htmlChildren[i]=html;
-							anzChildren++;
-							if((anzChildren==myval.length)) {
-								cb(err,htmlChildren.join(''));
-							}
-						});
+						//console.log(baseData);
+						(function(){ var myi=i; // need to copy i
+							renderChildren(err,tmpl,baseData,function(err,html){
+								if(err) return cb(err);
+								htmlChildren[myi]=html;
+								anzChildren++;
+								if((anzChildren==myval.length)) {
+									cb(err,htmlChildren.join(''));
+								}
+							});
+						})();
 					}
 				} else {
 					cb(err,'');
