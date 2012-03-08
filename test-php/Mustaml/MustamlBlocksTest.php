@@ -10,10 +10,10 @@ require_once 'mustaml.php';
  * inheritance by registering an autoloader that will
  * by default render the blocks.
  * If we then define child templates we overwrite the
- * blocks by setting a template value to their name
- * in the data passed. This way, the autoloader is not
- * called and instead the overridden template block
- * is rendered. 
+ * blocks by setting the template value with their name
+ * in the data passed to another template. This way, the
+ * autoloader is no longer called and instead the 
+ * overridden template block is rendered. 
  * 
  * See the example below:
  */
@@ -21,7 +21,7 @@ class MustamlBricksTest extends \PHPUnit_Framework_TestCase
     implements \Mustaml\Autoloaders\AutoloaderI,
     \Mustaml\Autoloaders\MustamlDependentAlI {
   
-  // first lets define our parent/main template:
+  // First define our parent/main template:
   const MAIN_TMPL = <<<'EOM'
 
 %h1
@@ -69,11 +69,11 @@ EOM;
                         $child());
   }
   
-  // Now following: The implementation of the autoloaders. 
+  // Now following: The implementation of the autoloader. 
   
   /**
    * Holds a Mustaml object that can create new Mustaml objects with
-   * same properties
+   * same properties (propagate autoloaders to child templates)
    * @var \Mustaml\Mustaml
    */
   private $mustamlBoilerplate = null;
@@ -81,7 +81,9 @@ EOM;
    * Inject the template that will render its block
    */
   public function autoload($key) {
+    // Only trigger on vars named *.block:
     if(preg_match('/^(.*)\.block/i',$key,$m)) {
+      // The template is really simple: just yield with double minus. 
       return $this->mustamlBoilerplate->getWithTemplate('--',array());
     }
   }
@@ -94,7 +96,7 @@ EOM;
   
   
   /**
-   * How the data values are passed to child temlates
+   * How the data values are passed to child templates
    */
   public function testNestingAndVarScope() {
     
